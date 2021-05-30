@@ -1,9 +1,9 @@
 {
-  "name": "insta_clone",
-  "displayName": "insta_clone",
+  "name": "CampusBuddy",
+  "displayName": "CampusBuddy",
   "expo": {
-    "name": "insta_clone",
-    "slug": "insta_clone",
+    "name": "CampusBuddy",
+    "slug": "CampusBuddy",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
