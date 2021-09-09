@@ -1,12 +1,13 @@
 import { StyleSheet } from 'react-native';
+import { COLORS } from '../../Constants/COLORS';
 
 const styles = StyleSheet.create ({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: COLORS.background_dark,
   },
   text: {
-    color: '#52575D',
+    color: COLORS.font,
   },
   image: {
     flex: 1,
@@ -15,7 +16,7 @@ const styles = StyleSheet.create ({
   },
   subText: {
     fontSize: 12,
-    color: '#AEB5BC',
+    color: COLORS.font_secondary,
     textTransform: 'uppercase',
     fontWeight: '500',
   },
@@ -27,12 +28,12 @@ const styles = StyleSheet.create ({
     overflow: 'hidden',
   },
   add: {
-    backgroundColor: '#41444B',
+    backgroundColor: COLORS.primary+"99",
     position: 'absolute',
     bottom: 0,
-    right: 0,
-    width: 60,
-    height: 60,
+    right: 25,
+    width: 30,
+    height: 30,
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
@@ -70,7 +71,7 @@ const styles = StyleSheet.create ({
     marginBottom: 16,
   },
   activityIndicator: {
-    backgroundColor: '#CABFAB',
+    backgroundColor: COLORS.primary,
     padding: 4,
     height: 12,
     width: 12,

@@ -1,15 +1,14 @@
 import {StyleSheet, Dimensions} from 'react-native';
+import { COLORS } from '../../Constants/COLORS';
 
 const styles = StyleSheet.create({
-    bottomTab: {
-        position: 'absolute',
-        bottom: 15,
-        left: 20,
-        right: 20,
-        backgroundColor: '#ffffff',
-        borderRadius: 15,
-        height: 60,
-    }
-})
+  bottomTab: {
+    position: "absolute",
+    backgroundColor: COLORS.background_dark,
+    borderTopWidth: 0,
+    height: 50,
+
+  },
+});
 
 export default styles;

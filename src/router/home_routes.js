@@ -1,29 +1,30 @@
-import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {useNavigation} from '@react-navigation/native';
-import {View, Image, Text} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import ADIcon from 'react-native-vector-icons/AntDesign';
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
+import { View, Image, Text } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import ADIcon from "react-native-vector-icons/AntDesign";
+import HomeScreen from "../screens/HomeScreen";
+import StoryScreen from "../screens/StoryScreen";
+import logo from "../assets/images/logo.png";
+import Drawer from "./DrawerNavigator/drawerNavigator";
+import ChatScreen from "../screens/ChatScreen";
+import FoodOrderScreen from "../screens/FoodOrderScreen";
+import styles from "./style";
+import SearchScreen from "../screens/SearchScreen";
+import NotificationScreen from "../screens/NotificationScreen";
+import { LinearGradient } from "expo-linear-gradient";
+import { COLORS } from "../Constants/COLORS";
 
-import HomeScreen from '../screens/HomeScreen';
-import StoryScreen from '../screens/StoryScreen';
-import logo from '../assets/images/logo.png';
-import Drawer from './DrawerNavigator/drawerNavigator';
-import ChatScreen from '../screens/ChatScreen';
-import FoodOrderScreen from '../screens/FoodOrderScreen';
-import styles from './style';
-import SearchScreen from '../screens/SearchScreen';
-import NotificationScreen from '../screens/NotificationScreen';
-
-const HomeStack = createStackNavigator ();
+const HomeStack = createStackNavigator();
 const HomeRoutes = () => {
-  const navigation = useNavigation ();
+  const navigation = useNavigation();
 
   const chatPress = () => {
-    navigation.navigate ('ChatScreen');
+    navigation.navigate("ChatScreen");
   };
   const drawerPress = () => {
-    navigation.openDrawer ();
+    navigation.openDrawer();
   };
   return (
     <HomeStack.Navigator>
@@ -31,14 +32,15 @@ const HomeRoutes = () => {
         name="Home"
         component={HomeScreen}
         options={{
-          title: 'Campus Buddy',
-          headerTitleAlign: 'center',
-          headerRightContainerStyle: {
-            marginRight: 15,
+          title: "Campus Buddy",
+          headerTitleAlign: "center",
+          headerStyle: {
+            height: 50,
+            backgroundColor: COLORS.background_dark,
           },
           headerTitle: () => (
             <View style={styles.container}>
-              <Text style={styles.header}>Campus Buddy</Text>
+              <Text style={styles.headerTitle}>Campus Buddy</Text>
             </View>
           ),
           headerRight: () => (
@@ -46,11 +48,15 @@ const HomeRoutes = () => {
               <Ionicons
                 name="chatbox"
                 size={25}
-                color={'black'}
+                color={COLORS.font}
                 onPress={chatPress}
               />
             </View>
           ),
+          headerRightContainerStyle: {
+            marginTop: 10,
+            marginRight: 10,
+          },
           headerLeftContainerStyle: {
             marginLeft: 15,
           },
@@ -59,7 +65,7 @@ const HomeRoutes = () => {
               <ADIcon
                 name="menu-fold"
                 size={25}
-                color={'black'}
+                color={"transparent"}
                 onPress={drawerPress}
               />
             </View>
@@ -70,21 +76,22 @@ const HomeRoutes = () => {
         name="ChatScreen"
         component={ChatScreen}
         options={{
-          title: 'Chat',
-          headerTitleAlign: 'center',
-          headerTintColor: 'black',
+          title: "Chat",
+          headerTitleAlign: "center",
+          headerTintColor: COLORS.background_dark,
           headerStyle: {
-            backgroundColor: '#fff',
+            backgroundColor: COLORS.background_dark,
+            
           },
 
           headerTitleStyle: {
-            fontWeight: 'bold',
+            fontWeight: "bold",
             fontSize: 20,
+            color: COLORS.font
           },
         }}
       />
-
     </HomeStack.Navigator>
-  )
+  );
 };
 export default HomeRoutes;

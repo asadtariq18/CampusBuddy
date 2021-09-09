@@ -13,7 +13,7 @@ const Header = ({imageUri, name, caption}) => (
     </View>
     <TouchableOpacity>
     <View style={styles.right}>
-    <Icon name='dots-three-vertical' size={20} color='#000000'/>
+    <Icon name='dots-three-vertical' size={20} color='#eee'/>
     </View>
     </TouchableOpacity>
     </View>

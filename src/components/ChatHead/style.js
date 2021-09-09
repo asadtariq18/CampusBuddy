@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import { COLORS } from '../../Constants/COLORS';
 
 const styles = StyleSheet.create({
     container: {
@@ -7,9 +8,10 @@ const styles = StyleSheet.create({
     name:{
         alignContent: 'center',
         alignSelf: 'center',
-        marginBottom: 10,
+        marginTop: -15,
+        marginStart:3,
         fontWeight: 'bold',
-        color: '#3c3c3c'
+        color: COLORS.font
     
     },
     left: {
@@ -20,7 +22,7 @@ const styles = StyleSheet.create({
         position:'absolute',
         marginLeft:70,
         marginTop:-28,
-        color: 'gray'
+        color: COLORS.font_secondary
     },
     messageView:{
          flexDirection: 'column',

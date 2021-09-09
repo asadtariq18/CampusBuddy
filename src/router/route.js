@@ -6,8 +6,9 @@ import StoryScreen from '../screens/StoryScreen';
 import ChatScreen from '../screens/ChatScreen';
 import InboxScreen from '../screens/InboxScreen';
 import {useRoute} from '@react-navigation/native';
-import SearchScreen from '../screens/SearchScreen';
+import CreatePostScreen from '../screens/CreatePostScreen';
 import NotificationScreen from '../screens/NotificationScreen';
+import { COLORS } from '../Constants/COLORS';
 
 const RootStack = createStackNavigator ();
 
@@ -17,7 +18,7 @@ const Router = () => {
   return (
     <RootStack.Navigator>
       <RootStack.Screen
-        name={'Feed'}
+        name={"Feed"}
         component={bottomTabNavigator}
         options={{
           headerShown: false,
@@ -33,20 +34,34 @@ const Router = () => {
       <RootStack.Screen
         name="InboxScreen"
         component={InboxScreen}
-        options={({route}) => ({
+        options={({ route }) => ({
           title: route.params.name,
-          headerTitleAlign: 'center',
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: COLORS.background_dark,
+          },
+          headerTitleStyle: {
+            color: COLORS.font,
+            fontWeight: "bold",
+          },
         })}
       />
       <RootStack.Screen
         name="NotificationScreen"
         component={NotificationScreen}
         options={{
-          title: 'Notification',
-          headerTitleAlign: 'center',
+          title: "Notification",
+          headerTitleAlign: "center",
         }}
       />
-
+      <RootStack.Screen
+        name="CreatePostScreen"
+        component={CreatePostScreen}
+        options={{
+          title: "Create a post",
+          headerTitleAlign: "center",
+        }}
+      />
     </RootStack.Navigator>
   );
 };

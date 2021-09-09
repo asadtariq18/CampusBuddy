@@ -1,32 +1,31 @@
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity, Text } from 'react-native';
-import ProfilePicture from '../ProfilePicture';
+import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity, Text, View } from "react-native";
+import ProfilePicture from "../ProfilePicture";
 
-import styles from './style';
-import StoryScreen from '../../screens/StoryScreen';
+import styles from "./style";
+import StoryScreen from "../../screens/StoryScreen";
+import { LinearGradient } from "expo-linear-gradient";
 
 const Story = (props) => {
-    const {
-        story:{
-            user:{
-                id,
-                imageUri,
-                name,
-            }
-    }
-    } = props;
-    const navigation = useNavigation();
+  const {
+    story: {
+      user: { id, imageUri, name },
+    },
+  } = props;
+  const navigation = useNavigation();
 
-    const onPress = () => {
-         navigation.navigate("StoryScreen", {username: name});
-    }
-    return(
-    <TouchableOpacity style={styles.container} onPress={onPress}>
-        <ProfilePicture uri={imageUri}/>
+  const onPress = () => {
+    navigation.navigate("StoryScreen", { username: name });
+  };
+  return (
+      <TouchableOpacity onPress={onPress}>
+          <View style={styles.container}>
+        <ProfilePicture uri={imageUri} />
         <Text style={styles.name}>{name}</Text>
-    </TouchableOpacity>
-
-)};
+    </View>
+      </TouchableOpacity>
+  );
+};
 
 export default Story;

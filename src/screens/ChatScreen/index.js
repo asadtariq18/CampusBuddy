@@ -4,13 +4,12 @@ import ChatList from '../../components/ChatList';
 import styles from './style';
 
 
-const ChatScreen = () =>(
-
-    <SafeAreaView style={styles.container}>
+const ChatScreen = () => (
+  <SafeAreaView style={styles.container}>
     <View style={styles.container}>
-    <ChatList/>
+      <ChatList />
     </View>
-    </SafeAreaView>
-)
+  </SafeAreaView>
+);
 
 export default ChatScreen; 

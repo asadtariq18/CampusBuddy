@@ -1,23 +1,29 @@
 import {StyleSheet} from 'react-native';
+import { COLORS } from '../../Constants/COLORS';
 
-const styles = StyleSheet.create ({
+const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: "row",
+    borderRadius: 30,
   },
   storiesContainer: {
-    marginBottom: 10,
-    backgroundColor: '#FAFAFA',
+    marginBottom: 5,
+    borderRadius: 0,
+    padding: 10,
+    marginTop: 10,
   },
   plusIcon: {
-    backgroundColor: '#FAFAFA',
-    marginLeft: 6,
-    paddingTop: 7,
-    paddingHorizontal: 5,
+    backgroundColor: COLORS.secondary,
+    borderRadius: 20,
+    padding: 15,
+    marginTop: 25,
+    marginHorizontal: 8,
   },
   name: {
-    textAlign: 'center',
+    textAlign: "center",
     marginVertical: 5,
     fontSize: 12,
+    color: COLORS.font,
   },
 });
 

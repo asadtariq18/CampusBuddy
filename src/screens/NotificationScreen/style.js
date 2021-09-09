@@ -1,18 +1,20 @@
 import {StyleSheet} from 'react-native';
+import { COLORS } from '../../Constants/COLORS';
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.background_dark,
         flex:1
     },
     header:{
         alignContent: 'center',
         justifyContent: 'center',
-        backgroundColor: '#ffffff'
+        backgroundColor: COLORS.background_dark,
     },
-    headertext:{
+    headerText:{
         fontWeight: 'bold',
         fontSize: 20,
+        color: COLORS.font
     },
 })
 

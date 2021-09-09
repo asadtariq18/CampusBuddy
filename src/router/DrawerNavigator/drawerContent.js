@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, useColorScheme} from 'react-native';
 import {
   useTheme,
   Avatar,
@@ -15,11 +15,12 @@ import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
+import { COLORS } from '../../Constants/COLORS';
 export function DrawerContent (props) {
   const paperTheme = useTheme ();
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: COLORS.background_dark}}>
       <DrawerContentScrollView {...props}>
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
@@ -54,45 +55,50 @@ export function DrawerContent (props) {
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({color, size}) => (
-                <Icon name="home-outline" color="black" size={size} />
+                <Icon name="home-outline" color={COLORS.icon} size={size} />
               )}
               label="Feed"
+              inactiveTintColor={COLORS.font}
               onPress={() => {
                 props.navigation.navigate ('Home');
               }}
             />
             <DrawerItem
               icon={({color, size}) => (
-                <Icon name="account-outline" color="black" size={size} />
+                <Icon name="account-outline" color={COLORS.icon} size={size} />
               )}
               label="Profile"
+              inactiveTintColor={COLORS.font}
               onPress={() => {
                 props.navigation.navigate ('Profile');
               }}
             />
             <DrawerItem
               icon={({color, size}) => (
-                <Icon name="food" color="black" size={size} />
+                <Icon name="food" color={COLORS.icon} size={size} />
               )}
               label="Food Order"
+              inactiveTintColor={COLORS.font}
               onPress={() => {
                 props.navigation.navigate ('Food Order');
               }}
             />
             <DrawerItem
               icon={({color, size}) => (
-                <Icon5 name="hands-helping" color="black" size={size - 5} />
+                <Icon5 name="hands-helping" color={COLORS.icon} size={size - 5} />
               )}
               label="Donation"
+              inactiveTintColor={COLORS.font}
               onPress={() => {
                 props.navigation.navigate ('Donation');
               }}
             />
             <DrawerItem
               icon={({color, size}) => (
-                <Icon name="map" color="black" size={size} />
+                <Icon name="map" color={COLORS.icon} size={size} />
               )}
               label="Map"
+              inactiveTintColor={COLORS.font}
               onPress={() => {
                 props.navigation.navigate ('Map');
               }}
@@ -101,7 +107,7 @@ export function DrawerContent (props) {
           <Drawer.Section title="Preferences">
             <TouchableRipple onPress={() => {}}>
               <View style={styles.preference}>
-                <Text>Dark Theme</Text>
+                <Text style={{color: COLORS.font}}>Dark Theme</Text>
                 <View pointerEvents="none">
                   <Switch value={paperTheme.dark} />
                 </View>
@@ -113,9 +119,10 @@ export function DrawerContent (props) {
       <Drawer.Section style={styles.bottomDrawerSection}>
         <DrawerItem
           icon={({color, size}) => (
-            <Icon name="exit-to-app" color="black" size={size} />
+            <Icon name="exit-to-app" color={COLORS.icon} size={size} />
           )}
           label="Sign Out"
+          inactiveTintColor={COLORS.font}
           onPress={() => {}}
         />
       </Drawer.Section>
@@ -123,7 +130,7 @@ export function DrawerContent (props) {
   );
 }
 
-const styles = StyleSheet.create ({
+const styles = StyleSheet.create({
   drawerContent: {
     flex: 1,
   },
@@ -133,24 +140,26 @@ const styles = StyleSheet.create ({
   title: {
     fontSize: 16,
     marginTop: 3,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    color: COLORS.font,
   },
   caption: {
     fontSize: 14,
     lineHeight: 14,
+    color: COLORS.font,
   },
   row: {
     marginTop: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   section: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginRight: 15,
   },
   paragraph: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginRight: 3,
   },
   drawerSection: {
@@ -158,12 +167,12 @@ const styles = StyleSheet.create ({
   },
   bottomDrawerSection: {
     marginBottom: 15,
-    borderTopColor: '#f4f4f4',
+    borderTopColor: COLORS.secondary,
     borderTopWidth: 1,
   },
   preference: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingVertical: 12,
     paddingHorizontal: 16,
   },

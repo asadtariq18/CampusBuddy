@@ -1,15 +1,17 @@
 import {StyleSheet} from 'react-native';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { COLORS } from '../../Constants/COLORS';
 
 const styles = StyleSheet.create({
     container: {
-       
+
     },
     name:{
         alignContent: 'center',
         alignSelf: 'center',
         marginBottom: 10,
         fontWeight: 'bold',
-        color: '#3c3c3c'
+        color: COLORS.font
     
     },
     left: {
@@ -18,7 +20,7 @@ const styles = StyleSheet.create({
     },
     notificationText:{
         marginTop: 19.5,
-        color: 'gray'
+        color: "gray"
     },
 })
 

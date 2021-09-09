@@ -5,6 +5,7 @@ import ProfilePicture from '../ProfilePicture';
 
 import styles from './style';
 import InboxScreen from '../../screens/InboxScreen';
+import { COLORS } from '../../Constants/COLORS';
 
 const Chat = ({imageUri, name, lastmessage}) => {
   const navigation = useNavigation ();
