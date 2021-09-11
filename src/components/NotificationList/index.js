@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, Text, FlatList } from 'react-native';
+import { FlatList } from 'react-native';
 import NotificationHead from '../NotificationHead/index';
 import data from '../../Data/NotificationData/notificationData';
 

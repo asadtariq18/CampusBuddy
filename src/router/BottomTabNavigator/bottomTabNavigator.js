@@ -1,4 +1,5 @@
 import React from "react";
+import { Keyboard } from "react-native";
 import "react-native-gesture-handler";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Foundation from "react-native-vector-icons/Foundation";
