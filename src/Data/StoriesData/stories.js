@@ -6,6 +6,12 @@ export default [
         "https://cdn.izoomyou.app/aHR0cHM6Ly9zY29udGVudC1pYWQzLTEuY2RuaW5zdGFncmFtLmNvbS92L3Q1MS4yODg1LTE5LzY3NjA3MDMzXzEzNzExNTA0MTMwMjI5MTJfNDY1MDQwMDcyNDc4NDUxMzAyNF9uLmpwZz9fbmNfaHQ9c2NvbnRlbnQtaWFkMy0xLmNkbmluc3RhZ3JhbS5jb20mX25jX29oYz1mVUk4X2wwaGoxZ0FYLTZIaHlWJmVkbT1BRUY4dFlZQkFBQUEmY2NiPTctNCZvaD1jNjBlNzc4ODFlMzc0MDVjN2QwNmQwMzlhOTlhZDZmMiZvZT02MTNEMTE0NCZfbmNfc2lkPWE5NTEzZA==",
       name: "Asad",
     },
+    stories: {
+      id: "s1",
+      media:
+        "https://camo.envatousercontent.com/5ca5bae8a99298ea2a8be3e35d304000060a2085/687474703a2f2f6e69782d73747564696f2d65646974696f6e2e72752f696d616765732f766964656f686976652f666f6f642d696e7374612e6a7067",
+      postedAt: '12:00 AM'
+      },
   },
   {
     user: {

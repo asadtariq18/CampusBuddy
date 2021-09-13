@@ -6,8 +6,7 @@ import {
   Text,
   TextInput,
   TouchableWithoutFeedback,
-  FlatList,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import MessagesList from "../../components/MessagesList/index";
 import { COLORS } from "../../Constants/COLORS";
@@ -33,15 +32,15 @@ const InboxScreen = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-          <MessagesList />
+      <ScrollView keyboardShouldPersistTaps>
+        <MessagesList />
       </ScrollView>
       <View style={{ flexDirection: "row" }}>
         <TextInput
           multiline
           placeholder="Type here..."
           placeholderTextColor={COLORS.font_secondary}
-          selectionColor={COLORS.primary + "99"}
+          selectionColor={COLORS.primary}
           style={styles.textInput}
           onChangeText={(value) => onChange(value)}
         ></TextInput>

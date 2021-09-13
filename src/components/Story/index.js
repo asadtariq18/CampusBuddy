@@ -10,7 +10,7 @@ import { LinearGradient } from "expo-linear-gradient";
 const Story = (props) => {
   const {
     story: {
-      user: { id, imageUri, name },
+      user: { imageUri, name, stories },
     },
   } = props;
   const navigation = useNavigation();

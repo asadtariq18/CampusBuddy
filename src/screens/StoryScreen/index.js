@@ -2,10 +2,8 @@ import React from 'react';
 import { SafeAreaView, Text, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native'
 
-
-
-
 const StoryScreen = () =>{
+
     const route = useRoute();
     const navigation = useNavigation();
     const name = route.params.username;

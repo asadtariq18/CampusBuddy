@@ -15,6 +15,7 @@ const DrawerNavigator = () =>{
 const createStack = () => 
     <Router/>
 return(
+
         <Drawer.Navigator initialRouteName="Feed" drawerContent={props => <DrawerContent{...props}/>}>
         <Drawer.Screen name="Feed" children={createStack}/>
         <Drawer.Screen name="Food Order" component={FoodOrderScreen} />

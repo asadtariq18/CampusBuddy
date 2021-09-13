@@ -3,20 +3,21 @@ import { Text, View } from "react-native";
 import moment from "moment";
 import styles from "./styles";
 import { COLORS } from "../../Constants/COLORS";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import {useClipboard} from "@react-native-community/clipboard";
 
 const MessageView = ({ user, message, createdAt }) => {
   const isMyMessage = () => {
     return user.id === "u1";
   };
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container}>
       <View
         style={
           (styles.messageBox,
           {
-            backgroundColor: isMyMessage()
-              ? COLORS.primary + "99"
-              : COLORS.secondary,
+            backgroundColor: isMyMessage() ? COLORS.primary : COLORS.secondary,
             marginLeft: isMyMessage() ? 50 : 0,
             marginRight: isMyMessage() ? 0 : 50,
             borderRadius: 20,
@@ -25,9 +26,11 @@ const MessageView = ({ user, message, createdAt }) => {
         }
       >
         <Text style={styles.message}>{message}</Text>
-        <Text style={styles.time}>{moment(createdAt).fromNow()}</Text>
+        <View style={styles.timeView}>
+          <Text style={styles.time}>{moment(createdAt).fromNow()}</Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

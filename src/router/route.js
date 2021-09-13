@@ -1,9 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-
 import bottomTabNavigator from './BottomTabNavigator/bottomTabNavigator';
 import StoryScreen from '../screens/StoryScreen';
-import ChatScreen from '../screens/ChatScreen';
 import InboxScreen from '../screens/InboxScreen';
 import {useRoute} from '@react-navigation/native';
 import CreatePostScreen from '../screens/CreatePostScreen';
@@ -13,7 +11,6 @@ import { COLORS } from '../Constants/COLORS';
 const RootStack = createStackNavigator ();
 
 const Router = () => {
-  const route = useRoute ();
 
   return (
     <RootStack.Navigator>
