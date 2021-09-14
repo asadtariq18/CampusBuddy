@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
-  StatusBar,
 } from "react-native";
 import { Icon } from "native-base";
 import { useNavigation } from "@react-navigation/native";
@@ -141,8 +140,7 @@ const SignUpScreen = () => {
             onChangeText={(value) => onChangePass(value.trim())}
           ></TextInput>
           <Icon
-            ios="ios-menu"
-            android="checkmark-circle"
+            name="checkmark-circle"
             style={{
               fontSize: 25,
               color: isValid_Password ? COLORS.primary : "gray",

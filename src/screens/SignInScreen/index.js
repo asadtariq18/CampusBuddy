@@ -52,10 +52,10 @@ const SignInScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View>
-      <Image
-        style={styles.image}
-        source={require("../../Constants/logo.png")}
-      />
+        <Image
+          style={styles.image}
+          source={require("../../Constants/logo.png")}
+        />
         <TextInput
           placeholder="Registration Number/ University Mail"
           placeholderTextColor={COLORS.font_secondary}
@@ -69,6 +69,7 @@ const SignInScreen = () => {
           placeholderTextColor={COLORS.font_secondary}
           selectionColor={COLORS.primary}
           style={styles.textInput}
+          secureTextEntry={true}
           onChangeText={(value) => onChangePass(value)}
         ></TextInput>
         <TouchableOpacity onPress={onLoginPress}>
