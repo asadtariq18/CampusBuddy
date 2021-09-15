@@ -9,6 +9,7 @@ import {
   TextInput,
   ScrollView,
   GestureRecognizer,
+  Pressable,
 } from "react-native";
 import { COLORS } from "../../../Constants/COLORS";
 import CommentList from "../../CommentList/index";
@@ -48,6 +49,9 @@ const Footer = ({ likesCount: likesCountProp, postedAt }) => {
     }
   };
 
+  const onClose=()=>{
+    setModalVisible(!modalVisible)
+  }
   useEffect(() => {
     setLikesCount(likesCountProp);
   }, []);
@@ -97,6 +101,10 @@ const Footer = ({ likesCount: likesCountProp, postedAt }) => {
         }}
       >
         <View style={styles.centeredView}>
+            <TouchableOpacity onPressIn={onClose}
+                style={styles.modalClose}
+              >
+            </TouchableOpacity>
           <View style={styles.modalView}>
             <View style={{ alignSelf: "center", marginBottom: 10 }}>
               <Text style={styles.modalText}>Comments</Text>

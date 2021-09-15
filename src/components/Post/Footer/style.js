@@ -4,7 +4,6 @@ import { COLORS } from '../../../Constants/COLORS';
 const styles = StyleSheet.create({
   container: {
     margin: 5,
-    
   },
   buttonView: {
     flexDirection: "row",
@@ -62,8 +61,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background_dark,
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
-    padding: 20,
-
+    padding: 10,
     shadowColor: COLORS.font_secondary,
   },
   modalText: {
@@ -84,6 +82,15 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 10,
     color: COLORS.font,
+  },
+  modalClose: {
+    flex: 1,
+    margin: 3,
+    backgroundColor: "transparent",
+    paddingHorizontal: "100%",
+    paddingVertical: 4,
+    marginTop: 10,
+    borderRadius: 20,
   },
 });
 
