@@ -5,7 +5,7 @@ import messagesData from "../../Data/ChatData/ChatMessages";
 
 const MessageList = () => {
   return (
-    <ScrollView>
+    <ScrollView scrollsToTop={false}>
       <FlatList
         data={messagesData.messages}
         keyExtractor={({ id }) => id}
