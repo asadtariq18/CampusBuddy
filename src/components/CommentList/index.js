@@ -1,21 +1,41 @@
 import React from "react";
-import { FlatList } from "react-native";
+import { FlatList, RefreshControl, ScrollView, ToastAndroid } from "react-native";
 import CommentHead from "../CommentHead/index";
-import data from '../../Data/CommentData/commentData';
+import data from "../../Data/CommentData/commentData";
 
-const CommentList = () => (
-  <FlatList
-    keyboardShouldPersistTaps="always"
-    data={data}
-    keyExtractor={({ id }) => id}
-    renderItem={({ item }) => (
-      <CommentHead
-        imageUri={item.imageUri}
-        name={item.name}
-        comment={item.comment}
-      />
-    )}
-  />
-);
+const CommentList = () => {
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    if (true) {
+      try {
+        setRefreshing(false);
+        ToastAndroid.show("Updated", ToastAndroid.SHORT);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      ToastAndroid.show("No more new comments", ToastAndroid.SHORT);
+      setRefreshing(false);
+    }
+  }, [refreshing]);
+  return (
+    <FlatList
+      keyboardShouldPersistTaps="handled"
+      data={data}
+      keyExtractor={({ id }) => id}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      renderItem={({ item }) => (
+        <CommentHead
+          imageUri={item.imageUri}
+          name={item.name}
+          comment={item.comment}
+        />
+      )}
+    />
+  );
+};
 
 export default CommentList;
