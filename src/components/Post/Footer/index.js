@@ -8,8 +8,8 @@ import {
   Modal,
   TextInput,
   ScrollView,
-  GestureRecognizer,
-  Pressable,
+  RefreshControl,
+  ToastAndroid,
 } from "react-native";
 import { COLORS } from "../../../Constants/COLORS";
 import CommentList from "../../CommentList/index";
@@ -21,6 +21,7 @@ const Footer = ({ likesCount: likesCountProp, postedAt }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isEmpty, setIsEmpty] = useState(true);
   const [comment, setComment] = useState("");
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const onLikePressed = () => {
     const amount = isLiked ? -1 : 1;
@@ -49,15 +50,30 @@ const Footer = ({ likesCount: likesCountProp, postedAt }) => {
     }
   };
 
-  const onClose=()=>{
-    setModalVisible(!modalVisible)
-  }
+  const onClose = () => {
+    setModalVisible(!modalVisible);
+  };
   useEffect(() => {
     setLikesCount(likesCountProp);
   }, []);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    if (true) {
+      try {
+        setRefreshing(false);
+        ToastAndroid.show("Updated", ToastAndroid.SHORT);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      ToastAndroid.show("No more new comments", ToastAndroid.SHORT);
+      setRefreshing(false);
+    }
+  }, [refreshing]);
   return (
     <View keyboardShouldPersistTaps="always" style={styles.container}>
-      <View style={styles.iconContainer}>
+      <View keyboardShouldPersistTaps="handled" style={styles.iconContainer}>
         <View style={styles.left}>
           <TouchableWithoutFeedback onPress={onLikePressed}>
             {isLiked ? (
@@ -91,6 +107,7 @@ const Footer = ({ likesCount: likesCountProp, postedAt }) => {
         <Text style={styles.postedAt}>{postedAt}</Text>
       </View>
       <Modal
+      keyboardShouldPersistTaps={"handled"}
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -101,10 +118,10 @@ const Footer = ({ likesCount: likesCountProp, postedAt }) => {
         }}
       >
         <View style={styles.centeredView}>
-            <TouchableOpacity onPressIn={onClose}
-                style={styles.modalClose}
-              >
-            </TouchableOpacity>
+          <TouchableOpacity
+            onPressIn={onClose}
+            style={styles.modalClose}
+          ></TouchableOpacity>
           <View style={styles.modalView}>
             <View style={{ alignSelf: "center", marginBottom: 10 }}>
               <Text style={styles.modalText}>Comments</Text>
@@ -115,10 +132,19 @@ const Footer = ({ likesCount: likesCountProp, postedAt }) => {
                 alignItems: "center",
                 justifyContent: "center",
               }}
+              refreshControl={
+                <RefreshControl
+                  progressBackgroundColor={COLORS.background_dark}
+                  colors={[COLORS.primary]}
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
+              }
             >
               <CommentList />
             </ScrollView>
             <View
+            keyboardShouldPersistTaps='always'
               style={{
                 flexDirection: "row",
                 justifyContent: "center",
@@ -126,6 +152,7 @@ const Footer = ({ likesCount: likesCountProp, postedAt }) => {
               }}
             >
               <TextInput
+              keyboardShouldPersistTaps={'always'}
                 placeholder="Comment"
                 multiline
                 placeholderTextColor={COLORS.font_secondary}

@@ -4,6 +4,7 @@ import Post from "../Post";
 import Stories from "../../components/Stories";
 import postsData from "../../Data/PostData/posts";
 import { View } from "native-base";
+import {COLORS} from '../../Constants/COLORS';
 
 const Feed = () => {
   const [refreshing, setRefreshing] = React.useState(false);
@@ -31,7 +32,7 @@ const Feed = () => {
         renderItem={({ item }) => <Post post={item} />}
         ListHeaderComponent={Stories}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl progressBackgroundColor={COLORS.background_dark} colors={[COLORS.primary]} refreshing={refreshing} onRefresh={onRefresh} />
         }
       />
     </View>

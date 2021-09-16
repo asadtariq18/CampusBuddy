@@ -2,6 +2,7 @@ import React from "react";
 import { FlatList, RefreshControl, ToastAndroid } from "react-native";
 import NotificationHead from "../NotificationHead/index";
 import data from "../../Data/NotificationData/notificationData";
+import { COLORS } from "../../Constants/COLORS";
 
 const NotificationList = () => {
   const [refreshing, setRefreshing] = React.useState(false);
@@ -32,7 +33,12 @@ const NotificationList = () => {
         />
       )}
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        <RefreshControl
+          progressBackgroundColor={COLORS.background_dark}
+          colors={[COLORS.primary]}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
       }
     />
   );

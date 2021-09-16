@@ -27,7 +27,12 @@ const ProfileScreen = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            progressBackgroundColor={COLORS.background_dark}
+            colors={[COLORS.primary]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
         }
       >
         <View style={{ alignSelf: "center" }}>

@@ -3,6 +3,7 @@ import { FlatList, RefreshControl, ToastAndroid } from "react-native";
 import styles from "./style";
 import ChatHead from "../ChatHead";
 import ChatData from "../../Data/ChatData/chatdata";
+import { COLORS } from "../../Constants/COLORS";
 
 const ChatList = () => {
   const [refreshing, setRefreshing] = React.useState(false);
@@ -34,7 +35,12 @@ const ChatList = () => {
         />
       )}
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        <RefreshControl
+          progressBackgroundColor={COLORS.background_dark}
+          colors={[COLORS.primary]}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
       }
     />
   );
