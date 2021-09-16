@@ -35,7 +35,6 @@ const HomeRoutes = () => {
           title: "Campus Buddy",
           headerTitleAlign: "center",
           headerStyle: {
-            paddingTop: 10,
             height: 50,
             backgroundColor: COLORS.background_dark,
           },
