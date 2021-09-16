@@ -5,12 +5,12 @@ import {
   View,
   TouchableOpacity,
   TextInput,
-  Image
+  Image,
+  ToastAndroid,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
-
 
 const SignInScreen = () => {
   const [regNo, setRegNo] = useState("");
@@ -38,17 +38,31 @@ const SignInScreen = () => {
 
   const onLoginPress = () => {
     if (regNo.toUpperCase() === "ASAD" && password === "1234") {
-        navigation.navigate("Home")
+      ToastAndroid.showWithGravityAndOffset(
+        "Logging in...",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+        25,
+        50
+      );
+      navigation.navigate("Home");
+      ToastAndroid.showWithGravityAndOffset(
+        "Logged in as "+ regNo,
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+        25,
+        50
+      );
     } else if (regNo === "" && password === "") {
-      alert("Fields empty");
+      ToastAndroid.show("Fields empty", ToastAndroid.SHORT);
     } else {
-      alert("Wrong Credentials, try again");
+      ToastAndroid.show("Wrong Credentials, try again", ToastAndroid.SHORT);
     }
   };
 
   const onSignUpPress = () => {
-     navigation.navigate("SignUp")
-  }
+    navigation.navigate("SignUp");
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View>
