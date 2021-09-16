@@ -5,8 +5,8 @@ const styles = StyleSheet.create({
   container: {
     margin: 5,
     borderRadius: 50,
-    borderWidth: 3,
-    borderColor:  COLORS.primary,
+    borderColor: COLORS.primary,
+    backgroundColor: COLORS.primary
   },
   image: {
     borderRadius: 50,

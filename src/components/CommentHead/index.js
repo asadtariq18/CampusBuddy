@@ -13,7 +13,7 @@ const CommentHead = ({ imageUri, name, comment }) => {
 
   return (
     <View style={styles.container}>
-      <ProfilePicture uri={imageUri} size={25} />
+      <ProfilePicture uri={imageUri} size={25} border={false} />
       <View style={styles.content}>
         <Text style={styles.name}>{name} </Text>
         <Text style={styles.commentText}>{comment}</Text>

@@ -8,7 +8,7 @@ const CommentList = () => {
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    if (false) {
+    if (true) {
       try {
         setRefreshing(false);
         ToastAndroid.show("Updated", ToastAndroid.SHORT);
@@ -22,6 +22,7 @@ const CommentList = () => {
   }, [refreshing]);
   return (
     <FlatList
+      keyboardShouldPersistTaps="handled"
       data={data}
       keyExtractor={({ id }) => id}
       refreshControl={

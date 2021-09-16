@@ -8,7 +8,7 @@ const Header = ({imageUri, name, caption}) => (
     <View>
     <View style={styles.container}>
     <View style={styles.left}>
-    <ProfilePicture uri= {imageUri} size={40} />
+    <ProfilePicture uri= {imageUri} size={40} border={false}/>
     <Text style={styles.name}>{name}</Text>
     </View>
     <TouchableOpacity>

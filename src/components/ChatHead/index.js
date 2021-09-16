@@ -16,7 +16,7 @@ const onPress = () => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
         <View style={styles.left}>
-          <ProfilePicture uri={imageUri} />
+          <ProfilePicture uri={imageUri} border={false} />
           <Text style={styles.name}>{name}</Text>
         </View>
         <View style={styles.messageView}>

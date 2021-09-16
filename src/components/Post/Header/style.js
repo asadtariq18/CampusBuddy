@@ -1,6 +1,5 @@
 import {StyleSheet} from 'react-native';
 import { COLORS } from '../../../Constants/COLORS';
-import Body from '../Body';
 
 const styles = StyleSheet.create({
   container: {
@@ -23,12 +22,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
     color: COLORS.font,
-    borderRadius: 10,
-    paddingHorizontal: 10,
+    paddingStart: 5,
   },
   caption: {
     color: COLORS.font,
-    fontSize: 18,
+    fontSize: 15,
   },
   bottom: {
     flexDirection: "column",
