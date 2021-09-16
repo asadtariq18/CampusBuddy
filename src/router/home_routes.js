@@ -35,6 +35,7 @@ const HomeRoutes = () => {
           title: "Campus Buddy",
           headerTitleAlign: "center",
           headerStyle: {
+            paddingTop: 10,
             height: 50,
             backgroundColor: COLORS.background_dark,
           },
@@ -58,14 +59,15 @@ const HomeRoutes = () => {
             marginRight: 10,
           },
           headerLeftContainerStyle: {
-            marginLeft: 15,
+            marginTop: 10,
+            marginLeft: 10,
           },
           headerLeft: () => (
             <View>
-              <ADIcon
-                name="menu-fold"
+              <Ionicons
+                name="ios-menu"
                 size={25}
-                color={"transparent"}
+                color={COLORS.font}
                 onPress={drawerPress}
               />
             </View>
