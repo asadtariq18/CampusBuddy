@@ -132,7 +132,8 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.instaclone"
+        vectorDrawables.useSupportLibrary = true
+        applicationId "com.campusbuddy"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

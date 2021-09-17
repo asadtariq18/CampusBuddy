@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -6,13 +6,21 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
+  ToastAndroid,
+  StatusBar,
+  Keyboard,
 } from "react-native";
 import { Icon } from "native-base";
+import { Header } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const SignUpScreen = () => {
+  const [isMale, setIsMale] = useState(false);
+  const [isFemale, setIsFemale] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [mail, setMail] = useState("");
@@ -21,15 +29,39 @@ const SignUpScreen = () => {
   const [isValid_LastName, setIsValid_LastName] = useState(false);
   const [isValid_Mail, setIsValid_Mail] = useState(false);
   const [isValid_Password, setIsValid_Password] = useState(false);
+  const [onFocus, setOnFocus] = useState(false);
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setOnFocus(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setOnFocus(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
+  const malePress = () => {
+    setIsFemale(false);
+    setIsMale(!isMale);
+  };
+
+  const femalePress = () => {
+    setIsMale(false);
+    setIsFemale(!isFemale);
+  };
 
   const onChangeFirstName = (str) => {
     if (ValidateFirstName(str)) {
       setFirstName(str);
     }
   };
-
   const onChangeLastName = (str) => {
     if (ValidateLastName(str)) {
       setLastName(str);
@@ -81,7 +113,7 @@ const SignUpScreen = () => {
 
   const ValidatePass = (str) => {
     if (str.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/)) {
-      setPassword(str)
+      setPassword(str);
       setIsValid_Password(true);
     } else {
       setIsValid_Password(false);
@@ -95,8 +127,18 @@ const SignUpScreen = () => {
       isValid_LastName &&
       isValid_Password
     ) {
-      navigation.navigate("SignIn");
-      alert(firstName + " " + lastName + "\n" + mail + "\n" + password);
+      navigation.navigate("SetUpProfile", {isMale});
+      ToastAndroid.showWithGravity(
+        "Your account has been created",
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM
+      );
+    } else {
+      ToastAndroid.showWithGravity(
+        "Invalid Input",
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM
+      );
     }
   };
 
@@ -105,17 +147,50 @@ const SignUpScreen = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
+      {!onFocus ? (
+        <Header style={styles.header}>
+          <StatusBar backgroundColor={COLORS.background_dark} />
+          <View style={styles.header}>
+            <Text style={styles.headerText}>Create your account</Text>
+          </View>
+        </Header>
+      ) : null}
       <View>
         <Image
           style={styles.image}
           source={require("../../Constants/logo.png")}
         />
+        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+          <TouchableWithoutFeedback onPress={malePress}>
+            {!isMale ? (
+              <View style={styles.buttonView}>
+                <Text style={styles.button5}>Male</Text>
+              </View>
+            ) : (
+              <View style={styles.buttonView}>
+                <Text style={styles.button4}>Male</Text>
+              </View>
+            )}
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={femalePress}>
+            {!isFemale ? (
+              <View style={styles.buttonView}>
+                <Text style={styles.button5}>Female</Text>
+              </View>
+            ) : (
+              <View style={styles.buttonView}>
+                <Text style={styles.button4}>Female</Text>
+              </View>
+            )}
+          </TouchableWithoutFeedback>
+        </View>
         <TextInput
           placeholder="First name"
           placeholderTextColor={COLORS.font_secondary}
           selectionColor={COLORS.primary}
           style={styles.textInput}
           onChangeText={(value) => onChangeFirstName(value.trim())}
+          onFocus={() => setOnFocus(true)}
         ></TextInput>
         <TextInput
           placeholder="Last Name"
@@ -151,7 +226,8 @@ const SignUpScreen = () => {
           {isValid_Mail &&
           isValid_FirstName &&
           isValid_LastName &&
-          isValid_Password ? (
+          isValid_Password &&
+          (isFemale || isMale) ? (
             <View style={styles.buttonView}>
               <Text style={styles.button2}>Sign up</Text>
             </View>

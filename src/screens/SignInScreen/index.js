@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -7,7 +7,10 @@ import {
   TextInput,
   Image,
   ToastAndroid,
+  StatusBar,
+  Keyboard
 } from "react-native";
+import { Header } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
@@ -16,8 +19,25 @@ const SignInScreen = () => {
   const [regNo, setRegNo] = useState("");
   const [password, setPassword] = useState("");
   const [isEmpty, setIsEmpty] = useState(true);
-
+  const [onFocus, setOnFocus] = useState(false);
   const navigation = useNavigation();
+
+  const [keyboardStatus, setKeyboardStatus] = useState(undefined);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setOnFocus(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setOnFocus(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
   const onChangeReg = (input1) => {
     setRegNo(input1);
     if (input1 !== "" && password !== "") {
@@ -47,7 +67,7 @@ const SignInScreen = () => {
       );
       navigation.navigate("Home");
       ToastAndroid.showWithGravityAndOffset(
-        "Logged in as "+ regNo,
+        "Logged in as " + regNo,
         ToastAndroid.SHORT,
         ToastAndroid.CENTER,
         25,
@@ -65,6 +85,14 @@ const SignInScreen = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
+      {!onFocus ? (
+        <Header style={styles.header}>
+          <StatusBar backgroundColor={COLORS.background_dark} />
+          <View style={styles.header}>
+            <Text style={styles.headerText}>Login here</Text>
+          </View>
+        </Header>
+      ) : null}
       <View>
         <Image
           style={styles.image}

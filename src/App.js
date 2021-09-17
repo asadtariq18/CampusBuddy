@@ -5,6 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Home from "./router/DrawerNavigator/drawerNavigator";
 import SignInScreen from "./screens/SignInScreen/index";
 import SignUpScreen from "./screens/SignUpScreen/index";
+import SetUpProfileScreen from "./screens/SetUpProfileScreen";
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false);
@@ -25,6 +26,11 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={Home}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SetUpProfile"
+          component={SetUpProfileScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
