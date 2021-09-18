@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   Text,
@@ -7,19 +7,26 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  ToastAndroid,
 } from "react-native";
 import { Header } from "native-base";
+import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import { COLORS } from "../../Constants/COLORS";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 
 const CreatePostScreen = () => {
+  const [caption, setCaption] = useState("");
   const [isSelected_Status, setIsSelected_Status] = useState(true);
   const [isSelected_Ask, setIsSelected_Ask] = useState(false);
   const [isSelected_Lost, setIsSelected_Lost] = useState(false);
   const [isSelected_Found, setIsSelected_Found] = useState(false);
 
+  const navigation = useNavigation();
+  const onChangeCaption = (input) => {
+    setCaption(input);
+  };
   const onSelect = (buttonTitle) => {
     if (buttonTitle === "status") {
       setIsSelected_Status(!isSelected_Status);
@@ -75,12 +82,18 @@ const CreatePostScreen = () => {
     }
   };
 
-  const uploadPressed = () => {
-    alert("Under Development!");
+  const postPressed = () => {
+    if (caption === "") {
+      ToastAndroid.show("Please write something", ToastAndroid.SHORT);
+    } else {
+      navigation.navigate("Feed");
+      ToastAndroid.show("Uploading your post", ToastAndroid.LONG);
+    }
   };
 
   const discardPressed = () => {
-    alert("Under Development!");
+    navigation.navigate("Feed");
+    ToastAndroid.show("Post cancelled", ToastAndroid.LONG);
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -97,6 +110,7 @@ const CreatePostScreen = () => {
           contextMenuHidden={true}
           selectionColor={COLORS.primary + "99"}
           style={styles.textInput}
+          onChangeText={onChangeCaption}
         ></TextInput>
         <Text style={styles.h2text}>Select category</Text>
         <View style={styles.cardView}>
@@ -155,7 +169,7 @@ const CreatePostScreen = () => {
           <Text style={styles.button}>Gallery</Text>
         </TouchableOpacity>
       </View>
-      <TouchableWithoutFeedback onPress={uploadPressed}>
+      <TouchableWithoutFeedback onPress={postPressed}>
         <View style={styles.postButton}>
           <Text style={styles.h1text}>Post</Text>
         </View>
