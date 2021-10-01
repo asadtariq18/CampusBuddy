@@ -6,8 +6,8 @@ import { COLORS } from "../../Constants/COLORS";
 
 const HomeScreen = () => (
   <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={COLORS.background_dark} />
-      <Feed />
+    <StatusBar backgroundColor={COLORS.background_dark} />
+    <Feed />
   </SafeAreaView>
 );
 

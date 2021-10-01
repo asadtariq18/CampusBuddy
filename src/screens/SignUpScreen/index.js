@@ -16,6 +16,8 @@ import { useNavigation } from "@react-navigation/native";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import Firebase from "../../config/Firebase";
+const auth = Firebase.auth();
 
 const SignUpScreen = () => {
   const [isMale, setIsMale] = useState(false);
@@ -120,22 +122,20 @@ const SignUpScreen = () => {
     }
   };
 
-  const onSignUpPress = () => {
-    if (
-      isValid_Mail &&
-      isValid_FirstName &&
-      isValid_LastName &&
-      isValid_Password
-    ) {
-      navigation.navigate("SetUpProfile", {isMale});
+  const onSignUpPress = async () => {
+    try {
+      if (mail !== "" && password !== "") {
+        await auth.createUserWithEmailAndPassword(mail, password);
+        ToastAndroid.showWithGravity(
+          "Your account has been created",
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM
+        );
+        navigation.navigate("SetUpProfile", { isMale });
+      }
+    } catch (error) {
       ToastAndroid.showWithGravity(
-        "Your account has been created",
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM
-      );
-    } else {
-      ToastAndroid.showWithGravity(
-        "Invalid Input",
+        "Invalid input",
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM
       );

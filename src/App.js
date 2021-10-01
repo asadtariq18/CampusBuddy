@@ -14,13 +14,8 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SignIn">
         <Stack.Screen
-          name="SignIn"
-          component={SignInScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="SignUp"
-          component={SignUpScreen}
+          name="Auth"
+          component={AuthStack}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -37,3 +32,20 @@ export default function App() {
     </NavigationContainer>
   );
 }
+const AuthStack = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator initialRouteName="SignIn">
+      <Stack.Screen
+        name="SignIn"
+        component={SignInScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUpScreen}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
+};

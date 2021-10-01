@@ -8,12 +8,15 @@ import {
   Image,
   ToastAndroid,
   StatusBar,
-  Keyboard
+  Keyboard,
 } from "react-native";
 import { Header } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
+import Firebase from "../../config/Firebase";
+
+const auth = Firebase.auth();
 
 const SignInScreen = () => {
   const [regNo, setRegNo] = useState("");
@@ -56,27 +59,27 @@ const SignInScreen = () => {
     }
   };
 
-  const onLoginPress = () => {
-    if (regNo.toUpperCase() === "ASAD" && password === "1234") {
+  const onLoginPress = async () => {
+    try {
+      if (regNo !== "" && password !== "") {
+        await auth.signInWithEmailAndPassword(regNo, password);
+        ToastAndroid.showWithGravityAndOffset(
+          "Logging in...",
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+          25,
+          50
+        );
+        navigation.navigate("Home");
+      }
+    } catch (error) {
       ToastAndroid.showWithGravityAndOffset(
-        "Logging in...",
+        "Wrong Credentials",
         ToastAndroid.SHORT,
         ToastAndroid.CENTER,
         25,
         50
       );
-      navigation.navigate("Home");
-      ToastAndroid.showWithGravityAndOffset(
-        "Logged in as " + regNo,
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
-        25,
-        50
-      );
-    } else if (regNo === "" && password === "") {
-      ToastAndroid.show("Fields empty", ToastAndroid.SHORT);
-    } else {
-      ToastAndroid.show("Wrong Credentials, try again", ToastAndroid.SHORT);
     }
   };
 

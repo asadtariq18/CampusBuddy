@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, StyleSheet, useColorScheme} from 'react-native';
+import React from "react";
+import { View, StyleSheet, useColorScheme } from "react-native";
 import {
   useTheme,
   Avatar,
@@ -10,28 +10,54 @@ import {
   Text,
   TouchableRipple,
   Switch,
-} from 'react-native-paper';
-import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
+} from "react-native-paper";
+import { ToastAndroid } from "react-native";
+import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon5 from 'react-native-vector-icons/FontAwesome5';
-import { COLORS } from '../../Constants/COLORS';
-export function DrawerContent (props) {
-  const paperTheme = useTheme ();
-
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import Icon5 from "react-native-vector-icons/FontAwesome5";
+import { COLORS } from "../../Constants/COLORS";
+import { useNavigation } from "@react-navigation/native";
+import Firebase from "../../config/Firebase";
+const auth = Firebase.auth();
+export function DrawerContent(props) {
+  const navigation = useNavigation();
+  const paperTheme = useTheme();
+  const onSignOutPress = async () => {
+    try {
+      ToastAndroid.showWithGravity(
+        "Signing out...",
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM
+      );
+      await auth.signOut();
+      navigation.navigate("SignIn");
+      ToastAndroid.showWithGravity(
+        "Signed Out",
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM
+      );
+    } catch (error) {
+      ToastAndroid.showWithGravity(
+        error,
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM
+      );
+    }
+  };
   return (
-    <View style={{flex: 1, backgroundColor: COLORS.background_dark}}>
+    <View style={{ flex: 1, backgroundColor: COLORS.background_dark }}>
       <DrawerContentScrollView {...props}>
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
-            <View style={{flexDirection: 'row', marginTop: 15}}>
+            <View style={{ flexDirection: "row", marginTop: 15 }}>
               <Avatar.Image
                 source={{
-                  uri: 'https://api.adorable.io/avatars/50/abott@adorable.png',
+                  uri: "https://api.adorable.io/avatars/50/abott@adorable.png",
                 }}
                 size={50}
               />
-              <View style={{marginLeft: 15, flexDirection: 'column'}}>
+              <View style={{ marginLeft: 15, flexDirection: "column" }}>
                 <Title style={styles.title}>Aleena</Title>
                 <Caption style={styles.caption}>SP18-BCS-023</Caption>
               </View>
@@ -44,70 +70,73 @@ export function DrawerContent (props) {
                 </Paragraph>
                 <Caption style={styles.caption}>Friends</Caption>
                 <Paragraph style={[styles.paragraph, styles.caption]}>
-                  {'         '}207
+                  {"         "}207
                 </Paragraph>
                 <Caption style={styles.caption}>Popularity</Caption>
               </View>
-
             </View>
           </View>
 
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
-              icon={({color, size}) => (
+              icon={({ color, size }) => (
                 <Icon name="home-outline" color={COLORS.icon} size={size} />
               )}
               label="Feed"
               inactiveTintColor={COLORS.font}
               onPress={() => {
-                props.navigation.navigate ('Home');
+                props.navigation.navigate("Home");
               }}
             />
             <DrawerItem
-              icon={({color, size}) => (
+              icon={({ color, size }) => (
                 <Icon name="account-outline" color={COLORS.icon} size={size} />
               )}
               label="Profile"
               inactiveTintColor={COLORS.font}
               onPress={() => {
-                props.navigation.navigate ('Profile');
+                props.navigation.navigate("Profile");
               }}
             />
             <DrawerItem
-              icon={({color, size}) => (
+              icon={({ color, size }) => (
                 <Icon name="food" color={COLORS.icon} size={size} />
               )}
               label="Food Order"
               inactiveTintColor={COLORS.font}
               onPress={() => {
-                props.navigation.navigate ('Food Order');
+                props.navigation.navigate("Food Order");
               }}
             />
             <DrawerItem
-              icon={({color, size}) => (
-                <Icon5 name="hands-helping" color={COLORS.icon} size={size - 5} />
+              icon={({ color, size }) => (
+                <Icon5
+                  name="hands-helping"
+                  color={COLORS.icon}
+                  size={size - 5}
+                />
               )}
               label="Donation"
               inactiveTintColor={COLORS.font}
               onPress={() => {
-                props.navigation.navigate ('Donation');
+                props.navigation.navigate("Donation");
               }}
             />
             <DrawerItem
-              icon={({color, size}) => (
+              icon={({ color, size }) => (
                 <Icon name="map" color={COLORS.icon} size={size} />
               )}
               label="Map"
               inactiveTintColor={COLORS.font}
               onPress={() => {
-                props.navigation.navigate ('Map');
+                props.navigation.navigate("Map");
               }}
             />
           </Drawer.Section>
           <Drawer.Section title="Preferences">
             <TouchableRipple onPress={() => {}}>
               <View style={styles.preference}>
-                <Text style={{color: COLORS.font}}>Dark Theme</Text>
+                <Text style={{ color: COLORS.font }}>Dark Theme</Text>
                 <View pointerEvents="none">
                   <Switch value={paperTheme.dark} />
                 </View>
@@ -118,12 +147,12 @@ export function DrawerContent (props) {
       </DrawerContentScrollView>
       <Drawer.Section style={styles.bottomDrawerSection}>
         <DrawerItem
-          icon={({color, size}) => (
+          icon={({ color, size }) => (
             <Icon name="exit-to-app" color={COLORS.icon} size={size} />
           )}
           label="Sign Out"
           inactiveTintColor={COLORS.font}
-          onPress={() => {}}
+          onPress={onSignOutPress}
         />
       </Drawer.Section>
     </View>

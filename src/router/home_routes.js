@@ -1,19 +1,11 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
-import { View, Image, Text } from "react-native";
+import { View, Text } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import ADIcon from "react-native-vector-icons/AntDesign";
 import HomeScreen from "../screens/HomeScreen";
-import StoryScreen from "../screens/StoryScreen";
-import logo from "../assets/images/logo.png";
-import Drawer from "./DrawerNavigator/drawerNavigator";
 import ChatScreen from "../screens/ChatScreen";
-import FoodOrderScreen from "../screens/FoodOrderScreen";
 import styles from "./style";
-import SearchScreen from "../screens/SearchScreen";
-import NotificationScreen from "../screens/NotificationScreen";
-import { LinearGradient } from "expo-linear-gradient";
 import { COLORS } from "../Constants/COLORS";
 
 const HomeStack = createStackNavigator();
