@@ -1,15 +1,16 @@
-import React from "react";
-import { useState } from "react";
+import React,{Component} from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "./router/DrawerNavigator/drawerNavigator";
 import SignInScreen from "./screens/SignInScreen/index";
 import SignUpScreen from "./screens/SignUpScreen/index";
 import SetUpProfileScreen from "./screens/SetUpProfileScreen";
+import LoadingScreen from "./screens/LoadingScreen";
+import * as Firebase from "firebase";
 
 export default function App() {
-  const [signedIn, setSignedIn] = useState(false);
   const Stack = createStackNavigator();
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SignIn">
@@ -44,6 +45,11 @@ const AuthStack = () => {
       <Stack.Screen
         name="SignUp"
         component={SignUpScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Loading"
+        component={LoadingScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

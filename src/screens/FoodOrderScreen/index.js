@@ -1,7 +1,5 @@
 import React from 'react';
 import {SafeAreaView, Text} from 'react-native';
-import BottomTabNavigator
-  from '../../router/BottomTabNavigator/bottomTabNavigator';
 
 const FoodOrderScreen = () => (
   <SafeAreaView

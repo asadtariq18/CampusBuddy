@@ -19,13 +19,12 @@ import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 
 const SetUpProfileScreen = ({ route }) => {
-  const gender = route.params;
+  const gender = route.params.gender;
   const [isDone, setIsDone] = useState(false);
-  console.warn(gender)
   const [image, setImage] = useState(
-     gender 
-      ? "https://spng.subpng.com/20180528/ahx/kisspng-computer-icons-user-avatar-woman-avatar-5b0c5b2f3f3cf6.688227091527536431259.jpg"
-      : "https://mpng.subpng.com/20180810/io/kisspng-computer-icons-user-profile-clip-art-icon-design-asha-rani-author-at-hire-help-5b6e34d7a84d83.7891420915339491436894.jpg"
+    gender === "Male"
+      ? "https://www.terrainhopperusa.com/wp-content/uploads/2019/01/avatar-woman.png"
+      : "https://www.terrainhopperusa.com/wp-content/uploads/2019/01/avatar-man.png"
   );
   const [info, setInfo] = useState("");
   const navigation = useNavigation();

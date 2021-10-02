@@ -3,10 +3,20 @@ import { Text, View, SafeAreaView, Image, ScrollView, RefreshControl, ToastAndro
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
+import * as Firebase from 'firebase';
 
 const ProfileScreen = () => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [updated, setUpdated] = React.useState(false);
+  const [user, setUser] = React.useState(getCurrentUser
+  )
+      function getCurrentUser() {
+        Firebase.auth().onAuthStateChanged((user) => {
+          if (user) {
+            setUser(user.email)
+          }
+        });
+      }
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);

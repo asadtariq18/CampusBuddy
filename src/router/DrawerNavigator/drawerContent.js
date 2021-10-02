@@ -25,11 +25,6 @@ export function DrawerContent(props) {
   const paperTheme = useTheme();
   const onSignOutPress = async () => {
     try {
-      ToastAndroid.showWithGravity(
-        "Signing out...",
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM
-      );
       await auth.signOut();
       navigation.navigate("SignIn");
       ToastAndroid.showWithGravity(

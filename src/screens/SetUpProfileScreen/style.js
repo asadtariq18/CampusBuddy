@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.secondary,
     fontSize: 15,
     height: 50,
-    width: 350,
+    width: 380,
     borderRadius: 20,
     margin: 10,
     padding: 10,
@@ -75,11 +75,13 @@ const styles = StyleSheet.create({
   avatar: {
     justifyContent: "center",
     alignItems: "center",
-    width: 200,
-    height: 200,
-    borderRadius: 200 / 2,
+    width: 180,
+    height: 180,
+    borderRadius: 180 / 2,
     backgroundColor: COLORS.secondary,
     marginVertical: 10,
+    borderWidth: 3,
+    borderColor: COLORS.primary
   },
 });
 

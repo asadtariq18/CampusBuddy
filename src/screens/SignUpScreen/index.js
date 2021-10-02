@@ -16,15 +16,16 @@ import { useNavigation } from "@react-navigation/native";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import Database from "../../Database/database";
 import Firebase from "../../config/Firebase";
 const auth = Firebase.auth();
 
 const SignUpScreen = () => {
-  const [isMale, setIsMale] = useState(false);
-  const [isFemale, setIsFemale] = useState(false);
-  const [isSelected, setIsSelected] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [isFemale, setIsFemale] = useState(false);
+  const [isMale, setIsMale] = useState(false);
+  const [gender, setGender] = useState("");
   const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
   const [isValid_FirstName, setIsValid_FirstName] = useState(false);
@@ -52,11 +53,13 @@ const SignUpScreen = () => {
   const malePress = () => {
     setIsFemale(false);
     setIsMale(!isMale);
+    setGender("Male");
   };
 
   const femalePress = () => {
     setIsMale(false);
     setIsFemale(!isFemale);
+    setGender("Female");
   };
 
   const onChangeFirstName = (str) => {
@@ -72,7 +75,7 @@ const SignUpScreen = () => {
 
   const onChangeMail = (str) => {
     if (ValidateMail(str)) {
-      setMail(str);
+      setMail(str.toLowerCase);
     }
   };
 
@@ -131,11 +134,12 @@ const SignUpScreen = () => {
           ToastAndroid.SHORT,
           ToastAndroid.BOTTOM
         );
-        navigation.navigate("SetUpProfile", { isMale });
+        Database.storeData(firstName, lastName, mail, gender);
+        navigation.navigate("SetUpProfile", {gender});
       }
     } catch (error) {
       ToastAndroid.showWithGravity(
-        "Invalid input",
+        error.message,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM
       );
