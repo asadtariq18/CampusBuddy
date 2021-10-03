@@ -6,6 +6,7 @@ import SignInScreen from "./screens/SignInScreen/index";
 import SignUpScreen from "./screens/SignUpScreen/index";
 import SetUpProfileScreen from "./screens/SetUpProfileScreen";
 import LoadingScreen from "./screens/LoadingScreen";
+
 import * as Firebase from "firebase";
 
 export default function App() {
