@@ -7,7 +7,7 @@
     "icon": "./src/Constants/logo.png",
     "splash": {
       "image": "./src/Constants/splash.png",
-      "backgroundColor": "black",
+      "backgroundColor": "#000000",
       "resizeMode": "contain"
     },
     "name": "Campus Buddy",

@@ -12,7 +12,6 @@ import { Ionicons } from "@expo/vector-icons";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import Database from "../../Database/database";
-import * as firebase from 'firebase';
 
 const ProfileScreen = () => {
   const [refreshing, setRefreshing] = React.useState(false);
