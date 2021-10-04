@@ -19,7 +19,7 @@ function storeUserData(firstName, lastName, mail, gender) {
     });
 }
 
-function getUserData(mail) {
+function updateUserData(mail) {
   const user = new Object();
   firebase
     .database()
@@ -39,8 +39,8 @@ function getUserData(mail) {
   return user;
 }
 function getCurrentUser() {
-  const user = getUserData(firebase.auth().currentUser.email);
-  return user
+  const user = updateUserData(firebase.auth().currentUser.email);
+  return user;
 }
 
-export default { storeUserData, getUserData, getCurrentUser };
+export default { storeUserData, updateUserData, getCurrentUser };

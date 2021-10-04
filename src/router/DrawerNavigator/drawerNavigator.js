@@ -1,6 +1,5 @@
 import React from 'react';
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import {createStackNavigator} from '@react-navigation/stack';
 import FoodOrderScreen from '../../screens/FoodOrderScreen';
 import DonationScreen from '../../screens/DonationScreen';
 import MapScreen from '../../screens/MapScreen';

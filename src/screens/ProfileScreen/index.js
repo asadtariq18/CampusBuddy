@@ -12,23 +12,20 @@ import { Ionicons } from "@expo/vector-icons";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import Database from "../../Database/database";
+import * as firebase from 'firebase';
 
 const ProfileScreen = () => {
   const [refreshing, setRefreshing] = React.useState(false);
-  const [updated, setUpdated] = React.useState(false);
+  const[user, setUser] = React.useState(Database.getCurrentUser());
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    if (updated) {
-      try {
-        setRefreshing(false);
-        ToastAndroid.show("Updated", ToastAndroid.SHORT);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      ToastAndroid.show("No more updates", ToastAndroid.SHORT);
+    try {
+      setUser(Database.getCurrentUser())
       setRefreshing(false);
+      ToastAndroid.show("Updated", ToastAndroid.SHORT);
+    } catch (error) {
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
     }
   }, [refreshing]);
   return (
@@ -48,7 +45,7 @@ const ProfileScreen = () => {
           <View style={styles.profileImage}>
             <Image
               source={{
-                uri: `${Database.getCurrentUser().profile_picture}`,
+                uri: `${user.profile_picture}`,
               }}
               style={styles.image}
             />
@@ -65,7 +62,7 @@ const ProfileScreen = () => {
 
         <View style={styles.infoContainer}>
           <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>
-            {Database.getCurrentUser().name}
+            {user.name}
           </Text>
           <Text
             style={[
@@ -73,7 +70,7 @@ const ProfileScreen = () => {
               { color: COLORS.font_secondary, fontSize: 14 },
             ]}
           >
-            {Database.getCurrentUser().regNo}
+            {user.regNo}
           </Text>
           <Text
             style={[
@@ -88,7 +85,7 @@ const ProfileScreen = () => {
         <View style={styles.statsContainer}>
           <View style={styles.statsBox}>
             <Text style={[styles.text, { fontSize: 24 }]}>
-              {Database.getCurrentUser().posts_count}
+              {user.posts_count}
             </Text>
             <Text style={[styles.text, styles.subText]}>Posts</Text>
           </View>
@@ -103,13 +100,13 @@ const ProfileScreen = () => {
             ]}
           >
             <Text style={[styles.text, { fontSize: 24 }]}>
-              {Database.getCurrentUser().friends_count}
+              {user.friends_count}
             </Text>
             <Text style={[styles.text, styles.subText]}>Friends</Text>
           </View>
           <View style={styles.statsBox}>
             <Text style={[styles.text, { fontSize: 24 }]}>
-              {Database.getCurrentUser().popularity}
+              {user.popularity}
             </Text>
             <Text style={[styles.text, styles.subText]}>Popularity</Text>
           </View>
@@ -124,7 +121,7 @@ const ProfileScreen = () => {
             minWidth: 400,
           }}
         >
-          {Database.getCurrentUser().posts_count === 0 ? (
+          {user.posts_count === 0 ? (
             <Text
               style={[
                 styles.text,
@@ -148,7 +145,7 @@ const ProfileScreen = () => {
                 <Image
                   source={{
                     uri: `${
-                      Database.getCurrentUser().posts.post_sp18bcs032_1.image
+                      user.posts.post_sp18bcs032_1.image
                     }`,
                   }}
                   style={styles.image}

@@ -76,7 +76,6 @@ const SignUpScreen = () => {
   const onChangeMail = (str) => {
     if (ValidateMail(str)) {
       setMail(str.toLowerCase());
-      console.log(mail)
     }
   };
 
@@ -209,7 +208,7 @@ const SignUpScreen = () => {
           placeholderTextColor={COLORS.font_secondary}
           selectionColor={COLORS.primary}
           style={styles.textInput}
-          onChangeText={(value) => onChangeMail(value.trim())}
+          onChangeText={(value) => onChangeMail(value.trim().toLowerCase())}
         ></TextInput>
         <View style={styles.passwordInput}>
           <TextInput

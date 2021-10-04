@@ -14,9 +14,9 @@ import { Header } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
+import * as firebase from "firebase";
 import Firebase from "../../config/Firebase";
 import Database from "../../Database/database";
-
 
 const auth = Firebase.auth();
 
@@ -26,8 +26,6 @@ const SignInScreen = () => {
   const [isEmpty, setIsEmpty] = useState(true);
   const [onFocus, setOnFocus] = useState(false);
   const navigation = useNavigation();
-
-  const [keyboardStatus, setKeyboardStatus] = useState(undefined);
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
@@ -72,17 +70,28 @@ const SignInScreen = () => {
           25,
           50
         );
-        Database.getCurrentUser()
+        Database.updateUserData(firebase.auth().currentUser.email);
         navigation.navigate("Home");
       }
     } catch (error) {
-      ToastAndroid.showWithGravityAndOffset(
-        "Wrong credentials",
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
-        25,
-        50
-      );
+      {
+        error.message ===
+        "The password is invalid or the user does not have a password."
+          ? ToastAndroid.showWithGravityAndOffset(
+              "Wrong credentials",
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER,
+              25,
+              50
+            )
+          : ToastAndroid.showWithGravityAndOffset(
+              error.message,
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER,
+              25,
+              50
+            );
+      }
     }
   };
 

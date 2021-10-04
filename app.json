@@ -1,9 +1,18 @@
 {
-  "name": "CampusBuddy",
-  "displayName": "CampusBuddy",
+  "name": "Campus Buddy",
+  "displayName": "Campus Buddy",
   "expo": {
-    "name": "CampusBuddy",
+    "description" :"A Social App for university students",
+    "primaryColor": "#20AF5E",
+    "icon": "./src/Constants/logo.png",
+    "splash": {
+      "image": "./src/Constants/splash.png",
+      "backgroundColor": "black",
+      "resizeMode": "contain"
+    },
+    "name": "Campus Buddy",
     "slug": "CampusBuddy",
+    "orientation": "portrait",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
