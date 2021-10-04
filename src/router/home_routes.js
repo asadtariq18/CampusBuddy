@@ -19,7 +19,7 @@ const HomeRoutes = () => {
     navigation.openDrawer();
   };
   return (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator initialRouteName="Home">
       <HomeStack.Screen
         name="Home"
         component={HomeScreen}
@@ -46,11 +46,9 @@ const HomeRoutes = () => {
             </View>
           ),
           headerRightContainerStyle: {
-            marginTop: 10,
             marginRight: 10,
           },
           headerLeftContainerStyle: {
-            marginTop: 10,
             marginLeft: 10,
           },
           headerLeft: () => (
@@ -74,13 +72,12 @@ const HomeRoutes = () => {
           headerTintColor: COLORS.background_dark,
           headerStyle: {
             backgroundColor: COLORS.background_dark,
-            
           },
 
           headerTitleStyle: {
             fontWeight: "bold",
             fontSize: 20,
-            color: COLORS.font
+            color: COLORS.font,
           },
         }}
       />

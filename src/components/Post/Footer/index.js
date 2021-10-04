@@ -1,4 +1,3 @@
-import { Row } from "native-base";
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -126,23 +125,9 @@ const Footer = ({ likesCount: likesCountProp, postedAt }) => {
             <View style={{ alignSelf: "center", marginBottom: 10 }}>
               <Text style={styles.modalText}>Comments</Text>
             </View>
-            <ScrollView
-              keyboardShouldPersistTaps={"handled"}
-              contentContainerStyle={{
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              refreshControl={
-                <RefreshControl
-                  progressBackgroundColor={COLORS.background_dark}
-                  colors={[COLORS.primary]}
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                />
-              }
-            >
-              <CommentList />
-            </ScrollView>
+
+                <CommentList />
+            
             <View
             keyboardShouldPersistTaps='always'
               style={{

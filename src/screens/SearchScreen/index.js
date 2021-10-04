@@ -1,13 +1,11 @@
 import React from "react";
-import { SafeAreaView, StatusBar } from "react-native";
+import { SafeAreaView, StatusBar, Text } from "react-native";
 import {
-  Container,
   Header,
   Item,
   Input,
   Icon,
   Button,
-  Text,
 } from "native-base";
 import { COLORS } from "../../Constants/COLORS";
 import styles from "../SearchScreen/style";

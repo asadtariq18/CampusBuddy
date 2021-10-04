@@ -1,22 +1,21 @@
 import React from "react";
-import { Text, View, SafeAreaView, Image, ScrollView, RefreshControl, ToastAndroid } from "react-native";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import {
+  Text,
+  View,
+  SafeAreaView,
+  Image,
+  ScrollView,
+  RefreshControl,
+  ToastAndroid,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
-import * as Firebase from 'firebase';
+import Database from "../../Database/database";
 
 const ProfileScreen = () => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [updated, setUpdated] = React.useState(false);
-  const [user, setUser] = React.useState(getCurrentUser
-  )
-      function getCurrentUser() {
-        Firebase.auth().onAuthStateChanged((user) => {
-          if (user) {
-            setUser(user.email)
-          }
-        });
-      }
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
@@ -49,7 +48,7 @@ const ProfileScreen = () => {
           <View style={styles.profileImage}>
             <Image
               source={{
-                uri: "https://cdn.izoomyou.app/aHR0cHM6Ly9zY29udGVudC1pYWQzLTEuY2RuaW5zdGFncmFtLmNvbS92L3Q1MS4yODg1LTE5LzE5ODI5MTgzMF8xMDgyNTg5MzE0ODI3NjJfNjQ4MzU1MDU1MDk3MTkyMTIyN19uLmpwZz9fbmNfaHQ9c2NvbnRlbnQtaWFkMy0xLmNkbmluc3RhZ3JhbS5jb20mX25jX29oYz1vdndaQmpjMkh1TUFYX2xRMFZUJmVkbT1BRUY4dFlZQkFBQUEmY2NiPTctNCZvaD1hMzQxZTkzZWU5YzY5NGJhMTQ4ZGU1MGZjYWU3OGQyYiZvZT02MTNEMzYwOSZfbmNfc2lkPWE5NTEzZA==",
+                uri: `${Database.getCurrentUser().profile_picture}`,
               }}
               style={styles.image}
             />
@@ -66,7 +65,7 @@ const ProfileScreen = () => {
 
         <View style={styles.infoContainer}>
           <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>
-            Aleena
+            {Database.getCurrentUser().name}
           </Text>
           <Text
             style={[
@@ -74,7 +73,7 @@ const ProfileScreen = () => {
               { color: COLORS.font_secondary, fontSize: 14 },
             ]}
           >
-            SP18-BCS-023
+            {Database.getCurrentUser().regNo}
           </Text>
           <Text
             style={[
@@ -88,7 +87,9 @@ const ProfileScreen = () => {
 
         <View style={styles.statsContainer}>
           <View style={styles.statsBox}>
-            <Text style={[styles.text, { fontSize: 24 }]}>1</Text>
+            <Text style={[styles.text, { fontSize: 24 }]}>
+              {Database.getCurrentUser().posts_count}
+            </Text>
             <Text style={[styles.text, styles.subText]}>Posts</Text>
           </View>
           <View
@@ -101,27 +102,61 @@ const ProfileScreen = () => {
               },
             ]}
           >
-            <Text style={[styles.text, { fontSize: 24 }]}>45</Text>
+            <Text style={[styles.text, { fontSize: 24 }]}>
+              {Database.getCurrentUser().friends_count}
+            </Text>
             <Text style={[styles.text, styles.subText]}>Friends</Text>
           </View>
           <View style={styles.statsBox}>
-            <Text style={[styles.text, { fontSize: 24 }]}>207</Text>
+            <Text style={[styles.text, { fontSize: 24 }]}>
+              {Database.getCurrentUser().popularity}
+            </Text>
             <Text style={[styles.text, styles.subText]}>Popularity</Text>
           </View>
         </View>
 
-        <View style={{ marginTop: 32 }}>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View style={styles.mediaImageContainer}>
-              <Image
-                source={{
-                  uri: "https://images.theconversation.com/files/254131/original/file-20190116-163274-1u0u5re.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=600&h=400&fit=crop&dpr=1",
-                }}
-                style={styles.image}
-                resizeMode="cover"
-              />
-            </View>
-          </ScrollView>
+        <View
+          style={{
+            marginTop: 32,
+            backgroundColor: COLORS.secondary,
+            borderRadius: 20,
+            minHeight: 100,
+            minWidth: 400,
+          }}
+        >
+          {Database.getCurrentUser().posts_count === 0 ? (
+            <Text
+              style={[
+                styles.text,
+                {
+                  fontSize: 24,
+                  color: COLORS.font_secondary,
+                  marginStart: 155,
+                  marginTop: 30,
+                },
+              ]}
+            >
+              {" "}
+              NO POSTS{" "}
+            </Text>
+          ) : (
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+            >
+              <View style={styles.mediaImageContainer}>
+                <Image
+                  source={{
+                    uri: `${
+                      Database.getCurrentUser().posts.post_sp18bcs032_1.image
+                    }`,
+                  }}
+                  style={styles.image}
+                  resizeMode="cover"
+                />
+              </View>
+            </ScrollView>
+          )}
         </View>
         <Text style={[styles.subText, styles.recent]}>Recent Activity</Text>
         <View style={{ alignItems: "center" }}>

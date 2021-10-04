@@ -22,7 +22,7 @@ const SetUpProfileScreen = ({ route }) => {
   const gender = route.params.gender;
   const [isDone, setIsDone] = useState(false);
   const [image, setImage] = useState(
-    gender === "Male"
+    gender === "Female"
       ? "https://www.terrainhopperusa.com/wp-content/uploads/2019/01/avatar-woman.png"
       : "https://www.terrainhopperusa.com/wp-content/uploads/2019/01/avatar-man.png"
   );

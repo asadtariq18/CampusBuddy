@@ -3,7 +3,7 @@ import { COLORS } from "../../Constants/COLORS";
 
 const styles = StyleSheet.create({
   container: {
-    width: 300,
+    width: 350,
     borderRadius: 10,
     backgroundColor: COLORS.secondary,
     flexDirection: "row",

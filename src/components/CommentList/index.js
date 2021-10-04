@@ -3,6 +3,7 @@ import { FlatList, RefreshControl, ScrollView, ToastAndroid } from "react-native
 import CommentHead from "../CommentHead/index";
 import data from "../../Data/CommentData/commentData";
 import { COLORS } from "../../Constants/COLORS";
+import { View } from "native-base";
 
 const CommentList = () => {
   const [refreshing, setRefreshing] = React.useState(false);

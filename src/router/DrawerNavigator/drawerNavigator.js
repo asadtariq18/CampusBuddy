@@ -8,7 +8,6 @@ import Router from '../route';
 import { DrawerContent } from './drawerContent';
 
 const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator();
 
 
 const DrawerNavigator = () =>{

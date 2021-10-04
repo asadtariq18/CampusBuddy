@@ -75,7 +75,8 @@ const SignUpScreen = () => {
 
   const onChangeMail = (str) => {
     if (ValidateMail(str)) {
-      setMail(str.toLowerCase);
+      setMail(str.toLowerCase());
+      console.log(mail)
     }
   };
 
@@ -134,7 +135,7 @@ const SignUpScreen = () => {
           ToastAndroid.SHORT,
           ToastAndroid.BOTTOM
         );
-        Database.storeData(firstName, lastName, mail, gender);
+        Database.storeUserData(firstName, lastName, mail.toLowerCase(), gender);
         navigation.navigate("SetUpProfile", {gender});
       }
     } catch (error) {

@@ -15,11 +15,13 @@ import { useNavigation } from "@react-navigation/native";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import Firebase from "../../config/Firebase";
+import Database from "../../Database/database";
+
 
 const auth = Firebase.auth();
 
 const SignInScreen = () => {
-  const [regNo, setRegNo] = useState("");
+  const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
   const [isEmpty, setIsEmpty] = useState(true);
   const [onFocus, setOnFocus] = useState(false);
@@ -41,8 +43,8 @@ const SignInScreen = () => {
     };
   }, []);
 
-  const onChangeReg = (input1) => {
-    setRegNo(input1);
+  const onChangeMail = (input1) => {
+    setMail(input1);
     if (input1 !== "" && password !== "") {
       setIsEmpty(false);
     } else {
@@ -52,7 +54,7 @@ const SignInScreen = () => {
 
   const onChangePass = (input2) => {
     setPassword(input2);
-    if (regNo !== "" && input2 !== "") {
+    if (mail !== "" && input2 !== "") {
       setIsEmpty(false);
     } else {
       setIsEmpty(true);
@@ -61,8 +63,8 @@ const SignInScreen = () => {
 
   const onLoginPress = async () => {
     try {
-      if (regNo !== "" && password !== "") {
-        await auth.signInWithEmailAndPassword(regNo, password);
+      if (mail !== "" && password !== "") {
+        await auth.signInWithEmailAndPassword(mail, password);
         ToastAndroid.showWithGravityAndOffset(
           "Logging in...",
           ToastAndroid.SHORT,
@@ -70,11 +72,12 @@ const SignInScreen = () => {
           25,
           50
         );
+        Database.getCurrentUser()
         navigation.navigate("Home");
       }
     } catch (error) {
       ToastAndroid.showWithGravityAndOffset(
-        "Wrong Credentials",
+        "Wrong credentials",
         ToastAndroid.SHORT,
         ToastAndroid.CENTER,
         25,
@@ -106,7 +109,7 @@ const SignInScreen = () => {
           placeholderTextColor={COLORS.font_secondary}
           selectionColor={COLORS.primary}
           style={styles.textInput}
-          onChangeText={(value) => onChangeReg(value)}
+          onChangeText={(value) => onChangeMail(value.trim())}
         ></TextInput>
 
         <TextInput

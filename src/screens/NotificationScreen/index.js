@@ -18,9 +18,7 @@ const NotificationScreen = () => (
         <Text style={styles.headerText}>Notification</Text>
       </View>
     </Header>
-    <ScrollView>
       <NotificationList />
-    </ScrollView>
   </SafeAreaView>
 );
 

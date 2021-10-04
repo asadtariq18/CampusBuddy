@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, useColorScheme } from "react-native";
+import { View, StyleSheet, StatusBar } from "react-native";
 import {
   useTheme,
   Avatar,
@@ -7,19 +7,17 @@ import {
   Caption,
   Paragraph,
   Drawer,
-  Text,
-  TouchableRipple,
-  Switch,
 } from "react-native-paper";
 import { ToastAndroid } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon5 from "react-native-vector-icons/FontAwesome5";
 import { COLORS } from "../../Constants/COLORS";
 import { useNavigation } from "@react-navigation/native";
 import Firebase from "../../config/Firebase";
 const auth = Firebase.auth();
+import Database from "../../Database/database";
+
 export function DrawerContent(props) {
   const navigation = useNavigation();
   const paperTheme = useTheme();
@@ -48,24 +46,29 @@ export function DrawerContent(props) {
             <View style={{ flexDirection: "row", marginTop: 15 }}>
               <Avatar.Image
                 source={{
-                  uri: "https://api.adorable.io/avatars/50/abott@adorable.png",
+                  uri: `${Database.getCurrentUser().profile_picture}`,
                 }}
                 size={50}
               />
               <View style={{ marginLeft: 15, flexDirection: "column" }}>
-                <Title style={styles.title}>Aleena</Title>
-                <Caption style={styles.caption}>SP18-BCS-023</Caption>
+                <Title style={styles.title}>
+                  {Database.getCurrentUser().name}
+                </Title>
+                <Caption style={styles.caption}>
+                  {Database.getCurrentUser().regNo}
+                </Caption>
               </View>
             </View>
 
             <View style={styles.row}>
               <View style={styles.section}>
                 <Paragraph style={[styles.paragraph, styles.caption]}>
-                  45
+                  {Database.getCurrentUser().friends_count}
                 </Paragraph>
                 <Caption style={styles.caption}>Friends</Caption>
                 <Paragraph style={[styles.paragraph, styles.caption]}>
-                  {"         "}207
+                  {"         "}
+                  {Database.getCurrentUser().popularity}
                 </Paragraph>
                 <Caption style={styles.caption}>Popularity</Caption>
               </View>
@@ -73,16 +76,6 @@ export function DrawerContent(props) {
           </View>
 
           <Drawer.Section style={styles.drawerSection}>
-            <DrawerItem
-              icon={({ color, size }) => (
-                <Icon name="home-outline" color={COLORS.icon} size={size} />
-              )}
-              label="Feed"
-              inactiveTintColor={COLORS.font}
-              onPress={() => {
-                props.navigation.navigate("Home");
-              }}
-            />
             <DrawerItem
               icon={({ color, size }) => (
                 <Icon name="account-outline" color={COLORS.icon} size={size} />
@@ -128,18 +121,16 @@ export function DrawerContent(props) {
               }}
             />
           </Drawer.Section>
-          <Drawer.Section title="Preferences">
-            <TouchableRipple onPress={() => {}}>
-              <View style={styles.preference}>
-                <Text style={{ color: COLORS.font }}>Dark Theme</Text>
-                <View pointerEvents="none">
-                  <Switch value={paperTheme.dark} />
-                </View>
-              </View>
-            </TouchableRipple>
-          </Drawer.Section>
         </View>
       </DrawerContentScrollView>
+      {/* <TouchableRipple onPress={() => {}}>
+        <View style={styles.preference}>
+          <Text style={{ color: COLORS.font }}>Dark Theme</Text>
+          <View pointerEvents="none">
+            <Switch value={paperTheme.dark} />
+          </View>
+        </View>
+      </TouchableRipple> */}
       <Drawer.Section style={styles.bottomDrawerSection}>
         <DrawerItem
           icon={({ color, size }) => (
@@ -160,6 +151,9 @@ const styles = StyleSheet.create({
   },
   userInfoSection: {
     paddingLeft: 20,
+    paddingBottom: 10,
+    borderBottomEndRadius: 20,
+    backgroundColor: COLORS.primary,
   },
   title: {
     fontSize: 16,

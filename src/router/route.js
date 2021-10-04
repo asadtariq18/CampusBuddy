@@ -3,7 +3,6 @@ import {createStackNavigator} from '@react-navigation/stack';
 import bottomTabNavigator from './BottomTabNavigator/bottomTabNavigator';
 import StoryScreen from '../screens/StoryScreen';
 import InboxScreen from '../screens/InboxScreen';
-import {useRoute} from '@react-navigation/native';
 import CreatePostScreen from '../screens/CreatePostScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import { COLORS } from '../Constants/COLORS';
