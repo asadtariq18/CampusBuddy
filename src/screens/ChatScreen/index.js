@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, Text, FlatList, View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import ChatList from '../../components/ChatList';
 import styles from './style';
 

@@ -3,7 +3,6 @@ import { View, FlatList, TouchableOpacity, Text } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
-import { LinearGradient } from "expo-linear-gradient";
 import StoryPreview from "../Story";
 import styles from "./style";
 import data from "../../Data/StoriesData/stories";

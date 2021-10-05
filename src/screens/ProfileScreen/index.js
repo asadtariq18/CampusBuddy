@@ -12,15 +12,18 @@ import { Ionicons } from "@expo/vector-icons";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import Database from "../../Database/database";
+import TimelinePosts from "../../components/TimelinePosts";
 
 const ProfileScreen = () => {
   const [refreshing, setRefreshing] = React.useState(false);
   const[user, setUser] = React.useState(Database.getCurrentUser());
+  const [posts, setPosts] = React.useState(Database.getUserPosts(user.mail));
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     try {
-      setUser(Database.getCurrentUser())
+      setUser(Database.getCurrentUser());
+      setPosts(Database.getUserPosts(user.mail));
       setRefreshing(false);
       ToastAndroid.show("Updated", ToastAndroid.SHORT);
     } catch (error) {
@@ -136,22 +139,16 @@ const ProfileScreen = () => {
               NO POSTS{" "}
             </Text>
           ) : (
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-            >
-              <View style={styles.mediaImageContainer}>
-                <Image
-                  source={{
-                    uri: `${
-                      user.posts.post_sp18bcs032_1.image
-                    }`,
-                  }}
-                  style={styles.image}
-                  resizeMode="cover"
-                />
-              </View>
-            </ScrollView>
+               <TimelinePosts />
+              // <View style={styles.mediaImageContainer}>
+              //   <Image
+              //     source={{
+              //       uri: `${posts.post_sp18bcs032_1.image}`,
+              //     }}
+              //     style={styles.image}
+              //     resizeMode="cover"
+              //   />
+              // </View>
           )}
         </View>
         <Text style={[styles.subText, styles.recent]}>Recent Activity</Text>

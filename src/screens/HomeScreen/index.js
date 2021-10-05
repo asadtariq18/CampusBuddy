@@ -1,5 +1,5 @@
 import React from "react";
-import { View, SafeAreaView, StatusBar } from "react-native";
+import { SafeAreaView, StatusBar } from "react-native";
 import Feed from "../../components/Feed";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";

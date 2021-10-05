@@ -69,7 +69,7 @@ const HomeRoutes = () => {
         options={{
           title: "Chat",
           headerTitleAlign: "center",
-          headerTintColor: COLORS.background_dark,
+          headerTintColor: COLORS.font,
           headerStyle: {
             backgroundColor: COLORS.background_dark,
           },

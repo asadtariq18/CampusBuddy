@@ -20,21 +20,13 @@ function storeUserData(firstName, lastName, mail, gender) {
 }
 
 function updateUserData(mail) {
-  const user = new Object();
+  let user = new Object();
   firebase
     .database()
     .ref(`users/user_${mail.split("@")[0]}`)
     .on("value", (snapshot) => {
       const temp = snapshot.val();
-      user.name = temp.name;
-      user.mail = temp.mail;
-      user.regNo = temp.regNo;
-      user.gender = temp.gender;
-      user.popularity = temp.popularity;
-      user.profile_picture = temp.profile_picture;
-      user.posts_count = temp.posts_count;
-      user.friends_count = temp.friends_count;
-      user.posts = temp.posts;
+      user = temp
     });
   return user;
 }
@@ -43,4 +35,50 @@ function getCurrentUser() {
   return user;
 }
 
-export default { storeUserData, updateUserData, getCurrentUser };
+function getUserPosts(mail) {
+  let postsArray = new Object();
+  firebase
+    .database()
+    .ref(`users/user_${mail.split("@")[0]}/posts`)
+    .on("value", (snapshot) => {
+      const posts = snapshot.val();
+      postsArray = posts
+
+    });
+  return postsArray;
+}
+
+function uploadUserPost(caption, privacy, type, image) {
+  const user = getCurrentUser();
+  firebase
+    .database()
+    .ref(
+      `users/user_${user.regNo.toLowerCase()}/posts/post_${user.regNo
+        .toLowerCase()
+        .replace(/-/g, "")}_${user.posts_count + 1}`
+    )
+    .update({
+      caption: caption,
+      owner: user.name,
+      privacy: privacy,
+      type: type,
+      image: image,
+      timestamp: "05/10/2021",
+      likes_count: 0,
+      comments_count: 0,
+    });
+
+  firebase
+    .database()
+    .ref(`users/user_${user.regNo.toLowerCase()}`)
+    .update({
+      posts_count: user.posts_count + 1,
+    });
+}
+export default {
+  storeUserData,
+  updateUserData,
+  getCurrentUser,
+  uploadUserPost,
+  getUserPosts,
+};

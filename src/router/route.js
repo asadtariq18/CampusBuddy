@@ -36,6 +36,7 @@ const Router = () => {
           headerStyle: {
             backgroundColor: COLORS.background_dark,
           },
+          headerTintColor: COLORS.font,
           headerTitleStyle: {
             color: COLORS.font,
             fontWeight: "bold",

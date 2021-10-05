@@ -1,15 +1,15 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity, Text, View } from "react-native";
+import { TouchableOpacity, Text, View, Image } from "react-native";
 import ProfilePicture from "../ProfilePicture";
 
 import styles from "./style";
 
-const Story = (props) => {
+const PostPreview = (props) => {
   const {
-    story: {
-      user: { imageUri, name },
-    },
+      story:{
+    user: { imageUri, name },
+      }
   } = props;
   const navigation = useNavigation();
 
@@ -17,13 +17,12 @@ const Story = (props) => {
     navigation.navigate("StoryScreen", { username: name });
   };
   return (
-      <TouchableOpacity onPress={onPress}>
-          <View style={styles.container}>
+    <TouchableOpacity onPress={onPress}>
+      <View style={styles.container}>
         <ProfilePicture uri={imageUri} />
-        <Text style={styles.name}>{name}</Text>
-    </View>
-      </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
   );
 };
 
-export default Story;
+export default PostPreview;

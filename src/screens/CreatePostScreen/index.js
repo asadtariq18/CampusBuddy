@@ -15,43 +15,17 @@ import styles from "./styles";
 import { COLORS } from "../../Constants/COLORS";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
+import Database from "../../Database/database";
 
 const CreatePostScreen = () => {
   const [caption, setCaption] = useState("");
-  const [isSelected_Status, setIsSelected_Status] = useState(true);
-  const [isSelected_Ask, setIsSelected_Ask] = useState(false);
-  const [isSelected_Lost, setIsSelected_Lost] = useState(false);
-  const [isSelected_Found, setIsSelected_Found] = useState(false);
+  const [type, setType] = useState("status");
+  const [privacy, setPrivacy] = useState("public");
+  const [image, setImage] = useState("image");
 
   const navigation = useNavigation();
   const onChangeCaption = (input) => {
     setCaption(input);
-  };
-  const onSelect = (buttonTitle) => {
-    if (buttonTitle === "status") {
-      setIsSelected_Status(!isSelected_Status);
-      setIsSelected_Ask(false);
-      setIsSelected_Lost(false);
-      setIsSelected_Found(false);
-    }
-    if (buttonTitle === "ask") {
-      setIsSelected_Status(false);
-      setIsSelected_Ask(!isSelected_Ask);
-      setIsSelected_Lost(false);
-      setIsSelected_Found(false);
-    }
-    if (buttonTitle === "lost") {
-      setIsSelected_Status(false);
-      setIsSelected_Ask(false);
-      setIsSelected_Lost(!isSelected_Lost);
-      setIsSelected_Found(false);
-    }
-    if (buttonTitle === "found") {
-      setIsSelected_Status(false);
-      setIsSelected_Ask(false);
-      setIsSelected_Lost(false);
-      setIsSelected_Found(!isSelected_Found);
-    }
   };
 
   const pickFromGallery = async () => {
@@ -64,7 +38,7 @@ const CreatePostScreen = () => {
         quality: 0.5,
       });
     } else {
-      Alert.alert("you need to give up permission to work");
+      Alert.alert("you need to give permission to work");
     }
   };
 
@@ -78,7 +52,7 @@ const CreatePostScreen = () => {
         quality: 0.5,
       });
     } else {
-      Alert.alert("you need to give up permission to work");
+      Alert.alert("you need to give permission to work");
     }
   };
 
@@ -86,8 +60,10 @@ const CreatePostScreen = () => {
     if (caption === "") {
       ToastAndroid.show("Please write something", ToastAndroid.SHORT);
     } else {
-      navigation.navigate("Feed");
       ToastAndroid.show("Uploading your post", ToastAndroid.LONG);
+      Database.uploadUserPost(caption, privacy, type, image)
+      setCaption("")
+      navigation.navigate("Feed");
     }
   };
 
@@ -108,14 +84,44 @@ const CreatePostScreen = () => {
         <TextInput
           multiline
           contextMenuHidden={true}
+          placeholderTextColor={COLORS.font_secondary}
           selectionColor={COLORS.primary + "99"}
           style={styles.textInput}
           onChangeText={onChangeCaption}
+          placeholder={"caption..."}
         ></TextInput>
-        <Text style={styles.h2text}>Select category</Text>
+      </View>
+
+      <Text style={styles.h2text}>Select privacy</Text>
+      <View style={styles.cardView}>
+        <TouchableWithoutFeedback onPress={() => setPrivacy("public")}>
+          {privacy === "public" ? (
+            <View style={styles.buttonView}>
+              <Text style={styles.button_pressed}>Public</Text>
+            </View>
+          ) : (
+            <View style={styles.buttonView}>
+              <Text style={styles.button}>Public</Text>
+            </View>
+          )}
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => setPrivacy("private")}>
+          {privacy === "private" ? (
+            <View style={styles.buttonView}>
+              <Text style={styles.button_pressed}>Private</Text>
+            </View>
+          ) : (
+            <View style={styles.buttonView}>
+              <Text style={styles.button}>Private</Text>
+            </View>
+          )}
+        </TouchableWithoutFeedback>
+      </View>
+      <View>
+        <Text style={styles.h2text}>Select type</Text>
         <View style={styles.cardView}>
-          <TouchableWithoutFeedback onPress={() => onSelect("status")}>
-            {isSelected_Status ? (
+          <TouchableWithoutFeedback onPress={() => setType("status")}>
+            {type === "status" ? (
               <View style={styles.buttonView}>
                 <Text style={styles.button_pressed}>Status</Text>
               </View>
@@ -125,8 +131,8 @@ const CreatePostScreen = () => {
               </View>
             )}
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => onSelect("ask")}>
-            {isSelected_Ask ? (
+          <TouchableWithoutFeedback onPress={() => setType("ask")}>
+            {type === "ask" ? (
               <View style={styles.buttonView}>
                 <Text style={styles.button_pressed}>Ask</Text>
               </View>
@@ -136,8 +142,19 @@ const CreatePostScreen = () => {
               </View>
             )}
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => onSelect("lost")}>
-            {isSelected_Lost ? (
+          <TouchableWithoutFeedback onPress={() => setType("poll")}>
+            {type === "poll" ? (
+              <View style={styles.buttonView}>
+                <Text style={styles.button_pressed}>Poll</Text>
+              </View>
+            ) : (
+              <View style={styles.buttonView}>
+                <Text style={styles.button}>Poll</Text>
+              </View>
+            )}
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => setType("lost")}>
+            {type === "lost" ? (
               <View style={styles.buttonView}>
                 <Text style={styles.button_pressed}>Lost</Text>
               </View>
@@ -147,8 +164,8 @@ const CreatePostScreen = () => {
               </View>
             )}
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => onSelect("found")}>
-            {isSelected_Found ? (
+          <TouchableWithoutFeedback onPress={() => setType("found")}>
+            {type === "found" ? (
               <View style={styles.buttonView}>
                 <Text style={styles.button_pressed}>Found</Text>
               </View>
