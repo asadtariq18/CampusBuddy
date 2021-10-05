@@ -20,7 +20,7 @@ useEffect(() => {
         data={postsArray}
         keyExtractor={({ id }) => id}
         horizontal
-        showsHorizontalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false} 
         renderItem={({ item }) => {
         return(<PostPreview post = {item}/>)}}
       />
