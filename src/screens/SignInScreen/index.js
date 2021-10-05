@@ -104,7 +104,7 @@ const SignInScreen = () => {
         <Header style={styles.header}>
           <StatusBar backgroundColor={COLORS.background_dark} />
           <View style={styles.header}>
-            <Text style={styles.headerText}>Login here</Text>
+            <Text style={styles.headerText}>Login</Text>
           </View>
         </Header>
       ) : null}
@@ -114,7 +114,7 @@ const SignInScreen = () => {
           source={require("../../Constants/logo.png")}
         />
         <TextInput
-          placeholder="Registration Number/ University Mail"
+          placeholder="University Mail"
           placeholderTextColor={COLORS.font_secondary}
           selectionColor={COLORS.primary}
           style={styles.textInput}

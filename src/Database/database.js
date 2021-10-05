@@ -46,6 +46,7 @@ function getUserPosts(mail) {
 
     });
   return postsArray;
+  
 }
 
 function uploadUserPost(caption, privacy, type, image) {

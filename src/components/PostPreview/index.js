@@ -1,16 +1,12 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, Text, View, Image } from "react-native";
 import ProfilePicture from "../ProfilePicture";
 
 import styles from "./style";
 
-const PostPreview = (props) => {
-  const {
-      story:{
-    user: { imageUri, name },
-      }
-  } = props;
+const PostPreview = ({post}) => {
+  let image = post.image;
   const navigation = useNavigation();
 
   const onPress = () => {
@@ -18,9 +14,9 @@ const PostPreview = (props) => {
   };
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={styles.container}>
-        <ProfilePicture uri={imageUri} />
-      </View>
+
+               <ProfilePicture uri={image} />
+
     </TouchableOpacity>
   );
 };

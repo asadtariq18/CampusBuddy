@@ -41,7 +41,7 @@
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "~0.13.12",
     "react-navigation-drawer": "^2.7.1",
-    "yarn": "^1.22.11"
+    "yarn": "^1.22.15"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

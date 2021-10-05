@@ -39,7 +39,7 @@ const AuthStack = () => {
   return (
     <Stack.Navigator initialRouteName="SignIn">
       <Stack.Screen
-        name="SignIn"
+        name="SignIn" 
         component={SignInScreen}
         options={{ headerShown: false }}
       />

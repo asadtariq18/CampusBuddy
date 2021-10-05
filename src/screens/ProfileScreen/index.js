@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
   Text,
   View,
@@ -17,8 +17,11 @@ import TimelinePosts from "../../components/TimelinePosts";
 const ProfileScreen = () => {
   const [refreshing, setRefreshing] = React.useState(false);
   const[user, setUser] = React.useState(Database.getCurrentUser());
-  const [posts, setPosts] = React.useState(Database.getUserPosts(user.mail));
-
+  const [posts, setPosts] = React.useState(user.posts);
+  useEffect(() => {
+    setUser(Database.getCurrentUser())
+    
+  }, [user])
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     try {
@@ -138,8 +141,8 @@ const ProfileScreen = () => {
               {" "}
               NO POSTS{" "}
             </Text>
-          ) : (
-               <TimelinePosts />
+          ) : ( 
+               <TimelinePosts posts = {user.posts} />
               // <View style={styles.mediaImageContainer}>
               //   <Image
               //     source={{
