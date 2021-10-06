@@ -88,6 +88,16 @@ export function DrawerContent(props) {
             />
             <DrawerItem
               icon={({ color, size }) => (
+                <Icon name="home-outline" color={COLORS.icon} size={size} />
+              )}
+              label="Feed"
+              inactiveTintColor={COLORS.font}
+              onPress={() => {
+                props.navigation.navigate("Feed");
+              }}
+            />
+            <DrawerItem
+              icon={({ color, size }) => (
                 <Icon name="food" color={COLORS.icon} size={size} />
               )}
               label="Food Order"

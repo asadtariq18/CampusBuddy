@@ -20,11 +20,9 @@ const styles = StyleSheet.create({
   time: {
     alignSelf: "flex-end",
     color: COLORS.font,
-    fontSize:10
+    fontSize:12
   },
   timeView:{
-    backgroundColor: COLORS.font_secondary,
-    borderRadius: 20,
     alignSelf: 'flex-end',
     paddingHorizontal: 5
   }

@@ -17,9 +17,11 @@ import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
+import database from "../../Database/database";
 
 const SetUpProfileScreen = ({ route }) => {
   const gender = route.params.gender;
+  const mail = route.params.mail;
   const [isDone, setIsDone] = useState(false);
   const [image, setImage] = useState(
     gender === "Female"
@@ -38,8 +40,8 @@ const SetUpProfileScreen = ({ route }) => {
         aspect: [1, 1],
         quality: 0.5,
       });
-      console.log(data);
-      setImage(data.uri);
+      console.log(data.cancelled)
+      if (!data.cancelled) setImage(data.uri);
     } else {
       Alert.alert("Campus Buddy wants permission to open gallery");
     }
@@ -54,7 +56,7 @@ const SetUpProfileScreen = ({ route }) => {
         aspect: [1, 1],
         quality: 0.5,
       });
-      setImage(data.uri);
+      if (data===null) setImage(data.uri);
     } else {
       Alert.alert("Campus Buddy wants permission to access camera");
     }
@@ -69,6 +71,7 @@ const SetUpProfileScreen = ({ route }) => {
   };
   const finishPressed = () => {
     if (info !== "") {
+      database.updateProfile_Picture(mail, image);
       Keyboard.dismiss();
       ToastAndroid.showWithGravity(
         "You are all set. Log in now",

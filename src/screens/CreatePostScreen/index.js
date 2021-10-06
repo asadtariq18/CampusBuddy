@@ -21,7 +21,7 @@ const CreatePostScreen = () => {
   const [caption, setCaption] = useState("");
   const [type, setType] = useState("status");
   const [privacy, setPrivacy] = useState("public");
-  const [image, setImage] = useState("image");
+  const [image, setImage] = useState("");
 
   const navigation = useNavigation();
   const onChangeCaption = (input) => {
@@ -37,6 +37,7 @@ const CreatePostScreen = () => {
         aspect: [1, 1],
         quality: 0.5,
       });
+      setImage(data.uri)
     } else {
       Alert.alert("you need to give permission to work");
     }
@@ -51,19 +52,21 @@ const CreatePostScreen = () => {
         aspect: [1, 1],
         quality: 0.5,
       });
+      setImage(data.uri);
     } else {
       Alert.alert("you need to give permission to work");
     }
   };
 
   const postPressed = () => {
-    if (caption === "") {
-      ToastAndroid.show("Please write something", ToastAndroid.SHORT);
+    if (image==="") {
+      ToastAndroid.show("No image selected", ToastAndroid.SHORT);
     } else {
       ToastAndroid.show("Uploading your post", ToastAndroid.LONG);
       Database.uploadUserPost(caption, privacy, type, image)
       setCaption("")
       navigation.navigate("Feed");
+      ToastAndroid.show("Post Uploaded", ToastAndroid.SHORT);
     }
   };
 
@@ -139,17 +142,6 @@ const CreatePostScreen = () => {
             ) : (
               <View style={styles.buttonView}>
                 <Text style={styles.button}>Ask</Text>
-              </View>
-            )}
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => setType("poll")}>
-            {type === "poll" ? (
-              <View style={styles.buttonView}>
-                <Text style={styles.button_pressed}>Poll</Text>
-              </View>
-            ) : (
-              <View style={styles.buttonView}>
-                <Text style={styles.button}>Poll</Text>
               </View>
             )}
           </TouchableWithoutFeedback>

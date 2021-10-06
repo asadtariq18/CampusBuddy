@@ -6,15 +6,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    marginBottom: 5
 
   },
   left: {
     flexDirection: "row",
-    marginLeft: 2,
   },
   right: {
     flexDirection: "row",
-    marginRight: 15,
   },
   name: {
     alignContent: "center",
@@ -32,7 +31,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     marginLeft: 10,
     marginBottom: 10,
-    marginTop: 5,
+    marginTop: 2,
   },
 });
 

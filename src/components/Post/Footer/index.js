@@ -14,9 +14,9 @@ import { COLORS } from "../../../Constants/COLORS";
 import CommentList from "../../CommentList/index";
 import styles from "./style";
 
-const Footer = ({ likesCount: likesCountProp, postedAt }) => {
+const Footer = ({ likes_count, postedAt }) => {
   const [isLiked, setIsLiked] = useState(false);
-  const [likesCount, setLikesCount] = useState(0);
+  const [likesCount, setLikesCount] = useState(likes_count);
   const [modalVisible, setModalVisible] = useState(false);
   const [isEmpty, setIsEmpty] = useState(true);
   const [comment, setComment] = useState("");
@@ -53,7 +53,7 @@ const Footer = ({ likesCount: likesCountProp, postedAt }) => {
     setModalVisible(!modalVisible);
   };
   useEffect(() => {
-    setLikesCount(likesCountProp);
+    setLikesCount(likes_count);
   }, []);
 
   const onRefresh = React.useCallback(async () => {
@@ -106,7 +106,7 @@ const Footer = ({ likesCount: likesCountProp, postedAt }) => {
         <Text style={styles.postedAt}>{postedAt}</Text>
       </View>
       <Modal
-      keyboardShouldPersistTaps={"handled"}
+        keyboardShouldPersistTaps={"handled"}
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -126,10 +126,10 @@ const Footer = ({ likesCount: likesCountProp, postedAt }) => {
               <Text style={styles.modalText}>Comments</Text>
             </View>
 
-                <CommentList />
-            
+            <CommentList />
+
             <View
-            keyboardShouldPersistTaps='always'
+              keyboardShouldPersistTaps="always"
               style={{
                 flexDirection: "row",
                 justifyContent: "center",
@@ -137,7 +137,7 @@ const Footer = ({ likesCount: likesCountProp, postedAt }) => {
               }}
             >
               <TextInput
-              keyboardShouldPersistTaps={'always'}
+                keyboardShouldPersistTaps={"always"}
                 placeholder="Comment"
                 multiline
                 placeholderTextColor={COLORS.font_secondary}

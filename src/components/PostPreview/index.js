@@ -1,22 +1,25 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity, Text, View, Image } from "react-native";
-import ProfilePicture from "../ProfilePicture";
+import { TouchableOpacity, View, Image } from "react-native";
 
 import styles from "./style";
 
-const PostPreview = ({post}) => {
-  let image = post.image;
+const PostPreview = ({ post }) => {
   const navigation = useNavigation();
 
   const onPress = () => {
-    navigation.navigate("StoryScreen", { username: name });
+    navigation.navigate("ViewPost", {post: post });
   };
   return (
     <TouchableOpacity onPress={onPress}>
-
-               <ProfilePicture uri={image} />
-
+      <View style={styles.postView}>
+      <Image
+        style={styles.image}
+        source={{
+          uri: post.image,
+        }}
+      />
+      </View>
     </TouchableOpacity>
   );
 };

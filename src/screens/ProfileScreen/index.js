@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import {
   Text,
   View,
@@ -16,17 +16,18 @@ import TimelinePosts from "../../components/TimelinePosts";
 
 const ProfileScreen = () => {
   const [refreshing, setRefreshing] = React.useState(false);
-  const[user, setUser] = React.useState(Database.getCurrentUser());
+  const [user, setUser] = React.useState(Database.getCurrentUser());
   const [posts, setPosts] = React.useState(user.posts);
+
   useEffect(() => {
-    setUser(Database.getCurrentUser())
-    
-  }, [user])
+    setUser(Database.getCurrentUser());
+    setPosts(Database.getUpdatedUserData(user.mail).posts);
+  }, []);
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     try {
       setUser(Database.getCurrentUser());
-      setPosts(Database.getUserPosts(user.mail));
+      setPosts(Database.getUpdatedUserData(user.mail).posts);
       setRefreshing(false);
       ToastAndroid.show("Updated", ToastAndroid.SHORT);
     } catch (error) {
@@ -77,14 +78,6 @@ const ProfileScreen = () => {
           >
             {user.regNo}
           </Text>
-          <Text
-            style={[
-              styles.text,
-              { color: COLORS.font_secondary, fontSize: 14 },
-            ]}
-          >
-            Student
-          </Text>
         </View>
 
         <View style={styles.statsContainer}>
@@ -92,7 +85,7 @@ const ProfileScreen = () => {
             <Text style={[styles.text, { fontSize: 24 }]}>
               {user.posts_count}
             </Text>
-            <Text style={[styles.text, styles.subText]}>Posts</Text>
+            <Text style={[styles.text, styles.text]}>Posts</Text>
           </View>
           <View
             style={[
@@ -107,22 +100,23 @@ const ProfileScreen = () => {
             <Text style={[styles.text, { fontSize: 24 }]}>
               {user.friends_count}
             </Text>
-            <Text style={[styles.text, styles.subText]}>Friends</Text>
+            <Text style={[styles.text, styles.text]}>Friends</Text>
           </View>
           <View style={styles.statsBox}>
             <Text style={[styles.text, { fontSize: 24 }]}>
               {user.popularity}
             </Text>
-            <Text style={[styles.text, styles.subText]}>Popularity</Text>
+            <Text style={[styles.text, styles.text]}>Popularity</Text>
           </View>
         </View>
 
-        <View
-          style={{
-            marginTop: 32,
+        <ScrollView
+          contentContainerStyle ={{
+            marginTop: 20,
             backgroundColor: COLORS.secondary,
-            borderRadius: 20,
-            minHeight: 100,
+            justifyContent: "center",
+            borderRadius: 10,
+            minHeight: 200,
             minWidth: 400,
           }}
         >
@@ -133,59 +127,17 @@ const ProfileScreen = () => {
                 {
                   fontSize: 24,
                   color: COLORS.font_secondary,
-                  marginStart: 155,
-                  marginTop: 30,
+                  marginTop: 50
                 },
               ]}
             >
               {" "}
               NO POSTS{" "}
             </Text>
-          ) : ( 
-               <TimelinePosts posts = {user.posts} />
-              // <View style={styles.mediaImageContainer}>
-              //   <Image
-              //     source={{
-              //       uri: `${posts.post_sp18bcs032_1.image}`,
-              //     }}
-              //     style={styles.image}
-              //     resizeMode="cover"
-              //   />
-              // </View>
+          ) : (
+            <TimelinePosts posts={posts} />
           )}
-        </View>
-        <Text style={[styles.subText, styles.recent]}>Recent Activity</Text>
-        <View style={{ alignItems: "center" }}>
-          <View style={styles.recentItem}>
-            <View style={styles.activityIndicator} />
-            <View style={{ width: 250 }}>
-              <Text
-                style={[
-                  styles.text,
-                  { color: COLORS.font_secondary, fontWeight: "300" },
-                ]}
-              >
-                Liked <Text style={{ fontWeight: "400" }}>Izmah</Text> and{" "}
-                <Text style={{ fontWeight: "400" }}>Atizaz</Text>
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.recentItem}>
-            <View style={styles.activityIndicator} />
-            <View style={{ width: 250 }}>
-              <Text
-                style={[
-                  styles.text,
-                  { color: COLORS.font_secondary, fontWeight: "300" },
-                ]}
-              >
-                Started Connection with{" "}
-                <Text style={{ fontWeight: "400" }}>Asad</Text>
-              </Text>
-            </View>
-          </View>
-        </View>
+        </ScrollView>
       </ScrollView>
     </SafeAreaView>
   );

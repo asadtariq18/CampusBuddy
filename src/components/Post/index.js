@@ -4,18 +4,25 @@ import Header from "./Header";
 import Body from "./Body";
 import Footer from "./Footer";
 import styles from "./style";
-import {LinearGradient} from "expo-linear-gradient";
+import { useRoute } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
+import database from "../../Database/database";
 
-const Post = ({ post }) => (
-  <View style={styles.container}>
+const Post = () => {
+  const routes = useRoute()
+  let post = routes.params.post;
+  const profile_picture = database.getUpdatedUserData(post.mail).profile_picture
+  return (
+    <View style={styles.container}>
       <Header
-        imageUri={post.user.imageUri}
-        name={post.user.name}
+        profile_picture={profile_picture}
+        name={post.owner}
         caption={post.caption}
       />
-      <Body imageUri={post.imageUri} />
-      <Footer likesCount={post.likesCount} postedAt={post.postedAt} />
-  </View>
-);
+      <Body image={post.image} />
+      <Footer likes_count={post.likes_count} postedAt={post.timestamp} />
+    </View>
+  );
+};
 
 export default Post;

@@ -135,7 +135,7 @@ const SignUpScreen = () => {
           ToastAndroid.BOTTOM
         );
         Database.storeUserData(firstName, lastName, mail.toLowerCase(), gender);
-        navigation.navigate("SetUpProfile", {gender});
+        navigation.navigate("SetUpProfile", {gender, mail});
       }
     } catch (error) {
       ToastAndroid.showWithGravity(

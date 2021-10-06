@@ -1,23 +1,18 @@
 import { StyleSheet } from "react-native";
-import { COLORS } from "../../Constants/COLORS";
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: COLORS.secondary,
-    borderRadius: 20,
-    padding: 15,
-    marginHorizontal: 3,
-  },
-  name: {
-    textAlign: "center",
-    fontSize: 12,
-    marginBottom: 5,
-    color: COLORS.font,
+  postView: {
+    flex: 1,
+    borderRadius: 10,
   },
   image: {
     flex: 1,
-    height: undefined,
-    width: undefined,
+    height: 93,
+    width: 93,
+    borderRadius: 10,
+    margin: 1,
+
+
   },
 });
 

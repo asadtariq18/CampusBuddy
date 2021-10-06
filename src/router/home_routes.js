@@ -7,6 +7,8 @@ import HomeScreen from "../screens/HomeScreen";
 import ChatScreen from "../screens/ChatScreen";
 import styles from "./style";
 import { COLORS } from "../Constants/COLORS";
+import DonationScreen from "../screens/DonationScreen";
+import ViewPostScreen from "../screens/ViewPostScreen";
 
 const HomeStack = createStackNavigator();
 const HomeRoutes = () => {
@@ -61,6 +63,25 @@ const HomeRoutes = () => {
               />
             </View>
           ),
+        }}
+      />
+
+      <HomeStack.Screen
+        name="ViewPost"
+        component={ViewPostScreen}
+        options={{
+          title: "View Post",
+          headerTitleAlign: "center",
+          headerTintColor: COLORS.font,
+          headerStyle: {
+            backgroundColor: COLORS.background_dark,
+          },
+
+          headerTitleStyle: {
+            fontWeight: "bold",
+            fontSize: 20,
+            color: COLORS.font,
+          },
         }}
       />
       <HomeStack.Screen

@@ -18,8 +18,16 @@ function storeUserData(firstName, lastName, mail, gender) {
       posts_count: 0,
     });
 }
+function updateProfile_Picture(mail, image){
+  firebase
+    .database()
+    .ref(`users/user_${mail.split("@")[0]}`)
+    .update({
+      profile_picture: image
+    });
+}
 
-function updateUserData(mail) {
+function getUpdatedUserData(mail) {
   let user = new Object();
   firebase
     .database()
@@ -31,20 +39,13 @@ function updateUserData(mail) {
   return user;
 }
 function getCurrentUser() {
-  const user = updateUserData(firebase.auth().currentUser.email);
+  const user = getUpdatedUserData(firebase.auth().currentUser.email);
   return user;
 }
 
 function getUserPosts(mail) {
   let postsArray = new Object();
-  firebase
-    .database()
-    .ref(`users/user_${mail.split("@")[0]}/posts`)
-    .on("value", (snapshot) => {
-      const posts = snapshot.val();
-      postsArray = posts
-
-    });
+  postsArray = getUpdatedUserData(mail)
   return postsArray;
   
 }
@@ -59,6 +60,7 @@ function uploadUserPost(caption, privacy, type, image) {
         .replace(/-/g, "")}_${user.posts_count + 1}`
     )
     .update({
+      mail: user.mail,
       caption: caption,
       owner: user.name,
       privacy: privacy,
@@ -78,8 +80,9 @@ function uploadUserPost(caption, privacy, type, image) {
 }
 export default {
   storeUserData,
-  updateUserData,
+  getUpdatedUserData,
   getCurrentUser,
   uploadUserPost,
   getUserPosts,
+  updateProfile_Picture,
 };

@@ -1,11 +1,13 @@
-import React from 'react';
-import { Text, Image, View } from 'react-native';
-import styles from './style';
+import React from "react";
+import { Image, View } from "react-native";
+import styles from "./style";
 
-const Body = ({imageUri}) => (
+const Body = ({ image }) => {
+  return (
     <View style={styles.view}>
-        <Image source={{uri: imageUri}} style={styles.image}/>
+      <Image source={{ uri: image }} style={styles.image} />
     </View>
-)
+  );
+};
 
 export default Body;

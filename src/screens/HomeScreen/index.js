@@ -8,7 +8,7 @@ const HomeScreen = () => (
   
   <SafeAreaView style={styles.container}>
     <StatusBar showHideTransition backgroundColor={COLORS.background_dark} />
-    <Feed />
+    {/* <Feed /> */}
   </SafeAreaView>
 );
 

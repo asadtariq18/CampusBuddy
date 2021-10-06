@@ -8,6 +8,7 @@ const styles = StyleSheet.create ({
   },
   text: {
     color: COLORS.font,
+    alignSelf: 'center',
   },
   image: {
     flex: 1,
@@ -44,9 +45,13 @@ const styles = StyleSheet.create ({
     marginTop: 16,
   },
   statsContainer: {
+    backgroundColor: COLORS.primary,
+    paddingVertical: 10,
     flexDirection: 'row',
     alignSelf: 'center',
-    marginTop: 32,
+    marginTop: 20,
+    borderTopEndRadius: 20,
+    borderBottomStartRadius: 20
   },
   statsBox: {
     alignItems: 'center',
@@ -58,26 +63,6 @@ const styles = StyleSheet.create ({
     borderRadius: 12,
     overflow: 'hidden',
     marginHorizontal: 10,
-  },
-  recent: {
-    marginLeft: 78,
-    marginTop: 32,
-    marginBottom: 6,
-    fontSize: 10,
-  },
-  recentItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 16,
-  },
-  activityIndicator: {
-    backgroundColor: COLORS.primary,
-    padding: 4,
-    height: 12,
-    width: 12,
-    borderRadius: 6,
-    marginTop: 3,
-    marginRight: 20,
   },
 });
 export default styles;

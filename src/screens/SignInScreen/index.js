@@ -70,7 +70,7 @@ const SignInScreen = () => {
           25,
           50
         );
-        Database.updateUserData(firebase.auth().currentUser.email);
+        Database.getUpdatedUserData(firebase.auth().currentUser.email);
         navigation.navigate("Home");
       }
     } catch (error) {
