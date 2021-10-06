@@ -163,6 +163,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingBottom: 10,
     borderBottomEndRadius: 20,
+    borderTopStartRadius: 20,
     backgroundColor: COLORS.primary,
   },
   title: {
