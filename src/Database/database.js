@@ -1,4 +1,5 @@
 import * as firebase from "firebase";
+import moment from "moment";
 
 function storeUserData(firstName, lastName, mail, gender) {
   firebase
@@ -18,12 +19,12 @@ function storeUserData(firstName, lastName, mail, gender) {
       posts_count: 0,
     });
 }
-function updateProfile_Picture(mail, image){
+function updateProfile_Picture(mail, image) {
   firebase
     .database()
     .ref(`users/user_${mail.split("@")[0]}`)
     .update({
-      profile_picture: image
+      profile_picture: image,
     });
 }
 
@@ -34,7 +35,7 @@ function getUpdatedUserData(mail) {
     .ref(`users/user_${mail.split("@")[0]}`)
     .on("value", (snapshot) => {
       const temp = snapshot.val();
-      user = temp
+      user = temp;
     });
   return user;
 }
@@ -45,19 +46,57 @@ function getCurrentUser() {
 
 function getUserPosts(mail) {
   let postsArray = new Object();
-  postsArray = getUpdatedUserData(mail)
+  postsArray = getUpdatedUserData(mail).posts;
   return postsArray;
-  
 }
+// const uploadImage = async ({image}) => {
+//   const [uploading, setUploading] = React.useState(false);
+//   const blob = await new Promise((resolve, reject) => {
+//     const xhr = new XMLHttpRequest();
+//     xhr.onload = function () {
+//       resolve(xhr.response);
+//     };
+//     xhr.onerror = function () {
+//       reject(new TypeError("Network request failed"));
+//     };
+//     xhr.responseType = "blob";
+//     xhr.open("GET", image, true);
+//     xhr.send(null);
+//   });
+
+//   const ref = firebase.storage().ref().child(new Date().toISOString);
+//   snapshot.on(
+//     firebase.storage.TaskEvent.STATE_CHANGED,
+//     () => {
+//       setUploading(true);
+//     },
+//     (error) => {
+//       setUploading(false);
+//       console.log(error);
+//       blob.close();
+//       return;
+//     },
+//     () => {
+//       snapshot.snapshot.ref.getDownloadURL().then((url) => {
+//         console.log("URL: ", url);
+//         setUploading(false);
+//         blob.close();
+//         return uri;
+//       });
+//     }
+//   );
+// };
 
 function uploadUserPost(caption, privacy, type, image) {
   const user = getCurrentUser();
+  let timestamp = moment().format("YYYY/MM/D hh:mm");
+
   firebase
     .database()
     .ref(
       `users/user_${user.regNo.toLowerCase()}/posts/post_${user.regNo
         .toLowerCase()
-        .replace(/-/g, "")}_${user.posts_count + 1}`
+        .replace(/-/g, "")}_${moment().format("YYYYMMDhhmmss")}`
     )
     .update({
       mail: user.mail,
@@ -66,7 +105,7 @@ function uploadUserPost(caption, privacy, type, image) {
       privacy: privacy,
       type: type,
       image: image,
-      timestamp: "05/10/2021",
+      timestamp: timestamp,
       likes_count: 0,
       comments_count: 0,
     });
@@ -76,6 +115,7 @@ function uploadUserPost(caption, privacy, type, image) {
     .ref(`users/user_${user.regNo.toLowerCase()}`)
     .update({
       posts_count: user.posts_count + 1,
+      popularity: user.popularity + 3,
     });
 }
 export default {

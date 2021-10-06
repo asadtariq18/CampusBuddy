@@ -4,13 +4,10 @@ import Header from "./Header";
 import Body from "./Body";
 import Footer from "./Footer";
 import styles from "./style";
-import { useRoute } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import database from "../../Database/database";
 
-const Post = () => {
-  const routes = useRoute()
-  let post = routes.params.post;
+const Post = ({post}) => {
   const profile_picture = database.getUpdatedUserData(post.mail).profile_picture
   return (
     <View style={styles.container}>

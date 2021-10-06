@@ -1,39 +1,29 @@
-import React from "react";
-import { FlatList, RefreshControl, ToastAndroid } from "react-native";
+import React, { useState, useEffect } from "react";
+import { FlatList } from "react-native";
 import Post from "../Post";
 import Stories from "../../components/Stories";
-import postsData from "../../Data/PostData/posts";
 import { View } from "native-base";
-import {COLORS} from '../../Constants/COLORS';
 
-const Feed = () => {
-  const [refreshing, setRefreshing] = React.useState(false);
+const Feed = ({ posts }) => {
+  const [postsArray, setPostsArray] = useState(posts);
+  useEffect(() => {
+    setPostsArray(
+      Object.keys(posts).map(function (_) {
+        return posts[_];
+      })
+    );
+  }, []);
 
-  const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
-    if (postsData.length < 1) {
-      try {
-        setRefreshing(false);
-        ToastAndroid.show("Updated", ToastAndroid.SHORT);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      ToastAndroid.show("No more new posts", ToastAndroid.SHORT);
-      setRefreshing(false);
-    }
-  }, [refreshing]);
   return (
     <View style={{ paddingBottom: 50 }}>
       <FlatList
-        data={postsData}
+        data={postsArray}
         showsVerticalScrollIndicator={false}
         keyExtractor={({ id }) => id}
-        renderItem={({ item }) => <Post post={item} />}
+        renderItem={({ item }) => {
+          return <Post post={item} />;
+        }}
         ListHeaderComponent={Stories}
-        refreshControl={
-          <RefreshControl progressBackgroundColor={COLORS.background_dark} colors={[COLORS.primary]} refreshing={refreshing} onRefresh={onRefresh} />
-        }
       />
     </View>
   );

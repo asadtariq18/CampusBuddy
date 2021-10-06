@@ -18,6 +18,7 @@ import { COLORS } from "../../Constants/COLORS";
 const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => (
   <Tab.Navigator
+  
   initialRouteName="Feed"
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
@@ -49,6 +50,8 @@ const BottomTabNavigator = () => (
       inactiveTintColor: COLORS.font,
       showLabel: false,
       style: styles.bottomTab,
+      keyboardHidesTabBar: true,
+      
     }}
   >
     <Tab.Screen name="Feed" component={HomeStackScreen} />

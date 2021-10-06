@@ -17,6 +17,7 @@ import { COLORS } from "../../Constants/COLORS";
 import * as firebase from "firebase";
 import Firebase from "../../config/Firebase";
 import Database from "../../Database/database";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const auth = Firebase.auth();
 
@@ -59,6 +60,12 @@ const SignInScreen = () => {
     }
   };
 
+  async function setUser() {
+    const _id = mail;
+    const user = { _id };
+    await AsyncStorage.setItem("user", JSON.stringify(user));
+    setUser(user);
+  }
   const onLoginPress = async () => {
     try {
       if (mail !== "" && password !== "") {
@@ -70,7 +77,9 @@ const SignInScreen = () => {
           25,
           50
         );
+
         Database.getUpdatedUserData(firebase.auth().currentUser.email);
+        setUser();
         navigation.navigate("Home");
       }
     } catch (error) {

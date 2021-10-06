@@ -20,7 +20,7 @@ import Database from "../../Database/database";
 
 export function DrawerContent(props) {
   const navigation = useNavigation();
-  
+
   const onSignOutPress = async () => {
     try {
       await auth.signOut();

@@ -23,6 +23,7 @@ const ProfileScreen = () => {
     setUser(Database.getCurrentUser());
     setPosts(Database.getUpdatedUserData(user.mail).posts);
   }, []);
+
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     try {
@@ -111,7 +112,7 @@ const ProfileScreen = () => {
         </View>
 
         <ScrollView
-          contentContainerStyle ={{
+          contentContainerStyle={{
             marginTop: 20,
             backgroundColor: COLORS.secondary,
             justifyContent: "center",
@@ -127,7 +128,7 @@ const ProfileScreen = () => {
                 {
                   fontSize: 24,
                   color: COLORS.font_secondary,
-                  marginTop: 50
+                  marginTop: 50,
                 },
               ]}
             >

@@ -40,7 +40,6 @@ const SetUpProfileScreen = ({ route }) => {
         aspect: [1, 1],
         quality: 0.5,
       });
-      console.log(data.cancelled)
       if (!data.cancelled) setImage(data.uri);
     } else {
       Alert.alert("Campus Buddy wants permission to open gallery");
