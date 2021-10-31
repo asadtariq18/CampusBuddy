@@ -15,6 +15,7 @@ import CommentList from "../../CommentList/index";
 import styles from "./style";
 
 const Footer = ({ likes_count, postedAt }) => {
+  console.log(likes_count)
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(likes_count);
   const [modalVisible, setModalVisible] = useState(false);

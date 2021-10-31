@@ -17,6 +17,7 @@ function storeUserData(firstName, lastName, mail, gender) {
       popularity: 0,
       friends_count: 0,
       posts_count: 0,
+      posts: 0,
     });
 }
 function updateProfile_Picture(mail, image) {
@@ -96,7 +97,7 @@ function uploadUserPost(caption, privacy, type, image) {
     .ref(
       `users/user_${user.regNo.toLowerCase()}/posts/post_${user.regNo
         .toLowerCase()
-        .replace(/-/g, "")}_${moment().format("YYYYMMDhhmmss")}`
+        .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
     )
     .update({
       mail: user.mail,

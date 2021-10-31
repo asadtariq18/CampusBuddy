@@ -64,8 +64,9 @@ const CreatePostScreen = () => {
     } else {
       ToastAndroid.show("Uploading your post", ToastAndroid.LONG);
       Database.uploadUserPost(caption, privacy, type, image)
-      setCaption("")
-      navigation.navigate("Feed");
+      setCaption(null)
+      setImage(null)
+      navigation.navigate("Home");
       ToastAndroid.show("Post Uploaded", ToastAndroid.SHORT);
     }
   };

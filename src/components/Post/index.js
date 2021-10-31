@@ -8,11 +8,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import database from "../../Database/database";
 
 const Post = ({post}) => {
-  const profile_picture = database.getUpdatedUserData(post.mail).profile_picture
+  //const profile_picture = database.getUpdatedUserData(post.mail).profile_picture
   return (
     <View style={styles.container}>
       <Header
-        profile_picture={profile_picture}
+        profile_picture={post.profile_picture}
         name={post.owner}
         caption={post.caption}
       />

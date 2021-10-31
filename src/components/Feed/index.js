@@ -5,19 +5,20 @@ import Stories from "../../components/Stories";
 import { View } from "native-base";
 
 const Feed = ({ posts }) => {
-  const [postsArray, setPostsArray] = useState(posts);
-  useEffect(() => {
-    setPostsArray(
-      Object.keys(posts).map(function (_) {
-        return posts[_];
-      })
-    );
-  }, []);
+  // const [postsArray, setPostsArray] = useState(posts);
+  // useEffect(() => {
+  //   setPostsArray(
+  //     Object.keys(posts).map(function (_) {
+  //       return posts[_];
+  //     })
+  //   );
+  // }, []);
 
   return (
     <View style={{ paddingBottom: 50 }}>
+      
       <FlatList
-        data={postsArray}
+        data={posts}
         showsVerticalScrollIndicator={false}
         keyExtractor={({ id }) => id}
         renderItem={({ item }) => {

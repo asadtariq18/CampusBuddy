@@ -12,12 +12,13 @@ import {
 } from "react-native";
 import { Header } from "native-base";
 import { useNavigation } from "@react-navigation/native";
+
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import * as firebase from "firebase";
 import Firebase from "../../config/Firebase";
 import Database from "../../Database/database";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const auth = Firebase.auth();
 
@@ -78,9 +79,9 @@ const SignInScreen = () => {
           50
         );
 
-        Database.getUpdatedUserData(firebase.auth().currentUser.email);
+        Database.getUpdatedUserData(mail);
         setUser();
-        navigation.navigate("Home");
+        navigation.navigate("AppStack");
       }
     } catch (error) {
       {
