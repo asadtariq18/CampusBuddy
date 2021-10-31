@@ -45,7 +45,7 @@ const styles = StyleSheet.create ({
     marginTop: 16,
   },
   statsContainer: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.background_dark,
     paddingVertical: 10,
     flexDirection: 'row',
     alignSelf: 'center',

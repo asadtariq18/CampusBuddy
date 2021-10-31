@@ -5,6 +5,8 @@ import StoryScreen from "../screens/StoryScreen";
 import ChatScreen from "../screens/ChatScreen";
 import InboxScreen from "../screens/InboxScreen";
 import ViewPostScreen from "../screens/ViewPostScreen";
+import DonateScreen from "../screens/DonationScreen/DonateScreen";
+import ApplyDonationScreen from "../screens/DonationScreen/ApplyDonationScreen";
 import {COLORS} from '../Constants/COLORS';
 import DrawerNavigator from "./DrawerNavigator/drawerNavigator";
 
@@ -20,7 +22,7 @@ const AppStack = () => {
           headerShown: false,
         }}
       />
-      
+
       <Stack.Screen
         name="StoryScreen"
         component={StoryScreen}
@@ -67,6 +69,44 @@ const AppStack = () => {
         component={ChatScreen}
         options={{
           title: "Chat",
+          headerTitleAlign: "center",
+          headerTintColor: COLORS.font,
+          headerStyle: {
+            backgroundColor: COLORS.background_dark,
+          },
+
+          headerTitleStyle: {
+            fontWeight: "bold",
+            fontSize: 20,
+            color: COLORS.font,
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="ApplyDonationScreen"
+        component={ApplyDonationScreen}
+        options={{
+          title: "Apply for donation",
+          headerTitleAlign: "center",
+          headerTintColor: COLORS.font,
+          headerStyle: {
+            backgroundColor: COLORS.background_dark,
+          },
+
+          headerTitleStyle: {
+            fontWeight: "bold",
+            fontSize: 20,
+            color: COLORS.font,
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="DonateScreen"
+        component={DonateScreen}
+        options={{
+          title: "Donate",
           headerTitleAlign: "center",
           headerTintColor: COLORS.font,
           headerStyle: {

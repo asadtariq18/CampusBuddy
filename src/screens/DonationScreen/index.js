@@ -14,7 +14,8 @@ import {LinearGradient} from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 
 const DonationScreen = () => 
-{const navigation = useNavigation();
+{
+  const navigation = useNavigation();
 return (
   <SafeAreaView style={styles.container}>
     <Header style={styles.header}>
@@ -35,17 +36,21 @@ return (
       }}
     />
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("DonateScreen")}
+      >
         <LinearGradient colors={["#1f4037", "#99f2c8"]} style={styles.cardView}>
           <Text style={styles.button}>Donate</Text>
         </LinearGradient>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("ApplyDonationScreen")}
+      >
         <LinearGradient
           colors={["#BBD2C5", "#536976", "#292E49"]}
           style={styles.cardView}
         >
-          <Text style={styles.button}>Request Donation</Text>
+          <Text style={styles.button}>Apply for donation</Text>
         </LinearGradient>
       </TouchableOpacity>
     </View>
