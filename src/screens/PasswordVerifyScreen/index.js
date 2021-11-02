@@ -1,73 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   SafeAreaView,
   Text,
   View,
   TouchableOpacity,
-  TextInput,
   Image,
-  ToastAndroid,
   StatusBar,
-  Keyboard,
 } from "react-native";
 import { Header } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
-import * as firebase from "firebase";
-import Firebase from "../../config/Firebase";
-import Database from "../../Database/database";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const auth = Firebase.auth();
 
 const PasswordVerifyScreen = () => {
-  const [mail, setMail] = useState("");
   const navigation = useNavigation();
-
-  const onChangeMail = (input1) => {
-    setMail(input1);
-    if (input1 !== "") {
-      setIsEmpty(false);
-    } else {
-      setIsEmpty(true);
-    }
-  };
-  const onSendCodePress = async () => {
-    try {
-      if (mail !== "") {
-        await auth.sendPasswordResetEmail(mail);
-        ToastAndroid.showWithGravityAndOffset(
-          "Sending email...",
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER,
-          25,
-          50
-        );
-        navigation.navigate("Verification Screen");
-      }
-    } catch (error) {
-      {
-        error.message ===
-        "There is no user record corresponding to this identifier. The user may have been deleted."
-          ? ToastAndroid.showWithGravityAndOffset(
-              "This Email address is not registered",
-              ToastAndroid.SHORT,
-              ToastAndroid.CENTER,
-              25,
-              50
-            )
-          : ToastAndroid.showWithGravityAndOffset(
-              "An error occurred while sending email",
-              ToastAndroid.SHORT,
-              ToastAndroid.CENTER,
-              25,
-              50
-            );
-      }
-    }
-  };
 
   const onLoginPress = () => {
     navigation.navigate("SignIn");

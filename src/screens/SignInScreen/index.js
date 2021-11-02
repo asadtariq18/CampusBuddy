@@ -16,7 +16,6 @@ import { useNavigation } from "@react-navigation/native";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import { Icon } from "native-base";
-import * as firebase from "firebase";
 import Firebase from "../../config/Firebase";
 import Database from "../../Database/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -80,7 +79,6 @@ const SignInScreen = () => {
           25,
           50
         );
-
         Database.getUpdatedUserData(mail);
         setUser();
         navigation.navigate("AppStack");

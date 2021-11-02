@@ -33,6 +33,7 @@ const SignUpScreen = () => {
   const [isValid_Mail, setIsValid_Mail] = useState(false);
   const [isValid_Password, setIsValid_Password] = useState(false);
   const [onFocus, setOnFocus] = useState(false);
+  
 
   const navigation = useNavigation();
 
@@ -128,14 +129,20 @@ const SignUpScreen = () => {
   const onSignUpPress = async () => {
     try {
       if (mail !== "" && password !== "") {
-        await auth.createUserWithEmailAndPassword(mail, password);
-        ToastAndroid.showWithGravity(
-          "Your account has been created",
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM
-        );
-        Database.storeUserData(firstName, lastName, mail.toLowerCase(), gender);
-        navigation.navigate("SetUpProfile", { gender, mail });
+        await auth.createUserWithEmailAndPassword(mail, password).then(() => {
+          ToastAndroid.showWithGravity(
+            "Your account has been created",
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM
+          );
+          Database.storeUserData(
+            firstName,
+            lastName,
+            mail.toLowerCase(),
+            gender
+          );
+            navigation.navigate("Email Verification Screen", { gender, mail });
+        });
       }
     } catch (error) {
       console.log(error.message);

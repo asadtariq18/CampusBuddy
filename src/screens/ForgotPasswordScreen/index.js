@@ -53,15 +53,16 @@ const ForgotPasswordScreen = () => {
   const onSendCodePress = async () => {
     try {
       if (mail !== "") {
-        await auth.sendPasswordResetEmail(mail);
-        ToastAndroid.showWithGravityAndOffset(
-          "Sending email...",
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER,
-          25,
-          50
-        );
-        navigation.navigate("Verification Screen");
+        await auth.sendPasswordResetEmail(mail).then(() => {
+          ToastAndroid.showWithGravityAndOffset(
+            "Sending email...",
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+            25,
+            50
+          );
+          navigation.navigate("Verification Screen");
+        });
       }
     } catch (error) {
       {
@@ -133,7 +134,6 @@ const ForgotPasswordScreen = () => {
         <TouchableOpacity onPress={onLoginPress}>
           <Text style={styles.button3}>Go back to Login</Text>
         </TouchableOpacity>
-
       </View>
     </SafeAreaView>
   );
