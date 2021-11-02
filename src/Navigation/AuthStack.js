@@ -4,7 +4,8 @@ import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import SetUpProfileScreen from "../screens/SetUpProfileScreen";
 import LoadingScreen from "../screens/LoadingScreen";
-import { NavigationContainer } from "@react-navigation/native";
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import VerificationScreen from "../screens/PasswordVerifyScreen";
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,16 @@ const AuthStack = () => {
       <Stack.Screen
         name="SetUpProfile"
         component={SetUpProfileScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Forgot Password"
+        component={ForgotPasswordScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Verification Screen"
+        component={VerificationScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

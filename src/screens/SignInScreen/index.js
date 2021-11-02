@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
+import { Icon } from "native-base";
 import * as firebase from "firebase";
 import Firebase from "../../config/Firebase";
 import Database from "../../Database/database";
@@ -27,6 +28,7 @@ const SignInScreen = () => {
   const [password, setPassword] = useState("");
   const [isEmpty, setIsEmpty] = useState(true);
   const [onFocus, setOnFocus] = useState(false);
+  const [hidePass, setHidePass] = useState(true);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -84,29 +86,45 @@ const SignInScreen = () => {
         navigation.navigate("AppStack");
       }
     } catch (error) {
-      {
+      if (
+        error.message ===
+        "There is no user record corresponding to this identifier. The user may have been deleted."
+      ) {
+        ToastAndroid.showWithGravityAndOffset(
+          "This email address is not registered",
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+          25,
+          50
+        );
+      } else if (
         error.message ===
         "The password is invalid or the user does not have a password."
-          ? ToastAndroid.showWithGravityAndOffset(
-              "Wrong credentials",
-              ToastAndroid.SHORT,
-              ToastAndroid.CENTER,
-              25,
-              50
-            )
-          : ToastAndroid.showWithGravityAndOffset(
-              error.message,
-              ToastAndroid.SHORT,
-              ToastAndroid.CENTER,
-              25,
-              50
-            );
+      ) {
+        ToastAndroid.showWithGravityAndOffset(
+          "Wrong credentials",
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+          25,
+          50
+        );
+      } else {
+        ToastAndroid.showWithGravityAndOffset(
+          "An error occurred",
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+          25,
+          50
+        );
       }
     }
   };
 
   const onSignUpPress = () => {
     navigation.navigate("SignUp");
+  };
+  const onForgotPasswordPress = () => {
+    navigation.navigate("Forgot Password");
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -131,14 +149,24 @@ const SignInScreen = () => {
           onChangeText={(value) => onChangeMail(value.trim())}
         ></TextInput>
 
-        <TextInput
-          placeholder="Password"
-          placeholderTextColor={COLORS.font_secondary}
-          selectionColor={COLORS.primary}
-          style={styles.textInput}
-          secureTextEntry={true}
-          onChangeText={(value) => onChangePass(value)}
-        ></TextInput>
+        <View style={styles.passwordInput}>
+          <TextInput
+            placeholder="Password"
+            placeholderTextColor={COLORS.font_secondary}
+            selectionColor={COLORS.primary}
+            style={{ color: COLORS.font, width: 300 }}
+            onChangeText={(value) => onChangePass(value.trim())}
+            secureTextEntry={hidePass}
+          ></TextInput>
+          <Icon
+            name="eye"
+            style={{
+              fontSize: 25,
+              color: password === "" ? "black" : COLORS.font,
+            }}
+            onPress={() => setHidePass(!hidePass)}
+          />
+        </View>
         <TouchableOpacity onPress={onLoginPress}>
           {isEmpty ? (
             <View style={styles.buttonView}>
@@ -149,6 +177,9 @@ const SignInScreen = () => {
               <Text style={styles.button2}>Log in</Text>
             </View>
           )}
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onForgotPasswordPress}>
+          <Text style={styles.button3}>Forgot Password?</Text>
         </TouchableOpacity>
 
         <Text style={styles.text}>Don't have account?</Text>

@@ -8,6 +8,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: COLORS.background_dark,
   },
+  passwordInput: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: COLORS.secondary,
+    fontSize: 15,
+    height: 50,
+    width: 350,
+    borderRadius: 20,
+    margin: 10,
+    padding: 10,
+    color: COLORS.font,
+  },
   text: {
     textAlign: "center",
     marginTop: 20,
@@ -28,7 +41,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   headerText: {
-    fontWeight: "600",
+    fontWeight: "bold",
     fontSize: 40,
     color: COLORS.font,
   },

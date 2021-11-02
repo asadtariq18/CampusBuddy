@@ -55,7 +55,7 @@ const SetUpProfileScreen = ({ route }) => {
         aspect: [1, 1],
         quality: 0.5,
       });
-      if (data===null) setImage(data.uri);
+      if (data === null) setImage(data.uri);
     } else {
       Alert.alert("Campus Buddy wants permission to access camera");
     }
@@ -124,6 +124,8 @@ const SetUpProfileScreen = ({ route }) => {
       </View>
       <Text style={styles.text}>Your info</Text>
       <TextInput
+      placeholder={"Type here..."}
+      placeholderTextColor={COLORS.font_secondary}
         multiline
         selectionColor={COLORS.primary + "99"}
         style={styles.textInput}

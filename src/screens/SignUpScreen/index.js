@@ -135,14 +135,26 @@ const SignUpScreen = () => {
           ToastAndroid.BOTTOM
         );
         Database.storeUserData(firstName, lastName, mail.toLowerCase(), gender);
-        navigation.navigate("SetUpProfile", {gender, mail});
+        navigation.navigate("SetUpProfile", { gender, mail });
       }
     } catch (error) {
-      ToastAndroid.showWithGravity(
-        error.message,
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM
-      );
+      console.log(error.message);
+      if (
+        error.message ===
+        "The email address is already in use by another account."
+      ) {
+        ToastAndroid.showWithGravity(
+          error.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM
+        );
+      } else {
+        ToastAndroid.showWithGravity(
+          "An error occurred while signing up, please try again",
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM
+        );
+      }
     }
   };
 
@@ -217,6 +229,7 @@ const SignUpScreen = () => {
             selectionColor={COLORS.primary}
             style={{ color: COLORS.font, width: 300 }}
             onChangeText={(value) => onChangePass(value.trim())}
+            secureTextEntry
           ></TextInput>
           <Icon
             name="checkmark-circle"
