@@ -22,26 +22,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const auth = Firebase.auth();
 
-const SignInScreen = () => {
+const PasswordVerifyScreen = () => {
   const [mail, setMail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isEmpty, setIsEmpty] = useState(true);
-  const [onFocus, setOnFocus] = useState(false);
   const navigation = useNavigation();
-
-  useEffect(() => {
-    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-      setOnFocus(true);
-    });
-    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-      setOnFocus(false);
-    });
-
-    return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
-    };
-  }, []);
 
   const onChangeMail = (input1) => {
     setMail(input1);
@@ -116,4 +99,4 @@ const SignInScreen = () => {
     </SafeAreaView>
   );
 };
-export default SignInScreen;
+export default PasswordVerifyScreen;

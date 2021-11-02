@@ -131,7 +131,7 @@ const ForgotPasswordScreen = () => {
           )}
         </TouchableOpacity>
         <TouchableOpacity onPress={onLoginPress}>
-          <Text style={styles.button3}>Go back to Log In</Text>
+          <Text style={styles.button3}>Go back to Login</Text>
         </TouchableOpacity>
 
       </View>
