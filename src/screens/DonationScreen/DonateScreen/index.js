@@ -5,11 +5,13 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Image
+  Image,
+  ToastAndroid,
 } from "react-native";
 import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
 import styles from "./style";
 import { COLORS } from "../../../Constants/COLORS";
+import database from "../../../Database/database";
 
 const DonateScreen = () => {
   const [isValid, setIsValid] = useState(false);
@@ -25,9 +27,12 @@ const fetchPaymentIntentClientSecret = async()=>{
     if ( !cardDetails?.complete || amount===0) {
       alert("Please enter complete Card Details and Amount");
       return
-    }
-    const billingDetails={
-      amount: amount
+    }else{
+      const billingDetails={
+        amount: amount
+      }
+        database.uploadDonationHistory(cardDetails, amount);
+        ToastAndroid.show("Payment Successful", ToastAndroid.LONG);
     }
   };
   return (

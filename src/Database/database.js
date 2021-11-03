@@ -145,6 +145,31 @@ function uploadUserPost(caption, privacy, type, image) {
       popularity: user.popularity + 3,
     });
 }
+
+function uploadDonationHistory(cardDetails, amount) {
+  try {
+    const user = getCurrentUser();
+    let timestamp = moment().format("YYYY/MM/D hh:mm");
+
+    firebase
+      .database()
+      .ref(
+        `db/donation_history/donation_${user.regNo
+          .toLowerCase()
+          .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
+      )
+      .update({
+        userID: user.mail.split("@")[0],
+        cardDetails: cardDetails,
+        amount: amount,
+        timestamp: timestamp,
+      });
+  } catch (error) {
+    console.log(error)
+    
+  }
+}
+
 export default {
   storeUserData,
   getUpdatedUserData,
@@ -153,4 +178,5 @@ export default {
   uploadUserStory,
   getUserPosts,
   updateProfile_Picture,
+  uploadDonationHistory
 };
