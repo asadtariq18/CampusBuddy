@@ -130,19 +130,19 @@ const SignUpScreen = () => {
     try {
       if (mail !== "" && password !== "") {
         await auth.createUserWithEmailAndPassword(mail, password).then(() => {
-          ToastAndroid.showWithGravity(
-            "Your account has been created",
-            ToastAndroid.SHORT,
-            ToastAndroid.BOTTOM
-          );
+          navigation.navigate("Email Verification Screen", { mail });
           Database.storeUserData(
             firstName,
             lastName,
             mail.toLowerCase(),
             gender
-          );
-            navigation.navigate("Email Verification Screen", { gender, mail });
-        });
+            );
+            ToastAndroid.showWithGravity(
+              "Your account has been created",
+              ToastAndroid.SHORT,
+              ToastAndroid.BOTTOM
+            );
+          });
       }
     } catch (error) {
       console.log(error.message);

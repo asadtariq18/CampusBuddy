@@ -18,39 +18,44 @@ import { COLORS } from "../../Constants/COLORS";
 const auth = Firebase.auth();
 
 const EmailVerifyScreen = ({ route }) => {
-  const mail = route.params.mail;
-  const gender = route.params.gender;
-  const [emailVerified, setEmailVerified] = useState(
-    auth.currentUser.emailVerified
-  );
+  const mail = route.params.mail.toLowerCase();
+  // const gender = route.params.gender;
+
   const [mailSent, setMailSent] = useState(false);
   const [label, setLabel] = useState(
     "Verify your email address to get registered"
   );
   const navigation = useNavigation();
 
-  useEffect(() => {
-    console.log("useEffect");
-    setEmailVerified(auth.currentUser.emailVerified);
-    console.log(emailVerified);
-    if (emailVerified) {
-      console.log(emailVerified);
-      ToastAndroid.showWithGravityAndOffset(
-        "Email Verified",
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
-        25,
-        50
-      );
-      navigation.navigate("SetUpProfile", { mail, gender });
-    }
-  });
+  // useEffect(() => {
+  //   console.log("useEffect");
+  //   setEmailVerified(auth.currentUser.emailVerified);
+  //   console.log(emailVerified);
+  //   if (emailVerified) {
+  //     console.log(emailVerified);
+  //     ToastAndroid.showWithGravityAndOffset(
+  //       "Email Verified",
+  //       ToastAndroid.SHORT,
+  //       ToastAndroid.CENTER,
+  //       25,
+  //       50
+  //     );
+  //     navigation.navigate("SetUpProfile", { mail, gender });
+  //   }
+  // });
 
   const onVerifyPress = () => {
     auth.currentUser.sendEmailVerification().then(() => {
       setMailSent(true);
       setLabel(`Check your email and follow the link we just sent to verify.`);
     });
+    ToastAndroid.showWithGravityAndOffset(
+      "Email Sent.",
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+      25,
+      50
+    );
   };
 
   return (
@@ -75,11 +80,15 @@ const EmailVerifyScreen = ({ route }) => {
             </View>
           </TouchableOpacity>
         ) : (
-          <TouchableWithoutFeedback>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("SignIn");
+            }}
+          >
             <View style={styles.buttonView}>
-              <Text style={styles.button2}>Email Sent</Text>
+              <Text style={styles.button1}>Go to Login</Text>
             </View>
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
         )}
       </View>
     </SafeAreaView>

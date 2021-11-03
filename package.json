@@ -15,6 +15,7 @@
     "@react-navigation/material-top-tabs": "^5.3.15",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.5",
+    "@stripe/stripe-react-native": "^0.2.3",
     "expo": "~41.0.1",
     "expo-av": "~9.1.2",
     "expo-image-picker": "^10.1.4",
@@ -44,6 +45,9 @@
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "~0.13.12",
     "react-navigation-drawer": "^2.7.1",
+    "react-redux": "^7.2.6",
+    "react-thunk": "^1.0.0",
+    "redux": "^4.1.2",
     "yarn": "^1.22.15"
   },
   "devDependencies": {

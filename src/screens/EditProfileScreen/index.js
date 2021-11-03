@@ -19,7 +19,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import database from "../../Database/database";
 
-const SetUpProfileScreen = ({ route }) => {
+const EditProfileScreen = ({ route }) => {
   const gender = route.params.gender;
   const mail = route.params.mail;
   const [isDone, setIsDone] = useState(false);
@@ -141,4 +141,4 @@ const SetUpProfileScreen = ({ route }) => {
     </SafeAreaView>
   );
 };
-export default SetUpProfileScreen;
+export default EditProfileScreen;

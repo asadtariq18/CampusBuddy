@@ -30,6 +30,7 @@ const SignInScreen = () => {
   const [hidePass, setHidePass] = useState(true);
   const navigation = useNavigation();
 
+  
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
       setOnFocus(true);
@@ -62,26 +63,37 @@ const SignInScreen = () => {
     }
   };
 
-  async function setUser() {
-    const _id = mail;
-    const user = { _id };
-    await AsyncStorage.setItem("user", JSON.stringify(user));
-    setUser(user);
-  }
+  // async function setUser() {
+  //   const _id = mail;
+  //   const user = { _id };
+  //   await AsyncStorage.setItem("user", JSON.stringify(user));
+  //   setUser(user);
+  // }
   const onLoginPress = async () => {
     try {
       if (mail !== "" && password !== "") {
         await auth.signInWithEmailAndPassword(mail, password);
-        ToastAndroid.showWithGravityAndOffset(
-          "Logging in...",
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER,
-          25,
-          50
-        );
-        Database.getUpdatedUserData(mail);
-        setUser();
-        navigation.navigate("AppStack");
+        if (auth.currentUser.emailVerified === false) {
+          ToastAndroid.showWithGravityAndOffset(
+            "Verify Your email first.",
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+            25,
+            50
+          );
+          navigation.navigate("Email Verification Screen", { mail });
+        } else {
+          ToastAndroid.showWithGravityAndOffset(
+            "Logging in...",
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+            25,
+            50
+          );
+          Database.getUpdatedUserData(mail);
+          //setUser();
+          navigation.navigate("AppStack");
+        }
       }
     } catch (error) {
       if (
