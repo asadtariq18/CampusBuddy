@@ -17,18 +17,18 @@ import TimelinePosts from "../../components/TimelinePosts";
 const ProfileScreen = () => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [user, setUser] = React.useState(Database.getCurrentUser());
-  const [posts, setPosts] = React.useState(user.posts);
+  const [posts, setPosts] = React.useState(Database.getUserPosts(user.mail));
 
   useEffect(() => {
     setUser(Database.getCurrentUser());
-    setPosts(Database.getUpdatedUserData(user.mail).posts);
+    setPosts(Database.getUserPosts(user.mail));
   }, []);
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     try {
       setUser(Database.getCurrentUser());
-      setPosts(Database.getUpdatedUserData(user.mail).posts);
+      setPosts(Database.getUserPosts(user.mail));
       setRefreshing(false);
       ToastAndroid.show("Updated", ToastAndroid.SHORT);
     } catch (error) {

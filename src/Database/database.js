@@ -4,7 +4,7 @@ import moment from "moment";
 function storeUserData(firstName, lastName, mail, gender) {
   firebase
     .database()
-    .ref(`users/user_${mail.split("@")[0]}`)
+    .ref(`db/users/user_${mail.split("@")[0]}`)
     .update({
       name: firstName + " " + lastName,
       regNo: mail.split("@")[0].toUpperCase(),
@@ -17,13 +17,12 @@ function storeUserData(firstName, lastName, mail, gender) {
       popularity: 0,
       friends_count: 0,
       posts_count: 0,
-      posts: 0,
     });
 }
 function updateProfile_Picture(mail, image) {
   firebase
     .database()
-    .ref(`users/user_${mail.split("@")[0]}`)
+    .ref(`db/users/user_${mail.split("@")[0]}`)
     .update({
       profile_picture: image,
     });
@@ -33,7 +32,7 @@ function getUpdatedUserData(mail) {
   let user = new Object();
   firebase
     .database()
-    .ref(`users/user_${mail.split("@")[0]}`)
+    .ref(`db/users/user_${mail.split("@")[0]}`)
     .on("value", (snapshot) => {
       const temp = snapshot.val();
       user = temp;
@@ -46,9 +45,15 @@ function getCurrentUser() {
 }
 
 function getUserPosts(mail) {
-  let postsArray = new Object();
-  postsArray = getUpdatedUserData(mail).posts;
-  return postsArray;
+  let posts = new Object();
+  firebase
+    .database()
+    .ref(`db/posts`)
+    .on("value", (snapshot) => {
+      const temp = snapshot.val();
+      posts = temp;
+    });
+  return posts;
 }
 // const uploadImage = async ({image}) => {
 //   const [uploading, setUploading] = React.useState(false);
@@ -95,12 +100,13 @@ function uploadUserPost(caption, privacy, type, image) {
   firebase
     .database()
     .ref(
-      `users/user_${user.regNo.toLowerCase()}/posts/post_${user.regNo
+      `db/posts/post_${user.regNo
         .toLowerCase()
         .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
     )
     .update({
       mail: user.mail,
+      userID: user.mail.split("@")[0],
       caption: caption,
       owner: user.name,
       privacy: privacy,
@@ -113,7 +119,7 @@ function uploadUserPost(caption, privacy, type, image) {
 
   firebase
     .database()
-    .ref(`users/user_${user.regNo.toLowerCase()}`)
+    .ref(`db/users/user_${user.regNo.toLowerCase()}`)
     .update({
       posts_count: user.posts_count + 1,
       popularity: user.popularity + 3,

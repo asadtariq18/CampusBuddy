@@ -6,6 +6,7 @@ import LoadingScreen from "./src/screens/LoadingScreen";
 import AuthStack from "./src/Navigation/AuthStack";
 import AppStack from "./src/Navigation/AppStack";
 import Firebase from "././src/config/Firebase";
+import { StripeProvider } from "@stripe/stripe-react-native";
 
 const auth = Firebase.auth();
 const Stack = createStackNavigator();
@@ -28,31 +29,35 @@ export default function App() {
 
   if (user && auth.currentUser.emailVerified)
     return (
+      <StripeProvider publishableKey="pk_test_51IUxdTFDTtq4Q7pzLMiGs5OUqN7HFJCOQeLGHQuBw2t8OPHwUaSewutTkk9Sb0OTPRvcQ1b7sGwAwi3uhfEkNK1F00HTG9b5Kk">
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name={"AppStack"}
+              component={AppStack}
+              options={{
+                headerShown: false,
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </StripeProvider>
+    );
+
+  return (
+    <StripeProvider publishableKey="pk_test_51IUxdTFDTtq4Q7pzLMiGs5OUqN7HFJCOQeLGHQuBw2t8OPHwUaSewutTkk9Sb0OTPRvcQ1b7sGwAwi3uhfEkNK1F00HTG9b5Kk">
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name={"AppStack"}
-            component={AppStack}
+            name={"AuthStack"}
+            component={AuthStack}
             options={{
               headerShown: false,
             }}
           />
         </Stack.Navigator>
       </NavigationContainer>
-    );
-
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name={"AuthStack"}
-          component={AuthStack}
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    </StripeProvider>
   );
 }
 

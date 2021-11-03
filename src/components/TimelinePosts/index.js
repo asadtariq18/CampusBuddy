@@ -6,12 +6,13 @@ import PostPreview from "../PostPreview";
 const TimelinePosts = ({ posts }) => {
   const [postsArray, setPostsArray] = useState(posts);
   useEffect(() => {
+    console.log("UseEffect runs")
     setPostsArray(
       Object.keys(posts).map(function (_) {
         return posts[_];
       })
     );
-  }, []);
+  }, [posts]);
   return (
     <ScrollView contentContainerStyle={styles.container}>
     <FlatList
