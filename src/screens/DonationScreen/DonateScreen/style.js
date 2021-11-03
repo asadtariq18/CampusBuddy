@@ -4,7 +4,7 @@ import { COLORS } from "../../../Constants/COLORS";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
     alignItems: "center",
     paddingTop: 30,
     backgroundColor: COLORS.background_dark,
@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
   text: {
     textAlign: "center",
     marginTop: 20,
-    fontSize: 12,
+    fontSize: 20,
+    fontWeight: 'bold',
     color: COLORS.font,
   },
   text2: {
@@ -41,17 +42,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     margin: 10,
     padding: 10,
-    color: COLORS.font,
-  },
-  textInput2: {
-    backgroundColor: COLORS.secondary,
-    fontSize: 15,
-    height: 100,
-    width: 350,
-    borderRadius: 20,
-    margin: 10,
-    padding: 10,
-    textAlignVertical: 'top',
     color: COLORS.font,
   },
   buttonView: {
@@ -95,6 +85,18 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     color: COLORS.font,
+  },
+  card: {
+    backgroundColor: COLORS.primary,
+    borderRadius: 20,
+  },
+  cardContainer: {
+    marginTop: 15,
+    fontSize: 15,
+    height: 50,
+    width: 350,
+    margin: 10,
+    padding: 10,
   },
 });
 

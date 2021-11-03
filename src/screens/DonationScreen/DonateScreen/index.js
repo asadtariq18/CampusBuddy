@@ -7,24 +7,27 @@ import {
   TouchableOpacity,
   Image
 } from "react-native";
+import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
 import styles from "./style";
 import { COLORS } from "../../../Constants/COLORS";
 
 const DonateScreen = () => {
   const [isValid, setIsValid] = useState(false);
-  const [cardHolder, setCardHolder] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiryDate, setExpiryDate] = useState("");
+  const [cardDetails, setCardDetails] = useState();
   const [amount, setAmount] = useState(0);
+  const {confirmPayment, loading} = useConfirmPayment();
 
-  const onPress = () => {
-    if (cardHolder === "" || cardNumber === "" || expiryDate === "" || amount === 0) {
-      alert("Fill the required fields");
-    } else {
-      alert(
-        "Donated Successfully"
-      );
+const fetchPaymentIntentClientSecret = async()=>{
+  
+}
 
+  const onPress = async () => {
+    if ( !cardDetails?.complete || amount===0) {
+      alert("Please enter complete Card Details and Amount");
+      return
+    }
+    const billingDetails={
+      amount: amount
     }
   };
   return (
@@ -35,29 +38,19 @@ const DonateScreen = () => {
           uri: "https://www.shareicon.net/data/128x128/2016/09/07/826989_heart_512x512.png",
         }}
       />
-      <TextInput
-        placeholder="Card Number"
-        placeholderTextColor={COLORS.font_secondary}
-        selectionColor={COLORS.primary}
-        style={styles.textInput}
-        onChangeText={(value) => setCardNumber(value.trim())}
-      ></TextInput>
-      <TextInput
-        placeholder="Card Holder Name"
-        placeholderTextColor={COLORS.font_secondary}
-        selectionColor={COLORS.primary}
-        style={styles.textInput}
-        onChangeText={(value) => setCardHolder(value.trim())}
-      ></TextInput>
-      <TextInput
-        placeholder="Expiry Date"
-        placeholderTextColor={COLORS.font_secondary}
-        selectionColor={COLORS.primary}
-        style={styles.textInput}
-        onChangeText={(value) => setExpiryDate(value.trim())}
-      ></TextInput>
+<Text style={styles.text}>Card Information</Text>
+      <CardField
+        placeholder={{ number: "4200 4200 4200 4200" }}
+        postalCodeEnabled={false}
+        cardStyle={styles.card}
+        style={styles.cardContainer}
+        onCardChange={(cardDetails) => {
+          setCardDetails(cardDetails);
+        }}
+      />
       <TextInput
         placeholder="Amount"
+        keyboardType={"number-pad"}
         placeholderTextColor={COLORS.font_secondary}
         selectionColor={COLORS.primary}
         style={styles.textInput}
