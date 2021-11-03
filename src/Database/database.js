@@ -93,6 +93,26 @@ function getUserPosts(mail) {
 //   );
 // };
 
+function uploadUserStory(image) {
+  const user = getCurrentUser();
+  let timestamp = moment().format("YYYY/MM/D hh:mm");
+
+  firebase
+    .database()
+    .ref(
+      `db/stories/story_${user.regNo
+        .toLowerCase()
+        .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
+    )
+    .update({
+      userID: user.mail.split("@")[0],
+      owner: user.name,
+      image: image,
+      timestamp: timestamp,
+      views: 0,
+    });
+}
+
 function uploadUserPost(caption, privacy, type, image) {
   const user = getCurrentUser();
   let timestamp = moment().format("YYYY/MM/D hh:mm");
@@ -130,6 +150,7 @@ export default {
   getUpdatedUserData,
   getCurrentUser,
   uploadUserPost,
+  uploadUserStory,
   getUserPosts,
   updateProfile_Picture,
 };

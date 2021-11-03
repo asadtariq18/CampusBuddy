@@ -6,32 +6,39 @@ import * as Permissions from "expo-permissions";
 import StoryPreview from "../Story";
 import styles from "./style";
 import data from "../../Data/StoriesData/stories";
+import database from "../../Database/database";
 const Stories = () => {
   const pickFromGallery = async () => {
     const { granted } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (granted) {
-      let data = await ImagePicker.launchImageLibraryAsync({
+      let media = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [1, 1],
         quality: 0.5,
       });
+      database.uploadUserStory(media.uri);
     } else {
       Alert.alert("you need to give up permission to work");
     }
   };
 
   const camPress = async () => {
-    const { granted } = await Permissions.askAsync(Permissions.CAMERA);
-    if (granted) {
-      let data = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.5,
-      });
-    } else {
-      Alert.alert("you need to give up permission to work");
+    try {
+      const { granted } = await Permissions.askAsync(Permissions.CAMERA);
+      if (granted) {
+        let media = await ImagePicker.launchCameraAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          aspect: [1, 1],
+          quality: 0.5,
+        });
+        database.uploadUserStory(media.uri);
+      } else {
+        Alert.alert("you need to give up permission to work");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
