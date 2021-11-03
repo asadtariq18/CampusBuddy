@@ -19,12 +19,14 @@ function storeUserData(firstName, lastName, mail, gender) {
       posts_count: 0,
     });
 }
-function updateProfile_Picture(mail, image) {
+function updateProfile(data) {
+  const mail = getCurrentUser().mail
   firebase
     .database()
     .ref(`db/users/user_${mail.split("@")[0]}`)
     .update({
-      profile_picture: image,
+      profile_picture: data.image,
+      bio: data.bio,
     });
 }
 
@@ -177,6 +179,6 @@ export default {
   uploadUserPost,
   uploadUserStory,
   getUserPosts,
-  updateProfile_Picture,
+  updateProfile,
   uploadDonationHistory
 };

@@ -7,14 +7,18 @@ import {
   ScrollView,
   RefreshControl,
   ToastAndroid,
+  StatusBar,
 } from "react-native";
+import { Header, Left, Body, Icon, Title, Button, Right } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import Database from "../../Database/database";
 import TimelinePosts from "../../components/TimelinePosts";
+import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen = () => {
+  const navigation = useNavigation();
   const [refreshing, setRefreshing] = React.useState(false);
   const [user, setUser] = React.useState(Database.getCurrentUser());
   const [posts, setPosts] = React.useState(Database.getUserPosts(user.mail));
@@ -37,6 +41,22 @@ const ProfileScreen = () => {
   }, [refreshing]);
   return (
     <SafeAreaView style={styles.container}>
+      <Header style={styles.header}>
+        <StatusBar backgroundColor={COLORS.background_dark} />
+        <Left>
+          <Button transparent onPress={() => navigation.openDrawer()}>
+            <Icon name="ios-menu" />
+          </Button>
+        </Left>
+        <Body style={styles.header}>
+          <Title style={styles.headerText}>Profile</Title>
+        </Body>
+        <Right>
+          <Button transparent onPress={() => navigation.navigate("EditProfile")}>
+            <Icon name="ios-menu" />
+          </Button>
+        </Right>
+      </Header>
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
@@ -55,14 +75,6 @@ const ProfileScreen = () => {
                 uri: `${user.profile_picture}`,
               }}
               style={styles.image}
-            />
-          </View>
-          <View style={styles.add}>
-            <Ionicons
-              name="ios-add"
-              size={25}
-              color={COLORS.icon}
-              style={{ marginTop: 5, marginLeft: 2 }}
             />
           </View>
         </View>

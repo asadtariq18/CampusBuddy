@@ -15,14 +15,14 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   headerText: {
-    fontWeight: "bold",
-    fontSize: 40,
+    fontWeight: "600",
+    fontSize: 30,
     color: COLORS.font,
   },
   text: {
     color: COLORS.font,
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 16,
     marginHorizontal: 10,
     marginTop: 20,
     alignSelf: "center",
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   },
   Button1: {
     fontWeight: "bold",
-    fontSize: 25,
+    fontSize: 16,
     marginLeft: 5,
     marginTop: 2,
     color: COLORS.font,
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   Button2: {
     fontWeight: "bold",
-    fontSize: 25,
+    fontSize: 16,
     marginLeft: 5,
     marginTop: 2,
     color: COLORS.font,

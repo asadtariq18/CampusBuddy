@@ -2,12 +2,14 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import BottomTabNavigator from "./BottomTabNavigator/bottomTabNavigator";
 import StoryScreen from "../screens/StoryScreen";
+import EditProfileScreen from "../screens/EditProfileScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 import ChatScreen from "../screens/ChatScreen";
 import InboxScreen from "../screens/InboxScreen";
 import ViewPostScreen from "../screens/ViewPostScreen";
 import DonateScreen from "../screens/DonationScreen/DonateScreen";
 import ApplyDonationScreen from "../screens/DonationScreen/ApplyDonationScreen";
-import {COLORS} from '../Constants/COLORS';
+import { COLORS } from "../Constants/COLORS";
 import DrawerNavigator from "./DrawerNavigator/drawerNavigator";
 
 const Stack = createStackNavigator();
@@ -22,7 +24,20 @@ const AppStack = () => {
           headerShown: false,
         }}
       />
-
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="StoryScreen"
         component={StoryScreen}

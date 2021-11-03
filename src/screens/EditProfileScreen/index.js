@@ -19,15 +19,9 @@ import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import database from "../../Database/database";
 
-const EditProfileScreen = ({ route }) => {
-  const gender = route.params.gender;
-  const mail = route.params.mail;
+const EditProfileScreen = () => {
   const [isDone, setIsDone] = useState(false);
-  const [image, setImage] = useState(
-    gender === "Female"
-      ? "https://www.terrainhopperusa.com/wp-content/uploads/2019/01/avatar-woman.png"
-      : "https://www.terrainhopperusa.com/wp-content/uploads/2019/01/avatar-man.png"
-  );
+  const [image, setImage] = useState(database.getCurrentUser().profile_picture);
   const [info, setInfo] = useState("");
   const navigation = useNavigation();
 
@@ -40,8 +34,11 @@ const EditProfileScreen = ({ route }) => {
         aspect: [1, 1],
         quality: 0.5,
       });
-      if (!data.cancelled) setImage(data.uri);
-    } else {
+      if (!data.cancelled) {
+        setIsDone(true);
+        setImage(data.uri);
+    }
+  } else {
       Alert.alert("Campus Buddy wants permission to open gallery");
     }
   };
@@ -55,7 +52,10 @@ const EditProfileScreen = ({ route }) => {
         aspect: [1, 1],
         quality: 0.5,
       });
-      if (data === null) setImage(data.uri);
+      if (!data.cancelled) {
+        setIsDone(true);
+        setImage(data.uri);
+      }
     } else {
       Alert.alert("Campus Buddy wants permission to access camera");
     }
@@ -68,31 +68,31 @@ const EditProfileScreen = ({ route }) => {
       setIsDone(false);
     }
   };
-  const finishPressed = () => {
-    if (info !== "") {
-      database.updateProfile_Picture(mail, image);
+  const savePressed = () => {
+    let newData = new Object();
+    newData = {
+      image: image,
+      bio: info,
+    };
+    if (isDone) {
       Keyboard.dismiss();
+      database.updateProfile(newData);
+      navigation.navigate("Feed");
       ToastAndroid.showWithGravity(
-        "You are all set. Log in now",
+        "Changes Saved",
         ToastAndroid.TOP,
         ToastAndroid.LONG
       );
-      navigation.navigate("SignIn");
     } else {
       Keyboard.dismiss();
-      ToastAndroid.showWithGravity(
-        "Fields empty",
-        ToastAndroid.TOP,
-        ToastAndroid.SHORT
-      );
     }
   };
 
-  const skipPressed = () => {
-    navigation.navigate("SignIn");
+  const discardPressed = () => {
     Keyboard.dismiss();
+    navigation.navigate("Feed");
     ToastAndroid.showWithGravity(
-      "Log in now",
+      "Discarded",
       ToastAndroid.TOP,
       ToastAndroid.LONG
     );
@@ -102,7 +102,7 @@ const EditProfileScreen = ({ route }) => {
       <Header style={styles.header}>
         <StatusBar backgroundColor={COLORS.background_dark} />
         <View style={styles.header}>
-          <Text style={styles.headerText}>Set up your profile</Text>
+          <Text style={styles.headerText}>Edit Profile</Text>
         </View>
       </Header>
       <View style={styles.avatar}>
@@ -124,19 +124,19 @@ const EditProfileScreen = ({ route }) => {
       </View>
       <Text style={styles.text}>Your info</Text>
       <TextInput
-      placeholder={"Type here..."}
-      placeholderTextColor={COLORS.font_secondary}
+        placeholder={"Type here..."}
+        placeholderTextColor={COLORS.font_secondary}
         multiline
         selectionColor={COLORS.primary + "99"}
         style={styles.textInput}
         onChangeText={(value) => onChangeText(value)}
       ></TextInput>
 
-      <TouchableWithoutFeedback onPress={finishPressed}>
-        <Text style={isDone ? styles.Button2 : styles.Button1}>Finish</Text>
+      <TouchableWithoutFeedback onPress={savePressed}>
+        <Text style={isDone ? styles.Button2 : styles.Button1}>Save</Text>
       </TouchableWithoutFeedback>
-      <TouchableOpacity onPress={skipPressed}>
-        <Text style={styles.text}>Skip</Text>
+      <TouchableOpacity onPress={discardPressed}>
+        <Text style={styles.text}>Discard</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
