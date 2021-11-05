@@ -14,22 +14,23 @@ import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import Database from "../../Database/database";
 import { useNavigation } from "@react-navigation/core";
-import posts from "../../Data/PostData/posts";
 
 const HomeScreen = () => {
-  const [refreshing, setRefreshing] = useState(false);
-  const [user, setUser] = useState(Database.getCurrentUser());
-  //const [posts, setPosts] = useState(Database.getUserPosts(user.mail));
-
   const navigation = useNavigation();
 
+  const [refreshing, setRefreshing] = useState(false);
+  const [user, setUser] = React.useState(Database.getCurrentUser());
+  const [posts, setPosts] = React.useState(Database.getPosts());
   useEffect(() => {
     setUser(Database.getCurrentUser());
+    setPosts(Database.getPosts());
   }, []);
+
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     try {
       setUser(Database.getCurrentUser());
+      setPosts(Database.getPosts());
       setRefreshing(false);
       ToastAndroid.show("Updated", ToastAndroid.SHORT);
     } catch (error) {
@@ -37,19 +38,16 @@ const HomeScreen = () => {
     }
   }, [refreshing]);
 
-    const drawerPress = () => {
-      navigation.openDrawer();
-    };
   return (
     <SafeAreaView style={styles.container}>
       <Header style={styles.header}>
         <StatusBar backgroundColor={COLORS.background_dark} />
         <Left>
-          <Button transparent onPress={drawerPress}>
+          <Button transparent onPress={() => navigation.openDrawer()}>
             <Icon name="ios-menu" />
           </Button>
         </Left>
-        <Body>
+        <Body style={styles.header}>
           <Title style={styles.headerText}>Campus Buddy</Title>
         </Body>
         <Right>

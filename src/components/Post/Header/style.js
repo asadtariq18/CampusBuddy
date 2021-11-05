@@ -6,8 +6,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 5
-
   },
   left: {
     flexDirection: "row",
@@ -16,16 +14,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   name: {
-    alignContent: "center",
-    alignSelf: "center",
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 18,
     color: COLORS.font,
-    paddingStart: 5,
+  },
+  userID: {
+    fontWeight: "bold",
+    fontSize: 12,
+    color: COLORS.font_secondary,
   },
   caption: {
     color: COLORS.font,
-    fontSize: 15,
+    fontSize: 17,
   },
   bottom: {
     flexDirection: "column",

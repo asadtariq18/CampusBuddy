@@ -11,9 +11,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background_dark,
   },
   headerText: {
-    alignSelf: 'center',
+    marginHorizontal: -100,
+    alignSelf: "center",
     fontWeight: "bold",
-    marginEnd: 40,
     fontSize: 20,
     color: COLORS.font,
   },

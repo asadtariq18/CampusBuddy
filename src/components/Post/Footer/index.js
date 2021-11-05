@@ -6,18 +6,17 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
-  ScrollView,
-  RefreshControl,
   ToastAndroid,
 } from "react-native";
 import { COLORS } from "../../../Constants/COLORS";
 import CommentList from "../../CommentList/index";
 import styles from "./style";
+import database from "../../../Database/database";
 
-const Footer = ({ likes_count, postedAt }) => {
-  console.log(likes_count)
+const Footer = ({ post }) => {
+
   const [isLiked, setIsLiked] = useState(false);
-  const [likesCount, setLikesCount] = useState(likes_count);
+  const [likesCount, setLikesCount] = useState(post.likes_count);
   const [modalVisible, setModalVisible] = useState(false);
   const [isEmpty, setIsEmpty] = useState(true);
   const [comment, setComment] = useState("");
@@ -25,8 +24,10 @@ const Footer = ({ likes_count, postedAt }) => {
 
   const onLikePressed = () => {
     const amount = isLiked ? -1 : 1;
+    database.likeAction(likesCount, post.postID)
     setLikesCount(likesCount + amount);
     setIsLiked(!isLiked);
+    console.log(post.likes_count)
   };
 
   const onCommentPressed = () => {
@@ -53,9 +54,6 @@ const Footer = ({ likes_count, postedAt }) => {
   const onClose = () => {
     setModalVisible(!modalVisible);
   };
-  useEffect(() => {
-    setLikesCount(likes_count);
-  }, []);
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
@@ -104,7 +102,7 @@ const Footer = ({ likes_count, postedAt }) => {
       </View>
 
       <View style={styles.left}>
-        <Text style={styles.postedAt}>{postedAt}</Text>
+        <Text style={styles.timestamp}>{post.timestamp.split(" ")[1]}</Text>
       </View>
       <Modal
         keyboardShouldPersistTaps={"handled"}

@@ -18,7 +18,6 @@ import { COLORS } from "../../Constants/COLORS";
 import { Icon } from "native-base";
 import Firebase from "../../config/Firebase";
 import Database from "../../Database/database";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const auth = Firebase.auth();
 

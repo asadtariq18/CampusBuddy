@@ -134,6 +134,16 @@ export function DrawerContent(props) {
       <Drawer.Section style={styles.bottomDrawerSection}>
         <DrawerItem
           icon={({ color, size }) => (
+            <Icon name="account-cog-outline" color={COLORS.icon} size={size} />
+          )}
+          label="Account Setting"
+          inactiveTintColor={COLORS.font}
+          onPress={() => {
+            props.navigation.navigate("Setting");
+          }}
+        />
+        <DrawerItem
+          icon={({ color, size }) => (
             <Icon name="exit-to-app" color={COLORS.icon} size={size} />
           )}
           label="Sign Out"

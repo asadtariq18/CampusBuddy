@@ -21,18 +21,18 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = React.useState(false);
   const [user, setUser] = React.useState(Database.getCurrentUser());
-  const [posts, setPosts] = React.useState(Database.getUserPosts(user.mail));
+  const [posts, setPosts] = React.useState(Database.getPosts());
 
   useEffect(() => {
     setUser(Database.getCurrentUser());
-    setPosts(Database.getUserPosts(user.mail));
+    setPosts(Database.getPosts());
   }, []);
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     try {
       setUser(Database.getCurrentUser());
-      setPosts(Database.getUserPosts(user.mail));
+      setPosts(Database.getPosts());
       setRefreshing(false);
       ToastAndroid.show("Updated", ToastAndroid.SHORT);
     } catch (error) {
@@ -52,7 +52,10 @@ const ProfileScreen = () => {
           <Title style={styles.headerText}>Profile</Title>
         </Body>
         <Right>
-          <Button transparent onPress={() => navigation.navigate("EditProfile")}>
+          <Button
+            transparent
+            onPress={() => navigation.navigate("EditProfile")}
+          >
             <Icon name="ios-menu" />
           </Button>
         </Right>

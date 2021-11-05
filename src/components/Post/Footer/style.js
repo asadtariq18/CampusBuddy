@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 20,
   },
-  postedAt: {
+  timestamp: {
     fontWeight: "bold",
     margin: 3,
     color: COLORS.font,

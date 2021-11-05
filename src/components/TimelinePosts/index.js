@@ -6,7 +6,6 @@ import PostPreview from "../PostPreview";
 const TimelinePosts = ({ posts }) => {
   const [postsArray, setPostsArray] = useState(posts);
   useEffect(() => {
-    console.log("UseEffect runs")
     setPostsArray(
       Object.keys(posts).map(function (_) {
         return posts[_];
@@ -17,7 +16,7 @@ const TimelinePosts = ({ posts }) => {
     <ScrollView contentContainerStyle={styles.container}>
     <FlatList
       contentContainerStyle={[styles.container, {flexWrap: "wrap"}]}
-      data={postsArray}
+      data={postsArray.reverse()}
       keyExtractor={({ id }) => id}
       renderItem={({ item }) => {
         return <PostPreview post={item} />;

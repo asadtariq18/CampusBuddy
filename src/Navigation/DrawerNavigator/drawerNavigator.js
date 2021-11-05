@@ -5,6 +5,7 @@ import DonationScreen from "../../screens/DonationScreen";
 import MapScreen from "../../screens/MapScreen";
 import { DrawerContent } from "./drawerContent";
 import BottomTabNavigator from "../BottomTabNavigator/bottomTabNavigator";
+import SettingScreen from "../../screens/SettingsScreen";
 
 
 const Drawer = createDrawerNavigator();
@@ -19,6 +20,7 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="Food Order" component={FoodOrderScreen} />
       <Drawer.Screen name="Donation" component={DonationScreen} />
       <Drawer.Screen name="Map" component={MapScreen} />
+      <Drawer.Screen name="Setting" component={SettingScreen} />
     </Drawer.Navigator>
   );
 };

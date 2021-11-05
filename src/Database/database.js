@@ -20,7 +20,7 @@ function storeUserData(firstName, lastName, mail, gender) {
     });
 }
 function updateProfile(data) {
-  const mail = getCurrentUser().mail
+  const mail = getCurrentUser().mail;
   firebase
     .database()
     .ref(`db/users/user_${mail.split("@")[0]}`)
@@ -46,7 +46,7 @@ function getCurrentUser() {
   return user;
 }
 
-function getUserPosts(mail) {
+function getPosts() {
   let posts = new Object();
   firebase
     .database()
@@ -56,6 +56,12 @@ function getUserPosts(mail) {
       posts = temp;
     });
   return posts;
+}
+function likeAction(likes_count, postID) {
+  console.log(postID);
+  firebase.database().ref(`db/posts/${postID}`).update({
+    likes_count: likes_count,
+  });
 }
 // const uploadImage = async ({image}) => {
 //   const [uploading, setUploading] = React.useState(false);
@@ -129,6 +135,9 @@ function uploadUserPost(caption, privacy, type, image) {
     .update({
       mail: user.mail,
       userID: user.mail.split("@")[0],
+      postID: `post_${user.regNo
+        .toLowerCase()
+        .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`,
       caption: caption,
       owner: user.name,
       privacy: privacy,
@@ -167,8 +176,7 @@ function uploadDonationHistory(cardDetails, amount) {
         timestamp: timestamp,
       });
   } catch (error) {
-    console.log(error)
-    
+    console.log(error);
   }
 }
 
@@ -177,8 +185,9 @@ export default {
   getUpdatedUserData,
   getCurrentUser,
   uploadUserPost,
+  likeAction,
   uploadUserStory,
-  getUserPosts,
+  getPosts,
   updateProfile,
-  uploadDonationHistory
+  uploadDonationHistory,
 };
