@@ -7,7 +7,7 @@ function storeUserData(firstName, lastName, mail, gender) {
     .ref(`db/users/user_${mail.split("@")[0]}`)
     .update({
       name: firstName + " " + lastName,
-      regNo: mail.split("@")[0].toUpperCase(),
+      userID: mail.split("@")[0],
       mail: mail,
       gender: gender,
       profile_picture:
@@ -44,6 +44,17 @@ function getUpdatedUserData(mail) {
 function getCurrentUser() {
   const user = getUpdatedUserData(firebase.auth().currentUser.email);
   return user;
+}
+function getUserPosts(userID) {
+  let posts = new Object();
+  firebase
+    .database()
+    .ref(`db/posts`)
+    .on("value", (snapshot) => {
+      const temp = snapshot.val();
+      posts = temp;
+    });
+  return posts;
 }
 
 function getPosts() {
@@ -188,6 +199,7 @@ export default {
   likeAction,
   uploadUserStory,
   getPosts,
+  getUserPosts,
   updateProfile,
   uploadDonationHistory,
 };

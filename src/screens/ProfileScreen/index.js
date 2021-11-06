@@ -21,7 +21,7 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = React.useState(false);
   const [user, setUser] = React.useState(Database.getCurrentUser());
-  const [posts, setPosts] = React.useState(Database.getPosts());
+  const [posts, setPosts] = React.useState(Database.getUserPosts(user.userID));
 
   useEffect(() => {
     setUser(Database.getCurrentUser());
@@ -92,7 +92,7 @@ const ProfileScreen = () => {
               { color: COLORS.font_secondary, fontSize: 14 },
             ]}
           >
-            {user.regNo}
+            {user.userID.toUpperCase()}
           </Text>
         </View>
 

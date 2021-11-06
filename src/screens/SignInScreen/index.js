@@ -11,6 +11,7 @@ import {
   Keyboard,
 } from "react-native";
 import { Header } from "native-base";
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from "@react-navigation/native";
 
 import styles from "./style";
@@ -18,10 +19,12 @@ import { COLORS } from "../../Constants/COLORS";
 import { Icon } from "native-base";
 import Firebase from "../../config/Firebase";
 import Database from "../../Database/database";
+import database from "../../Database/database";
 
 const auth = Firebase.auth();
 
 const SignInScreen = () => {
+  const [user, setUser] = useState(null);
   const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
   const [isEmpty, setIsEmpty] = useState(true);
@@ -29,8 +32,8 @@ const SignInScreen = () => {
   const [hidePass, setHidePass] = useState(true);
   const navigation = useNavigation();
 
-  
   useEffect(() => {
+    readUser();
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
       setOnFocus(true);
     });
@@ -43,6 +46,13 @@ const SignInScreen = () => {
       hideSubscription.remove();
     };
   }, []);
+
+  async function readUser(){
+    const user = await AsyncStorage.getItem('user')
+    if(user){
+      setUser(JSON.parse(user))
+    }
+  }
 
   const onChangeMail = (input1) => {
     setMail(input1);
@@ -62,12 +72,6 @@ const SignInScreen = () => {
     }
   };
 
-  // async function setUser() {
-  //   const _id = mail;
-  //   const user = { _id };
-  //   await AsyncStorage.setItem("user", JSON.stringify(user));
-  //   setUser(user);
-  // }
   const onLoginPress = async () => {
     try {
       if (mail !== "" && password !== "") {
@@ -90,7 +94,9 @@ const SignInScreen = () => {
             50
           );
           Database.getUpdatedUserData(mail);
-          //setUser();
+          const user = database.getCurrentUser();
+          await AsyncStorage.setItem("user", JSON.stringify(user));
+          setUser(user);
           navigation.navigate("AppStack");
         }
       }
@@ -151,6 +157,7 @@ const SignInScreen = () => {
           source={require("../../Constants/logo.png")}
         />
         <TextInput
+          keyboardType= 'email-address'
           placeholder="University Mail"
           placeholderTextColor={COLORS.font_secondary}
           selectionColor={COLORS.primary}

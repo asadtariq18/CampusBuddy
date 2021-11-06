@@ -24,10 +24,13 @@ const Footer = ({ post }) => {
 
   const onLikePressed = () => {
     const amount = isLiked ? -1 : 1;
-    database.likeAction(likesCount, post.postID)
     setLikesCount(likesCount + amount);
+    if(amount===1){
+    database.likeAction(likesCount+1, post.postID)
+    }else{
+      database.likeAction(likesCount - 1, post.postID);
+    }
     setIsLiked(!isLiked);
-    console.log(post.likes_count)
   };
 
   const onCommentPressed = () => {
@@ -71,7 +74,7 @@ const Footer = ({ post }) => {
   }, [refreshing]);
   return (
     <View keyboardShouldPersistTaps="always" style={styles.container}>
-      <View keyboardShouldPersistTaps="handled" style={styles.iconContainer}>
+      <View keyboardShouldPersistTaps="handled">
         <View style={styles.left}>
           <TouchableWithoutFeedback onPress={onLikePressed}>
             {isLiked ? (

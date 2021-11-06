@@ -31,6 +31,7 @@ const ChatList = () => {
         <ChatHead
           imageUri={item.imageUri}
           name={item.name}
+          userID={item.userID}
           lastmessage={item.lastmessage}
         />
       )}

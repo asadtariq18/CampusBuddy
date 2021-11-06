@@ -55,7 +55,7 @@ export function DrawerContent(props) {
                   {Database.getCurrentUser().name}
                 </Title>
                 <Caption style={styles.caption}>
-                  {Database.getCurrentUser().regNo}
+                  @{Database.getCurrentUser().userID}
                 </Caption>
               </View>
             </View>

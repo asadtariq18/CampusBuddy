@@ -7,10 +7,10 @@ import styles from './style';
 import InboxScreen from '../../screens/InboxScreen';
 import { COLORS } from '../../Constants/COLORS';
 
-const Chat = ({imageUri, name, lastmessage}) => {
+const Chat = ({imageUri, name, userID, lastmessage}) => {
   const navigation = useNavigation ();
 const onPress = () => {
-  navigation.navigate ("InboxScreen", {name});
+  navigation.navigate ("InboxScreen", {name, userID, imageUri});
 };
 
   return (
