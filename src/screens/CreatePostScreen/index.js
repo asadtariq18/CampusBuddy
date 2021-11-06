@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  SafeAreaView,
+  ScrollView,
   Text,
   View,
   StatusBar,
@@ -8,6 +8,8 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   ToastAndroid,
+  Image,
+  SafeAreaView,
 } from "react-native";
 import { Header } from "native-base";
 import { useNavigation } from "@react-navigation/native";
@@ -18,10 +20,12 @@ import * as Permissions from "expo-permissions";
 import Database from "../../Database/database";
 
 const CreatePostScreen = () => {
+  const icon =
+    "https://icon-library.com/images/add-photo-icon/add-photo-icon-19.jpg";
   const [caption, setCaption] = useState("");
   const [type, setType] = useState("status");
   const [privacy, setPrivacy] = useState("public");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(icon);
 
   const navigation = useNavigation();
   const onChangeCaption = (input) => {
@@ -37,7 +41,7 @@ const CreatePostScreen = () => {
         aspect: [1, 1],
         quality: 0.5,
       });
-      setImage(data.uri)
+      setImage(data.uri);
     } else {
       Alert.alert("you need to give permission to work");
     }
@@ -52,27 +56,35 @@ const CreatePostScreen = () => {
         aspect: [1, 1],
         quality: 0.5,
       });
-      setImage(data.uri);
+      if (!data.cancelled()) {
+        setImage(data.uri);
+      }
     } else {
       Alert.alert("you need to give permission to work");
     }
   };
 
   const postPressed = () => {
-    if (image==="") {
+    if (image === icon) {
       ToastAndroid.show("No image selected", ToastAndroid.SHORT);
     } else {
       ToastAndroid.show("Uploading your post", ToastAndroid.LONG);
-      Database.uploadUserPost(caption, privacy, type, image)
-      setCaption(null)
-      setImage(null)
+      Database.uploadUserPost(caption, privacy, type, image);
       navigation.navigate("Home");
+      setCaption("");
+      setImage(icon);
+      setType("status");
+      setPrivacy("public");
       ToastAndroid.show("Post Uploaded", ToastAndroid.SHORT);
     }
   };
 
   const discardPressed = () => {
-    navigation.navigate("Feed");
+    navigation.navigate("Home");
+    setCaption("");
+    setImage(icon);
+    setType("status");
+    setPrivacy("public");
     ToastAndroid.show("Post cancelled", ToastAndroid.LONG);
   };
   return (
@@ -83,102 +95,108 @@ const CreatePostScreen = () => {
           <Text style={styles.headerText}>Create a post</Text>
         </View>
       </Header>
-      <View>
-        <Text style={styles.h2text}>Write caption</Text>
-        <TextInput
-          multiline
-          contextMenuHidden={true}
-          placeholderTextColor={COLORS.font_secondary}
-          selectionColor={COLORS.primary + "99"}
-          style={styles.textInput}
-          onChangeText={onChangeCaption}
-          placeholder={"caption..."}
-        ></TextInput>
-      </View>
+      <ScrollView style={styles.container}>
+        <View>
+          <TextInput
+            multiline
+            placeholderTextColor={COLORS.font_secondary}
+            selectionColor={COLORS.primary + "99"}
+            style={styles.textInput}
+            onChangeText={onChangeCaption}
+            placeholder={"caption..."}
+          ></TextInput>
+        </View>
 
-      <Text style={styles.h2text}>Select privacy</Text>
+        <View style={styles.imageView}>
+          <Image
+            style={styles.image}
+            source={{
+              uri: image,
+            }}
+          />
+          <View style={{ flexDirection: "row", marginTop: 8 }}>
+            <TouchableOpacity onPress={camPress}>
+              <Text style={styles.button}>Camera</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={pickFromGallery}>
+              <Text style={styles.button}>Gallery</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
       <View style={styles.cardView}>
-        <TouchableWithoutFeedback onPress={() => setPrivacy("public")}>
-          {privacy === "public" ? (
-            <View style={styles.buttonView}>
-              <Text style={styles.button_pressed}>Public</Text>
-            </View>
-          ) : (
-            <View style={styles.buttonView}>
-              <Text style={styles.button}>Public</Text>
-            </View>
-          )}
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => setPrivacy("private")}>
-          {privacy === "private" ? (
-            <View style={styles.buttonView}>
-              <Text style={styles.button_pressed}>Private</Text>
-            </View>
-          ) : (
-            <View style={styles.buttonView}>
-              <Text style={styles.button}>Private</Text>
-            </View>
-          )}
-        </TouchableWithoutFeedback>
-      </View>
-      <View>
-        <Text style={styles.h2text}>Select type</Text>
-        <View style={styles.cardView}>
-          <TouchableWithoutFeedback onPress={() => setType("status")}>
-            {type === "status" ? (
+        <View style={{ flexDirection: "row", marginTop: 8 }}>
+          <TouchableWithoutFeedback onPress={() => setPrivacy("public")}>
+            {privacy === "public" ? (
               <View style={styles.buttonView}>
-                <Text style={styles.button_pressed}>Status</Text>
+                <Text style={styles.button_pressed}>Public</Text>
               </View>
             ) : (
               <View style={styles.buttonView}>
-                <Text style={styles.button}>Status</Text>
+                <Text style={styles.button}>Public</Text>
               </View>
             )}
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => setType("ask")}>
-            {type === "ask" ? (
+          <TouchableWithoutFeedback onPress={() => setPrivacy("private")}>
+            {privacy === "private" ? (
               <View style={styles.buttonView}>
-                <Text style={styles.button_pressed}>Ask</Text>
+                <Text style={styles.button_pressed}>Private</Text>
               </View>
             ) : (
               <View style={styles.buttonView}>
-                <Text style={styles.button}>Ask</Text>
+                <Text style={styles.button}>Private</Text>
               </View>
             )}
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => setType("lost")}>
-            {type === "lost" ? (
-              <View style={styles.buttonView}>
-                <Text style={styles.button_pressed}>Lost</Text>
-              </View>
-            ) : (
-              <View style={styles.buttonView}>
-                <Text style={styles.button}>Lost</Text>
-              </View>
-            )}
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => setType("found")}>
-            {type === "found" ? (
-              <View style={styles.buttonView}>
-                <Text style={styles.button_pressed}>Found</Text>
-              </View>
-            ) : (
-              <View style={styles.buttonView}>
-                <Text style={styles.button}>Found</Text>
-              </View>
-            )}
-          </TouchableWithoutFeedback>
+          </View>
+          <View style={{ flexDirection: "row", marginTop: 8 }}>
+            <TouchableWithoutFeedback onPress={() => setType("status")}>
+              {type === "status" ? (
+                <View style={styles.buttonView}>
+                  <Text style={styles.button_pressed}>Status</Text>
+                </View>
+              ) : (
+                <View style={styles.buttonView}>
+                  <Text style={styles.button}>Status</Text>
+                </View>
+              )}
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => setType("ask")}>
+              {type === "ask" ? (
+                <View style={styles.buttonView}>
+                  <Text style={styles.button_pressed}>Ask</Text>
+                </View>
+              ) : (
+                <View style={styles.buttonView}>
+                  <Text style={styles.button}>Ask</Text>
+                </View>
+              )}
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => setType("lost")}>
+              {type === "lost" ? (
+                <View style={styles.buttonView}>
+                  <Text style={styles.button_pressed}>Lost</Text>
+                </View>
+              ) : (
+                <View style={styles.buttonView}>
+                  <Text style={styles.button}>Lost</Text>
+                </View>
+              )}
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => setType("found")}>
+              {type === "found" ? (
+                <View style={styles.buttonView}>
+                  <Text style={styles.button_pressed}>Found</Text>
+                </View>
+              ) : (
+                <View style={styles.buttonView}>
+                  <Text style={styles.button}>Found</Text>
+                </View>
+              )}
+            </TouchableWithoutFeedback>
         </View>
       </View>
-      <Text style={styles.h2text}>Insert image</Text>
-      <View style={styles.cardView}>
-        <TouchableOpacity onPress={camPress}>
-          <Text style={styles.button}>Camera</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={pickFromGallery}>
-          <Text style={styles.button}>Gallery</Text>
-        </TouchableOpacity>
-      </View>
+      <View></View>
       <TouchableWithoutFeedback onPress={postPressed}>
         <View style={styles.postButton}>
           <Text style={styles.h1text}>Post</Text>

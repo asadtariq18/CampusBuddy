@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { COLORS } from "../../Constants/COLORS";
+import { Dimensions } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
@@ -16,35 +17,43 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: COLORS.font,
   },
-
+  imageView: {
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: COLORS.secondary,
+    marginHorizontal: 15,
+    marginTop: 5,
+    padding: 10,
+  },
+  image: {
+    width: Dimensions.get("window").width - 50,
+    height: Dimensions.get("window").width - 50,
+    alignSelf: "center",
+    borderRadius: 20,
+  },
   h1text: {
     color: COLORS.font,
     fontWeight: "bold",
     fontSize: 20,
   },
-  h2text: {
-    color: COLORS.font,
-    fontWeight: "bold",
-    fontSize: 20,
-    marginHorizontal: 15,
-    marginTop: 5,
-  },
+
   cardView: {
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row",
     borderRadius: 30,
     backgroundColor: COLORS.secondary,
-    margin: 15,
+    marginHorizontal: 15,
+    marginTop: 5,
     padding: 10,
-    height: 80,
   },
   textInput: {
     backgroundColor: COLORS.secondary,
     fontSize: 15,
-    height: 80,
+    minHeight: 50,
     borderRadius: 30,
-    margin: 15,
+    marginHorizontal: 15,
+    marginVertical: 10,
     paddingHorizontal: 20,
     color: COLORS.font,
   },
@@ -56,7 +65,7 @@ const styles = StyleSheet.create({
   button_pressed: {
     fontWeight: "bold",
     marginLeft: 5,
-    marginTop: 2,
+    marginTop: 5,
     color: COLORS.font,
     backgroundColor: COLORS.primary,
     borderRadius: 25,
@@ -66,7 +75,7 @@ const styles = StyleSheet.create({
   button: {
     fontWeight: "bold",
     marginLeft: 5,
-    marginTop: 2,
+    marginTop: 5,
     color: COLORS.font,
     backgroundColor: COLORS.secondary,
     borderRadius: 25,
@@ -77,12 +86,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     fontWeight: "bold",
-    marginHorizontal: 50,
-    marginVertical: 5,
+    marginHorizontal: 40,
+    marginTop: 20,
     color: COLORS.font,
     backgroundColor: COLORS.primary,
-    borderRadius: 25,
-    paddingVertical: 15,
+    borderRadius: 20,
+    paddingVertical: 10,
   },
   discardButton: {
     alignSelf: "center",
@@ -90,7 +99,6 @@ const styles = StyleSheet.create({
     margin: 50,
     marginTop: 10,
     color: COLORS.font,
-    backgroundColor: COLORS.tertiary,
     borderRadius: 25,
     paddingHorizontal: 20,
     paddingVertical: 10,
