@@ -19,13 +19,14 @@ const Feed = ({ posts }) => {
     <View style={{ paddingBottom: 50 }}>
       
       <FlatList
-        data={postsArray.reverse()}
+      inverted
+        data={postsArray}
         showsVerticalScrollIndicator={false}
         keyExtractor={({ id }) => id}
         renderItem={({ item }) => {
           return <Post post={item} />;
         }}
-        ListHeaderComponent={Stories}
+        ListFooterComponent={Stories}
       />
     </View>
   );

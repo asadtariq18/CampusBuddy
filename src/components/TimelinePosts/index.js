@@ -16,7 +16,7 @@ const TimelinePosts = ({ posts }) => {
     <ScrollView contentContainerStyle={styles.container}>
     <FlatList
       contentContainerStyle={[styles.container, {flexWrap: "wrap"}]}
-      data={postsArray.reverse()}
+      data={postsArray}
       keyExtractor={({ id }) => id}
       renderItem={({ item }) => {
         return <PostPreview post={item} />;

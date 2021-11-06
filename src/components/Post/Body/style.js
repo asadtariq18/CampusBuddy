@@ -6,7 +6,6 @@ const styles = StyleSheet.create({
         height: Dimensions.get('window').width -20,
         alignSelf: 'center',
         borderRadius: 20
-        
     },
     view:{
         justifyContent: 'center',
