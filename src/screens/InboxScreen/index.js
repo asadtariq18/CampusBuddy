@@ -1,62 +1,89 @@
-import { useRoute } from "@react-navigation/native";
-import React, { useState } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TextInput,
-  TouchableWithoutFeedback,
-  ScrollView,
-} from "react-native";
-import MessagesList from "../../components/MessagesList/index";
+// @refresh reset
+
+import React, { useState, useEffect, useCallback } from "react";
+import { GiftedChat } from "react-native-gifted-chat";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LogBox } from "react-native";
+import * as firebase from "firebase";
+import "firebase/firestore";
+import styles from "../InboxScreen/style";
 import { COLORS } from "../../Constants/COLORS";
-import styles from "./style";
+import database from "../../Database/database";
 
-const InboxScreen = () => {
-  const route = useRoute();
-  const [textInput, setTextInput] = useState("");
-  const [isEmpty, setIsEmpty] = useState(true);
+const firebaseConfig = {
+  apiKey: "AIzaSyDUjGcux9KGVcXlBe6fqSVFSoa5nMMqHGY",
+  authDomain: "campus-buddy-69dd7.firebaseapp.com",
+  projectId: "campus-buddy-69dd7",
+  storageBucket: "campus-buddy-69dd7.appspot.com",
+  messagingSenderId: "862630618301",
+  appId: "1:862630618301:web:1f34fdb33e5edbd0e603d4",
+  measurementId: "G-E6Z5LCLYT0",
+};
 
-  const onChange = (message) => {
-    setTextInput(message);
-    if (message === "") {
-      setIsEmpty(true);
-    } else {
-      setIsEmpty(false);
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
+
+const db = firebase.firestore();
+
+const InboxScreen = ({route}) => {
+  const [user, setUser] = useState(null);
+  const {userID} = route.params;
+  const chatsRef = db.collection(`Chat_${userID}_&_${database.getCurrentUser().userID}`);
+  const avtr = database.getCurrentUser().profile_picture;
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    readUser();
+    const unsubscribe = chatsRef.onSnapshot((querySnapshot) => {
+      const messagesFirestore = querySnapshot
+        .docChanges()
+        .filter(({ type }) => type === "added")
+        .map(({ doc }) => {
+          const message = doc.data();
+          return { ...message, createdAt: message.createdAt.toDate() };
+        })
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      appendMessages(messagesFirestore);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const appendMessages = useCallback(
+    (messages) => {
+      setMessages((previousMessages) =>
+        GiftedChat.append(previousMessages, messages)
+      );
+    },
+    [messages]
+  );
+
+  async function readUser() {
+    const user = await AsyncStorage.getItem("user");
+    if (user) {
+      setUser(JSON.parse(user));
+      
     }
-  };
-  const onSendPress = () => {
-    if (textInput !== "") {
-      alert(textInput);
-    }
-  };
+  }
+
+  async function handleSend(messages) {
+    const writes = messages.map((m) => chatsRef.add(m));
+    await Promise.all(writes);
+  }
+
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView keyboardShouldPersistTaps>
-        <MessagesList />
-      </ScrollView>
-      <View style={{ flexDirection: "row" }}>
-        <TextInput
-          multiline
-          placeholder="Type here..."
-          placeholderTextColor={COLORS.font_secondary}
-          selectionColor={COLORS.primary}
-          style={styles.textInput}
-          onChangeText={(value) => onChange(value)}
-        ></TextInput>
-        <TouchableWithoutFeedback onPress={onSendPress}>
-          {isEmpty ? (
-            <View style={styles.buttonView}>
-              <Text style={styles.button1}>Send</Text>
-            </View>
-          ) : (
-            <View style={styles.buttonView}>
-              <Text style={styles.button2}>Send</Text>
-            </View>
-          )}
-        </TouchableWithoutFeedback>
-      </View>
-    </SafeAreaView>
+    <GiftedChat
+    showUserAvatar
+      alwaysShowSend
+      messagesContainerStyle={{ backgroundColor: COLORS.background_dark }}
+      isTyping
+      style={styles.container}
+      messages={messages}
+      user={user}
+      onSend={handleSend}
+    />
   );
 };
 
