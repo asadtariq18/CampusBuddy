@@ -21,7 +21,7 @@ import database from "../../Database/database";
 
 const EditProfileScreen = () => {
   const [isDone, setIsDone] = useState(false);
-  const [image, setImage] = useState(database.getCurrentUser().profile_picture);
+  const [image, setImage] = useState(database.getCurrentUser().avatar);
   const [info, setInfo] = useState("");
   const navigation = useNavigation();
 

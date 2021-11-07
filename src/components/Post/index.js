@@ -7,11 +7,11 @@ import styles from "./style";
 import database from "../../Database/database";
 
 const Post = ({post}) => {
-  const profile_picture = database.getUpdatedUserData(post.mail).profile_picture
+  const avatar = database.getUpdatedUserData(post.mail).avatar
   return (
     <View style={styles.container}>
       <Header
-        profile_picture={profile_picture}
+        avatar={avatar}
         name={post.owner}
         userID={post.userID}
         caption={post.caption}

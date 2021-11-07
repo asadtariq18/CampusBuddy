@@ -46,7 +46,7 @@ export function DrawerContent(props) {
             <View style={{ flexDirection: "row", marginTop: 15 }}>
               <Avatar.Image
                 source={{
-                  uri: `${Database.getCurrentUser().profile_picture}`,
+                  uri: `${Database.getCurrentUser().avatar}`,
                 }}
                 size={50}
               />

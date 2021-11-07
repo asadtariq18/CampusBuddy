@@ -10,7 +10,7 @@ function storeUserData(firstName, lastName, mail, gender) {
       userID: mail.split("@")[0],
       mail: mail,
       gender: gender,
-      profile_picture:
+      avatar:
         gender === "Female"
           ? "https://www.terrainhopperusa.com/wp-content/uploads/2019/01/avatar-woman.png"
           : "https://www.terrainhopperusa.com/wp-content/uploads/2019/01/avatar-man.png",
@@ -25,7 +25,7 @@ function updateProfile(data) {
     .database()
     .ref(`db/users/user_${mail.split("@")[0]}`)
     .update({
-      profile_picture: data.image,
+      avatar: data.image,
       bio: data.bio,
     });
 }

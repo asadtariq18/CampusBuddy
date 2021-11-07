@@ -75,7 +75,7 @@ const ProfileScreen = () => {
           <View style={styles.profileImage}>
             <Image
               source={{
-                uri: `${user.profile_picture}`,
+                uri: `${user.avatar}`,
               }}
               style={styles.image}
             />
