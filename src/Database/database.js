@@ -191,6 +191,22 @@ function uploadDonationHistory(cardDetails, amount) {
   }
 }
 
+function searchUsers() {
+  let users = new Object();
+  try {
+    firebase
+      .database()
+      .ref(`db/users`)
+      .on("value", (snapshot) => {
+        let temp = snapshot.val();
+        users = temp;
+      });
+    return users;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export default {
   storeUserData,
   getUpdatedUserData,
@@ -199,6 +215,7 @@ export default {
   likeAction,
   uploadUserStory,
   getPosts,
+  searchUsers,
   getUserPosts,
   updateProfile,
   uploadDonationHistory,
