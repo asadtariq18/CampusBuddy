@@ -1,15 +1,18 @@
 // @refresh reset
 
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Keyboard } from "react-native";
+import { Icon, Button } from "native-base";
 import {
   GiftedChat,
   InputToolbar,
   Send,
   Bubble,
-  Avatar,
-  onSend,
+  Composer,
 } from "react-native-gifted-chat";
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
+import { Audio } from "expo-av";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LogBox } from "react-native";
 import * as firebase from "firebase";
@@ -35,18 +38,33 @@ if (firebase.apps.length === 0) {
 LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
 
 const db = firebase.firestore();
-
 const InboxScreen = ({ route }) => {
+  let recording = new Audio.Recording();
   const [user, setUser] = useState(null);
   const { userID } = route.params;
   const chatsRef = db.collection(
     `Chat_${userID}_&_${database.getCurrentUser().userID}`
   );
-  const avtr = database.getCurrentUser().profile_picture;
+
   const [messages, setMessages] = useState([]);
-  const [image, setImage] = useState(
-    "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg"
-  );
+  const [image, setImage] = useState(null);
+  const [audio, setAudio] = useState(null);
+  const [onFocus, setOnFocus] = useState(false);
+
+  useEffect(() => {
+    readUser();
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setOnFocus(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setOnFocus(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
 
   useEffect(() => {
     readUser();
@@ -85,10 +103,54 @@ const InboxScreen = ({ route }) => {
       if (image) {
         m.image = image;
       }
+      if (audio) {
+        m.audio = audio;
+      }
       chatsRef.add(m);
     });
     await Promise.all(writes);
   }
+
+  async function startRecording() {
+    try {
+      console.log("Requesting permissions..");
+      await Audio.requestPermissionsAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+      console.log("Starting recording..");
+      await recording.prepareToRecordAsync(
+        Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
+      );
+      await recording.startAsync();
+      console.log("Recording started");
+    } catch (err) {
+      console.error("Failed to start recording", err);
+    }
+  }
+
+  async function stopRecording() {
+    console.log("Stopping recording..");
+    await recording.stopAndUnloadAsync();
+    const uri = recording.getURI();
+    setAudio(uri);
+    console.log("Recording stopped and stored at", uri);
+  }
+  const camPress = async () => {
+    const { granted } = await Permissions.askAsync(Permissions.CAMERA);
+    if (granted) {
+      let data = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      setImage(data.uri);
+    } else {
+      Alert.alert("you need to give permission to work");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -114,16 +176,32 @@ const InboxScreen = ({ route }) => {
               {...props}
               containerStyle={styles.textInput}
               textInputStyle={{ color: COLORS.font }}
-            />
+            ></InputToolbar>
           );
         }}
+        renderAvatar={null}
         renderSend={(props) => {
           return (
-            <Send
-              {...props}
-              containerStyle={styles.button2}
-              textStyle={styles.text2}
-            />
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Button transparent style={styles.button3} onPress={camPress}>
+                <Icon name="ios-camera" />
+              </Button>
+              {onFocus ? null : (
+                <Button
+                  transparent
+                  style={styles.button3}
+                  onPressIn={startRecording}
+                  onPressOut={stopRecording}
+                >
+                  <Icon name="ios-mic" />
+                </Button>
+              )}
+              <Send
+                {...props}
+                containerStyle={styles.button2}
+                textStyle={styles.text2}
+              />
+            </View>
           );
         }}
         renderChatEmpty={() => {

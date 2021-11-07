@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     color: COLORS.font,
-    transform: [{ rotateY: "180deg"}, {rotateZ: '180deg' }],
+    transform: [{ rotateY: "180deg" }, { rotateZ: "180deg" }],
   },
   textInput: {
     backgroundColor: COLORS.background_dark,
@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     flexDirection: "row",
-
   },
   button2: {
     backgroundColor: COLORS.primary,
@@ -40,14 +39,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginRight: 2,
   },
-  button1: {
-    fontWeight: "bold",
-    color: COLORS.font,
+  button3: {
     backgroundColor: COLORS.secondary,
-    borderRadius: 25,
-    paddingHorizontal: 20,
-    paddingVertical: 15,
+    borderRadius: 30,
+    marginRight: 2,
   },
+
 });
 
 export default styles;
