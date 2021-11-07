@@ -4,12 +4,12 @@ import ProfilePicture from "../../ProfilePicture";
 import styles from "./style";
 import Icon from "react-native-vector-icons/Entypo";
 
-const Header = ({ profile_picture, name, userID, caption }) => {
+const Header = ({ avatar, name, userID, caption }) => {
   return (
     <View>
       <View style={styles.container}>
         <View style={styles.left}>
-          <ProfilePicture uri={profile_picture} size={55} border={false} />
+          <ProfilePicture uri={avatar} size={55} border={false} />
         <View style={{marginTop: 18}}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.userID}>@{userID}</Text>
