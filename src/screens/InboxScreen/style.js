@@ -3,37 +3,42 @@ import { COLORS } from "../../Constants/COLORS";
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: COLORS.background_dark,
     flex: 1,
   },
+  text2: {
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 16,
+    color: COLORS.font,
+  },
   text: {
     textAlign: "center",
-    fontSize: 40,
+    fontSize: 20,
     color: COLORS.font,
+    transform: [{ rotateY: "180deg"}, {rotateZ: '180deg' }],
   },
   textInput: {
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.background_dark,
     fontSize: 15,
-    height: 50,
-    width: "75%",
-    borderRadius: 20,
-    margin: 10,
-    padding: 10,
-    color: COLORS.font,
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: COLORS.primary,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.primary,
+    marginHorizontal: 4,
+    marginBottom: 8,
+    padding: 4,
   },
   buttonView: {
-    paddingVertical: 2,
-    marginTop: 10
+    flexDirection: "row",
+
   },
   button2: {
-    fontWeight: "bold",
-    color: COLORS.font,
     backgroundColor: COLORS.primary,
-    borderRadius: 25,
-    paddingHorizontal: 20,
-    paddingVertical: 15,
+    borderRadius: 30,
+    paddingHorizontal: 10,
+    marginRight: 2,
   },
   button1: {
     fontWeight: "bold",
