@@ -11,7 +11,7 @@ import {
   Keyboard,
 } from "react-native";
 import { Header } from "native-base";
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
 import styles from "./style";
@@ -20,25 +20,36 @@ import { Icon } from "native-base";
 import Firebase from "../../config/Firebase";
 import Database from "../../Database/database";
 import database from "../../Database/database";
+import {
+  isEmptyChange,
+  onFocusChange,
+  reverseHidePass,
+  updateMail,
+  updatePass,
+} from "../../Redux/SignIn/actions";
+import { useDispatch, useSelector } from "react-redux";
+import store from "../../Redux/store";
 
 const auth = Firebase.auth();
 
 const SignInScreen = () => {
   const [user, setUser] = useState(null);
-  const [mail, setMail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isEmpty, setIsEmpty] = useState(true);
-  const [onFocus, setOnFocus] = useState(false);
-  const [hidePass, setHidePass] = useState(true);
+  const dispatch = useDispatch();
+  //const [mail, setMail] = useState("");
+  const mail = useSelector((state) => state.login.mail);
+  const password = useSelector((state) => state.login.password);
+  const isEmpty = useSelector((state) => state.login.isEmpty);
+  const onFocus = useSelector((state) => state.login.onFocus);
+  const hidePass = useSelector((state) => state.login.hidePass);
   const navigation = useNavigation();
 
   useEffect(() => {
     readUser();
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-      setOnFocus(true);
+      dispatch(onFocusChange(true));
     });
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-      setOnFocus(false);
+      dispatch(onFocusChange(false));
     });
 
     return () => {
@@ -47,28 +58,34 @@ const SignInScreen = () => {
     };
   }, []);
 
-  async function readUser(){
-    const user = await AsyncStorage.getItem('user')
-    if(user){
-      setUser(JSON.parse(user))
+  async function readUser() {
+    const user = await AsyncStorage.getItem("user");
+    if (user) {
+      setUser(JSON.parse(user));
     }
   }
 
   const onChangeMail = (input1) => {
-    setMail(input1);
+    dispatch(updateMail(input1));
+    //setMail(input1);
     if (input1 !== "" && password !== "") {
-      setIsEmpty(false);
+      //setIsEmpty(false);
+      dispatch(isEmptyChange(false));
     } else {
-      setIsEmpty(true);
+      dispatch(isEmptyChange(true));
+      //setIsEmpty(true);
     }
   };
 
   const onChangePass = (input2) => {
-    setPassword(input2);
+    dispatch(updatePass(input2));
+    //setPassword(input2);
     if (mail !== "" && input2 !== "") {
-      setIsEmpty(false);
+      dispatch(isEmptyChange(false));
+      //setIsEmpty(false);
     } else {
-      setIsEmpty(true);
+      dispatch(isEmptyChange(true));
+      // setIsEmpty(true);
     }
   };
 
@@ -157,7 +174,7 @@ const SignInScreen = () => {
           source={require("../../Constants/logo.png")}
         />
         <TextInput
-          keyboardType= 'email-address'
+          keyboardType="email-address"
           placeholder="University Mail"
           placeholderTextColor={COLORS.font_secondary}
           selectionColor={COLORS.primary}
@@ -180,7 +197,7 @@ const SignInScreen = () => {
               fontSize: 25,
               color: password === "" ? "black" : COLORS.font,
             }}
-            onPress={() => setHidePass(!hidePass)}
+            onPress={() => dispatch(reverseHidePass(!hidePass))}
           />
         </View>
         <TouchableOpacity onPress={onLoginPress}>
