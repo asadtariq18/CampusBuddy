@@ -133,6 +133,7 @@ function uploadUserStory(image) {
 }
 
 function uploadUserPost(caption, privacy, type, image) {
+  console.log("database 1");
   const user = getCurrentUser();
   let timestamp = moment().format("YYYY/MM/D hh:mm");
 
@@ -158,7 +159,7 @@ function uploadUserPost(caption, privacy, type, image) {
       likes_count: 0,
       comments_count: 0,
     });
-
+console.log("database 2")
   firebase
     .database()
     .ref(`db/users/user_${user.regNo.toLowerCase()}`)
@@ -202,6 +203,7 @@ function searchUsers() {
         users = temp;
       });
     return users;
+    console.log(users)
   } catch (error) {
     console.log(error);
   }

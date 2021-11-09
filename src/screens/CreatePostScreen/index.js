@@ -65,17 +65,22 @@ const CreatePostScreen = () => {
   };
 
   const postPressed = () => {
-    if (image === icon) {
-      ToastAndroid.show("No image selected", ToastAndroid.SHORT);
-    } else {
-      ToastAndroid.show("Uploading your post", ToastAndroid.LONG);
-      Database.uploadUserPost(caption, privacy, type, image);
-      navigation.navigate("Home");
-      setCaption("");
-      setImage(icon);
-      setType("status");
-      setPrivacy("public");
-      ToastAndroid.show("Post Uploaded", ToastAndroid.SHORT);
+    try {
+      if (image === icon) {
+        ToastAndroid.show("No image selected", ToastAndroid.SHORT);
+      } else {
+        ToastAndroid.show("Uploading your post", ToastAndroid.LONG);
+        Database.uploadUserPost(caption, privacy, type, image);
+        navigation.navigate("Home");
+        setCaption("");
+        setImage(icon);
+        setType("status");
+        setPrivacy("public");
+        ToastAndroid.show("Post Uploaded", ToastAndroid.SHORT);
+      }
+    } catch (error) {
+      console.log(error)
+      ToastAndroid.show(error, ToastAndroid.SHORT);
     }
   };
 

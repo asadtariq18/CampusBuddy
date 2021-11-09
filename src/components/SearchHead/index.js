@@ -8,15 +8,17 @@ import styles from "./style";
 const SearchHead = ({ result }) => {
   const navigation = useNavigation();
   const onPress = () => {
-      alert(`${result.name} profile`)
+      alert(`${result.name} Profile`)
   };
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.left}>
-        <ProfilePicture uri={result.avatar} border={false} />
+        <ProfilePicture uri={result.avatar} size={40} border={false} />
+        <View style={{ marginTop: 10 }}>
         <Text style={styles.name}>{result.name} </Text>
-        <Text style={styles.notificationText}>{result.userID}</Text>
+        <Text style={styles.text2}>@{result.userID}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );

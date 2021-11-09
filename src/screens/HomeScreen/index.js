@@ -24,6 +24,7 @@ const HomeScreen = () => {
   useEffect(() => {
     setUser(Database.getCurrentUser());
     setPosts(Database.getPosts());
+    onRefresh();
   }, []);
 
   const onRefresh = React.useCallback(async () => {
@@ -32,7 +33,7 @@ const HomeScreen = () => {
       setUser(Database.getCurrentUser());
       setPosts(Database.getPosts());
       setRefreshing(false);
-      ToastAndroid.show("Updated", ToastAndroid.SHORT);
+     // ToastAndroid.show("Updated", ToastAndroid.SHORT);
     } catch (error) {
       ToastAndroid.show(error.message, ToastAndroid.SHORT);
     }

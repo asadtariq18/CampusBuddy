@@ -1,23 +1,25 @@
 import { StyleSheet } from "react-native";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 import { COLORS } from "../../Constants/COLORS";
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    paddingVertical: 4,
+    marginBottom: 5,
+    borderRadius: 20,
+    marginHorizontal: 2,
+    backgroundColor: COLORS.primary,
+  },
   name: {
-    alignContent: "center",
-    alignSelf: "center",
-    marginBottom: 10,
     fontWeight: "bold",
     color: COLORS.font,
+    fontSize: 20,
   },
   left: {
     flexDirection: "row",
-    marginLeft: 2,
   },
-  notificationText: {
-    marginTop: 19.5,
-    color: "gray",
+  text2: {
+    color: COLORS.font_secondary,
+    fontSize: 12,
   },
 });
 

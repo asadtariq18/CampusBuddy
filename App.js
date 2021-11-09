@@ -14,6 +14,14 @@ import store from "./src/Redux/store";
 const auth = Firebase.auth();
 const Stack = createStackNavigator();
 
+export const AppWrapper = () => {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+};
+
 export default function App() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
@@ -32,21 +40,19 @@ export default function App() {
 
   if (user && auth.currentUser.emailVerified)
     return (
-      <Provider store={store}>
-        <StripeProvider publishableKey="pk_test_51IUxdTFDTtq4Q7pzLMiGs5OUqN7HFJCOQeLGHQuBw2t8OPHwUaSewutTkk9Sb0OTPRvcQ1b7sGwAwi3uhfEkNK1F00HTG9b5Kk">
-          <NavigationContainer>
-            <Stack.Navigator>
-              <Stack.Screen
-                name={"AppStack"}
-                component={AppStack}
-                options={{
-                  headerShown: false,
-                }}
-              />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </StripeProvider>
-      </Provider>
+      <StripeProvider publishableKey="pk_test_51IUxdTFDTtq4Q7pzLMiGs5OUqN7HFJCOQeLGHQuBw2t8OPHwUaSewutTkk9Sb0OTPRvcQ1b7sGwAwi3uhfEkNK1F00HTG9b5Kk">
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name={"AppStack"}
+              component={AppStack}
+              options={{
+                headerShown: false,
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </StripeProvider>
     );
 
   return (
@@ -66,4 +72,4 @@ export default function App() {
   );
 }
 
-registerRootComponent(App);
+registerRootComponent(AppWrapper);
