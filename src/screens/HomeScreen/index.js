@@ -13,27 +13,29 @@ import Feed from "../../components/Feed";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import Database from "../../Database/database";
+import { setRefreshing, setUser, setPosts } from "../../Redux/Home/actions";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/core";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-
-  const [refreshing, setRefreshing] = useState(false);
-  const [user, setUser] = React.useState(Database.getCurrentUser());
-  const [posts, setPosts] = React.useState(Database.getPosts());
+  const dispatch = useDispatch();
+  const refreshing = useSelector((state) => state.home.refreshing);
+  const user = useSelector((state) => state.home.user);
+  const posts = useSelector((state) => state.home.posts);
   useEffect(() => {
-    setUser(Database.getCurrentUser());
-    setPosts(Database.getPosts());
+    dispatch(setUser(Database.getCurrentUser()));
+    dispatch(setPosts(Database.getPosts()));
     onRefresh();
   }, []);
 
   const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
+    dispatch(setRefreshing(true));
     try {
-      setUser(Database.getCurrentUser());
-      setPosts(Database.getPosts());
-      setRefreshing(false);
-     // ToastAndroid.show("Updated", ToastAndroid.SHORT);
+      dispatch(setUser(Database.getCurrentUser()));
+      dispatch(setPosts(Database.getPosts()));
+      dispatch(setRefreshing(false));
+      // ToastAndroid.show("Updated", ToastAndroid.SHORT);
     } catch (error) {
       ToastAndroid.show(error.message, ToastAndroid.SHORT);
     }

@@ -10,30 +10,32 @@ import {
   StatusBar,
 } from "react-native";
 import { Header, Left, Body, Icon, Title, Button, Right } from "native-base";
-import { Ionicons } from "@expo/vector-icons";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import Database from "../../Database/database";
 import TimelinePosts from "../../components/TimelinePosts";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { setRefreshing, setPosts, setUser } from "../../Redux/Profile/actions";
 
 const ProfileScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [refreshing, setRefreshing] = React.useState(false);
-  const [user, setUser] = React.useState(Database.getCurrentUser());
-  const [posts, setPosts] = React.useState(Database.getUserPosts(user.userID));
+  const refreshing = useSelector((state) => state.profile.refreshing);
+  const user = useSelector((state) => state.profile.user);
+  const posts = useSelector((state) => state.profile.posts);
 
   useEffect(() => {
-    setUser(Database.getCurrentUser());
-    setPosts(Database.getPosts());
+    dispatch(setUser(Database.getCurrentUser()));
+    dispatch(setPosts(Database.getPosts()));
   }, []);
 
   const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
+    dispatch(setRefreshing(true));
     try {
-      setUser(Database.getCurrentUser());
-      setPosts(Database.getPosts());
-      setRefreshing(false);
+      dispatch(setUser(Database.getCurrentUser()));
+      dispatch(setPosts(Database.getPosts()));
+      dispatch(setRefreshing(false));
       ToastAndroid.show("Updated", ToastAndroid.SHORT);
     } catch (error) {
       ToastAndroid.show(error.message, ToastAndroid.SHORT);
@@ -56,7 +58,7 @@ const ProfileScreen = () => {
             transparent
             onPress={() => navigation.navigate("EditProfile")}
           >
-            <Icon name="ios-menu" />
+            <Text style={styles.text}>Edit</Text>
           </Button>
         </Right>
       </Header>
@@ -125,35 +127,33 @@ const ProfileScreen = () => {
             <Text style={[styles.text, styles.text]}>Popularity</Text>
           </View>
         </View>
-
-        <ScrollView
-          contentContainerStyle={{
-            marginTop: 20,
-            backgroundColor: COLORS.secondary,
-            justifyContent: "center",
-            borderRadius: 10,
-            minHeight: 200,
-            minWidth: 400,
-          }}
-        >
-          {user.posts_count === 0 ? (
-            <Text
-              style={[
-                styles.text,
-                {
-                  fontSize: 24,
-                  color: COLORS.font_secondary,
-                  marginTop: 50,
-                },
-              ]}
-            >
-              {" "}
-              NO POSTS{" "}
-            </Text>
-          ) : (
+        {user.posts_count === 0 ? (
+          <Text
+            style={[
+              styles.text,
+              {
+                fontSize: 24,
+                color: COLORS.font_secondary,
+                marginTop: 50,
+              },
+            ]}
+          >
+            {" "}
+            NO POSTS{" "}
+          </Text>
+        ) : (
+          <ScrollView
+            contentContainerStyle={{
+              marginTop: 20,
+              backgroundColor: COLORS.secondary,
+              justifyContent: "center",
+              borderRadius: 10,
+              minWidth: 400,
+            }}
+          >
             <TimelinePosts posts={posts} />
-          )}
-        </ScrollView>
+          </ScrollView>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

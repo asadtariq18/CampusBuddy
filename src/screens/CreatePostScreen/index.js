@@ -18,18 +18,19 @@ import { COLORS } from "../../Constants/COLORS";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import Database from "../../Database/database";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setCaption, setType, setPrivacy, setImage } from "../../Redux/CreatePost/actions";
 const CreatePostScreen = () => {
-  const icon =
-    "https://icon-library.com/images/add-photo-icon/add-photo-icon-19.jpg";
-  const [caption, setCaption] = useState("");
-  const [type, setType] = useState("status");
-  const [privacy, setPrivacy] = useState("public");
-  const [image, setImage] = useState(icon);
-
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const icon = "https://icon-library.com/images/add-photo-icon/add-photo-icon-19.jpg"
+  const caption = useSelector((state)=> state.createPost.caption);
+  const type = useSelector((state)=> state.createPost.type);
+  const privacy = useSelector((state)=> state.createPost.privacy);
+  const image = useSelector((state)=> state.createPost.image);
+
   const onChangeCaption = (input) => {
-    setCaption(input);
+    dispatch(setCaption(input));
   };
 
   const pickFromGallery = async () => {
@@ -41,7 +42,7 @@ const CreatePostScreen = () => {
         aspect: [1, 1],
         quality: 0.5,
       });
-      setImage(data.uri);
+      dispatch(setImage(data.uri));
     } else {
       Alert.alert("you need to give permission to work");
     }
@@ -56,9 +57,7 @@ const CreatePostScreen = () => {
         aspect: [1, 1],
         quality: 0.5,
       });
-      if (!data.cancelled()) {
-        setImage(data.uri);
-      }
+        dispatch(setImage(data.uri));
     } else {
       Alert.alert("you need to give permission to work");
     }
@@ -72,10 +71,10 @@ const CreatePostScreen = () => {
         ToastAndroid.show("Uploading your post", ToastAndroid.LONG);
         Database.uploadUserPost(caption, privacy, type, image);
         navigation.navigate("Home");
-        setCaption("");
-        setImage(icon);
-        setType("status");
-        setPrivacy("public");
+        dispatch(setCaption(""));
+        dispatch(setImage(icon));
+        dispatch(setType("status"));
+        dispatch(setPrivacy("public"));
         ToastAndroid.show("Post Uploaded", ToastAndroid.SHORT);
       }
     } catch (error) {
@@ -86,10 +85,10 @@ const CreatePostScreen = () => {
 
   const discardPressed = () => {
     navigation.navigate("Home");
-    setCaption("");
-    setImage(icon);
-    setType("status");
-    setPrivacy("public");
+    dispatch(setCaption(""));
+    dispatch(setImage(icon));
+    dispatch(setType("status"));
+    dispatch(setPrivacy("public"));
     ToastAndroid.show("Post cancelled", ToastAndroid.LONG);
   };
   return (
@@ -131,7 +130,7 @@ const CreatePostScreen = () => {
       </ScrollView>
       <View style={styles.cardView}>
         <View style={{ flexDirection: "row", marginTop: 8 }}>
-          <TouchableWithoutFeedback onPress={() => setPrivacy("public")}>
+          <TouchableWithoutFeedback onPress={() => dispatch(setPrivacy("public"))}>
             {privacy === "public" ? (
               <View style={styles.buttonView}>
                 <Text style={styles.button_pressed}>Public</Text>
@@ -142,7 +141,7 @@ const CreatePostScreen = () => {
               </View>
             )}
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => setPrivacy("private")}>
+          <TouchableWithoutFeedback onPress={() => dispatch(setPrivacy("private"))}>
             {privacy === "private" ? (
               <View style={styles.buttonView}>
                 <Text style={styles.button_pressed}>Private</Text>
@@ -155,7 +154,7 @@ const CreatePostScreen = () => {
           </TouchableWithoutFeedback>
           </View>
           <View style={{ flexDirection: "row", marginTop: 8 }}>
-            <TouchableWithoutFeedback onPress={() => setType("status")}>
+            <TouchableWithoutFeedback onPress={() => dispatch(setType("status"))}>
               {type === "status" ? (
                 <View style={styles.buttonView}>
                   <Text style={styles.button_pressed}>Status</Text>
@@ -166,7 +165,7 @@ const CreatePostScreen = () => {
                 </View>
               )}
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => setType("ask")}>
+            <TouchableWithoutFeedback onPress={() => dispatch(setType("ask"))}>
               {type === "ask" ? (
                 <View style={styles.buttonView}>
                   <Text style={styles.button_pressed}>Ask</Text>
@@ -177,7 +176,7 @@ const CreatePostScreen = () => {
                 </View>
               )}
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => setType("lost")}>
+            <TouchableWithoutFeedback onPress={() => dispatch(setType("lost"))}>
               {type === "lost" ? (
                 <View style={styles.buttonView}>
                   <Text style={styles.button_pressed}>Lost</Text>
@@ -188,7 +187,7 @@ const CreatePostScreen = () => {
                 </View>
               )}
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => setType("found")}>
+            <TouchableWithoutFeedback onPress={() => dispatch(setType("found"))}>
               {type === "found" ? (
                 <View style={styles.buttonView}>
                   <Text style={styles.button_pressed}>Found</Text>

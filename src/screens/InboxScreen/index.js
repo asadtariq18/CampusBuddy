@@ -8,7 +8,6 @@ import {
   InputToolbar,
   Send,
   Bubble,
-  Composer,
 } from "react-native-gifted-chat";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
@@ -20,6 +19,14 @@ import "firebase/firestore";
 import styles from "../InboxScreen/style";
 import { COLORS } from "../../Constants/COLORS";
 import database from "../../Database/database";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setUser,
+  setMessages,
+  setImage,
+  setAudio,
+  setOnFocus,
+} from "../../Redux/Inbox/actions";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDUjGcux9KGVcXlBe6fqSVFSoa5nMMqHGY",
@@ -30,34 +37,33 @@ const firebaseConfig = {
   appId: "1:862630618301:web:1f34fdb33e5edbd0e603d4",
   measurementId: "G-E6Z5LCLYT0",
 };
-
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
 }
-
 LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
-
 const db = firebase.firestore();
+
 const InboxScreen = ({ route }) => {
+  const dispatch = useDispatch();
   let recording = new Audio.Recording();
-  const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.inbox.user);
   const { userID } = route.params;
   const chatsRef = db.collection(
     `Chat_${userID}_&_${database.getCurrentUser().userID}`
   );
 
-  const [messages, setMessages] = useState([]);
-  const [image, setImage] = useState(null);
-  const [audio, setAudio] = useState(null);
-  const [onFocus, setOnFocus] = useState(false);
+  const [messages, setMessages] = useState([])
+  const image = useSelector((state) => state.inbox.image);
+  const audio = useSelector((state) => state.inbox.audio);
+  const onFocus = useSelector((state) => state.inbox.onFocus);
 
   useEffect(() => {
     readUser();
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-      setOnFocus(true);
+      dispatch(setOnFocus(true));
     });
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-      setOnFocus(false);
+      dispatch(setOnFocus(false));
     });
 
     return () => {
@@ -68,6 +74,7 @@ const InboxScreen = ({ route }) => {
 
   useEffect(() => {
     readUser();
+    console.log(messages);
     const unsubscribe = chatsRef.onSnapshot((querySnapshot) => {
       const messagesFirestore = querySnapshot
         .docChanges()
@@ -84,9 +91,9 @@ const InboxScreen = ({ route }) => {
 
   const appendMessages = useCallback(
     (messages) => {
-      setMessages((previousMessages) =>
-        GiftedChat.append(previousMessages, messages)
-      );
+        setMessages((previousMessages) =>
+          GiftedChat.append(previousMessages, messages)
+        )
     },
     [messages]
   );
@@ -94,7 +101,7 @@ const InboxScreen = ({ route }) => {
   async function readUser() {
     const user = await AsyncStorage.getItem("user");
     if (user) {
-      setUser(JSON.parse(user));
+      dispatch(setUser(JSON.parse(user)));
     }
   }
 
@@ -102,9 +109,11 @@ const InboxScreen = ({ route }) => {
     const writes = messages.map((m) => {
       if (image) {
         m.image = image;
+        dispatch(setImage(null));
       }
       if (audio) {
         m.audio = audio;
+        dispatch(setAudio(null));
       }
       chatsRef.add(m);
     });
@@ -134,7 +143,7 @@ const InboxScreen = ({ route }) => {
     console.log("Stopping recording..");
     await recording.stopAndUnloadAsync();
     const uri = recording.getURI();
-    setAudio(uri);
+    dispatch(setAudio(uri));
     console.log("Recording stopped and stored at", uri);
   }
   const camPress = async () => {
@@ -146,7 +155,7 @@ const InboxScreen = ({ route }) => {
         aspect: [4, 3],
         quality: 1,
       });
-      setImage(data.uri);
+      dispatch(setImage(data.uri));
     } else {
       Alert.alert("you need to give permission to work");
     }

@@ -18,31 +18,48 @@ import { COLORS } from "../../Constants/COLORS";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Database from "../../Database/database";
 import Firebase from "../../config/Firebase";
+import {
+  setFirstName,
+  setLastName,
+  setIsFemale,
+  setIsMale,
+  setGender,
+  setMail,
+  setPassword,
+  setIsValidFirstName,
+  setIsValidLastName,
+  setIsValidMail,
+  setIsValidPassword,
+  setOnFocus,
+} from "../../Redux/SignUp/actions";
+import { useDispatch, useSelector } from "react-redux";
 const auth = Firebase.auth();
 
 const SignUpScreen = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [isFemale, setIsFemale] = useState(false);
-  const [isMale, setIsMale] = useState(false);
-  const [gender, setGender] = useState("");
-  const [mail, setMail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isValid_FirstName, setIsValid_FirstName] = useState(false);
-  const [isValid_LastName, setIsValid_LastName] = useState(false);
-  const [isValid_Mail, setIsValid_Mail] = useState(false);
-  const [isValid_Password, setIsValid_Password] = useState(false);
-  const [onFocus, setOnFocus] = useState(false);
-  
+  const dispatch = useDispatch();
+  const firstName = useSelector((state) => state.signup.firstName);
+  const lastName = useSelector((state) => state.signup.lastName);
+  const isFemale = useSelector((state) => state.signup.isFemale);
+  const isMale = useSelector((state) => state.signup.isMale);
+  const gender = useSelector((state) => state.signup.gender);
+  const mail = useSelector((state) => state.signup.mail);
+  const password = useSelector((state) => state.signup.password);
+  const isValidFirstName = useSelector(
+    (state) => state.signup.isValidFirstName
+  );
+  const isValidLastName = useSelector((state) => state.signup.isValidLastName);
+  const isValidMail = useSelector((state) => state.signup.isValidMail);
+  const isValidPassword = useSelector((state) => state.signup.isValidPassword);
+  const onFocus = useSelector((state) => state.signup.onFocus);
 
   const navigation = useNavigation();
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-      setOnFocus(true);
+      dispatch(setOnFocus(true));
     });
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-      setOnFocus(false);
+      dispatch(setOnFocus(false));
     });
 
     return () => {
@@ -52,57 +69,60 @@ const SignUpScreen = () => {
   }, []);
 
   const malePress = () => {
-    setIsFemale(false);
-    setIsMale(!isMale);
-    setGender("Male");
+    dispatch(setIsFemale(false));
+    dispatch(setIsMale(!isMale));
+    dispatch(setGender("Male"));
   };
 
   const femalePress = () => {
-    setIsMale(false);
-    setIsFemale(!isFemale);
-    setGender("Female");
+    dispatch(setIsMale(false));
+    dispatch(setIsFemale(!isFemale));
+    dispatch(setGender("Female"));
+    // setIsMale(false);
+    // setIsFemale(!isFemale);
+    // setGender("Female");
   };
 
   const onChangeFirstName = (str) => {
     if (ValidateFirstName(str)) {
-      setFirstName(str);
+      dispatch(setFirstName(str));
     }
   };
   const onChangeLastName = (str) => {
     if (ValidateLastName(str)) {
-      setLastName(str);
+      dispatch(setLastName(str));
     }
   };
 
   const onChangeMail = (str) => {
     if (ValidateMail(str)) {
-      setMail(str.toLowerCase());
+      dispatch(setMail(str.toLowerCase()));
     }
   };
 
   const onChangePass = (str) => {
     if (ValidatePass(str)) {
-      setPassword(str);
+      dispatch(setPassword(str));
     }
   };
 
   const ValidateFirstName = (str) => {
     var hasNumber = /\d/;
     if (!hasNumber.test(str) && str !== "") {
-      setFirstName(str);
-      setIsValid_FirstName(true);
+      dispatch(setFirstName(str));
+      dispatch(setIsValidFirstName(true));
     } else {
-      setIsValid_FirstName(false);
+      dispatch(setIsValidFirstName(false));
     }
   };
 
   const ValidateLastName = (str) => {
     var hasNumber = /\d/;
     if (!hasNumber.test(str) && str !== "") {
-      setLastName(str);
-      setIsValid_LastName(true);
+      dispatch(setLastName(str));
+      dispatch(setIsValidLastName(true));
     } else {
-      setIsValid_LastName(false);
+      dispatch(setIsValidLastName(false));
     }
   };
 
@@ -110,19 +130,19 @@ const SignUpScreen = () => {
     const re =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(String(str).toLowerCase())) {
-      setMail(str);
-      setIsValid_Mail(true);
+      dispatch(setMail(str));
+      dispatch(setIsValidMail(true));
     } else {
-      setIsValid_Mail(false);
+      dispatch(setIsValidMail(false));
     }
   };
 
   const ValidatePass = (str) => {
     if (str.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/)) {
-      setPassword(str);
-      setIsValid_Password(true);
+      dispatch(setPassword(str));
+      dispatch(setIsValidPassword(true));
     } else {
-      setIsValid_Password(false);
+      dispatch(setIsValidPassword(false));
     }
   };
 
@@ -136,13 +156,13 @@ const SignUpScreen = () => {
             lastName,
             mail.toLowerCase(),
             gender
-            );
-            ToastAndroid.showWithGravity(
-              "Your account has been created",
-              ToastAndroid.SHORT,
-              ToastAndroid.BOTTOM
-            );
-          });
+          );
+          ToastAndroid.showWithGravity(
+            "Your account has been created",
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM
+          );
+        });
       }
     } catch (error) {
       console.log(error.message);
@@ -213,7 +233,7 @@ const SignUpScreen = () => {
           selectionColor={COLORS.primary}
           style={styles.textInput}
           onChangeText={(value) => onChangeFirstName(value.trim())}
-          onFocus={() => setOnFocus(true)}
+          onFocus={() => dispatch(setOnFocus(true))}
         ></TextInput>
         <TextInput
           placeholder="Last Name"
@@ -228,6 +248,7 @@ const SignUpScreen = () => {
           selectionColor={COLORS.primary}
           style={styles.textInput}
           onChangeText={(value) => onChangeMail(value.trim().toLowerCase())}
+          keyboardType={"email-address"}
         ></TextInput>
         <View style={styles.passwordInput}>
           <TextInput
@@ -242,25 +263,25 @@ const SignUpScreen = () => {
             name="checkmark-circle"
             style={{
               fontSize: 25,
-              color: isValid_Password ? COLORS.primary : "gray",
+              color: isValidPassword ? COLORS.primary : "gray",
             }}
           />
         </View>
-        <TouchableOpacity onPress={onSignUpPress}>
-          {isValid_Mail &&
-          isValid_FirstName &&
-          isValid_LastName &&
-          isValid_Password &&
-          (isFemale || isMale) ? (
+        {isValidMail &&
+        isValidFirstName &&
+        isValidLastName &&
+        isValidPassword &&
+        (isFemale || isMale) ? (
+          <TouchableOpacity onPress={onSignUpPress}>
             <View style={styles.buttonView}>
               <Text style={styles.button2}>Sign up</Text>
             </View>
-          ) : (
-            <View style={styles.buttonView}>
-              <Text style={styles.button1}>Sign up</Text>
-            </View>
-          )}
-        </TouchableOpacity>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.buttonView}>
+            <Text style={styles.button1}>Sign up</Text>
+          </View>
+        )}
 
         <Text style={styles.text}>Already have account?</Text>
         <TouchableOpacity onPress={onLoginPress}>

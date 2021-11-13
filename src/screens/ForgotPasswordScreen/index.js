@@ -12,28 +12,28 @@ import {
 } from "react-native";
 import { Header } from "native-base";
 import { useNavigation } from "@react-navigation/native";
+import { setMail, setIsEmpty, setOnFocus } from "../../Redux/ForgotPassword/actions";
+import { useDispatch, useSelector } from "react-redux";
 
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
-import * as firebase from "firebase";
 import Firebase from "../../config/Firebase";
-import Database from "../../Database/database";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const auth = Firebase.auth();
 
 const ForgotPasswordScreen = () => {
-  const [mail, setMail] = useState("");
-  const [isEmpty, setIsEmpty] = useState(true);
-  const [onFocus, setOnFocus] = useState(false);
+  const dispatch = useDispatch();
+  const mail = useSelector((state)=> state.forgotPassword.mail);
+  const isEmpty = useSelector((state)=> state.forgotPassword.isEmpty);
+  const onFocus = useSelector((state)=> state.forgotPassword.onFocus);
   const navigation = useNavigation();
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-      setOnFocus(true);
+      dispatch(setOnFocus(true));
     });
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-      setOnFocus(false);
+      dispatch(setOnFocus(false));
     });
 
     return () => {
@@ -43,11 +43,11 @@ const ForgotPasswordScreen = () => {
   }, []);
 
   const onChangeMail = (input1) => {
-    setMail(input1);
+    dispatch(setMail(input1));
     if (input1 !== "") {
-      setIsEmpty(false);
+      dispatch(setIsEmpty(false));
     } else {
-      setIsEmpty(true);
+      dispatch(setIsEmpty(true));
     }
   };
   const onSendCodePress = async () => {

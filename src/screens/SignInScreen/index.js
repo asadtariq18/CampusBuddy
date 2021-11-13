@@ -35,7 +35,6 @@ const auth = Firebase.auth();
 const SignInScreen = () => {
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
-  //const [mail, setMail] = useState("");
   const mail = useSelector((state) => state.login.mail);
   const password = useSelector((state) => state.login.password);
   const isEmpty = useSelector((state) => state.login.isEmpty);
@@ -67,25 +66,19 @@ const SignInScreen = () => {
 
   const onChangeMail = (input1) => {
     dispatch(updateMail(input1));
-    //setMail(input1);
     if (input1 !== "" && password !== "") {
-      //setIsEmpty(false);
       dispatch(isEmptyChange(false));
     } else {
       dispatch(isEmptyChange(true));
-      //setIsEmpty(true);
     }
   };
 
   const onChangePass = (input2) => {
     dispatch(updatePass(input2));
-    //setPassword(input2);
     if (mail !== "" && input2 !== "") {
       dispatch(isEmptyChange(false));
-      //setIsEmpty(false);
     } else {
       dispatch(isEmptyChange(true));
-      // setIsEmpty(true);
     }
   };
 

@@ -12,27 +12,28 @@ import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
 import styles from "./style";
 import { COLORS } from "../../../Constants/COLORS";
 import database from "../../../Database/database";
+import { useDispatch, useSelector } from "react-redux";
+import { setCardDetails, setAmount } from "../../../Redux/Donate/actions";
 
 const DonateScreen = () => {
-  const [isValid, setIsValid] = useState(false);
-  const [cardDetails, setCardDetails] = useState();
-  const [amount, setAmount] = useState(0);
-  const {confirmPayment, loading} = useConfirmPayment();
+  const dispatch = useDispatch();
+  const cardDetails = useSelector((state) => state.donate.cardDetails);
+  const amount = useSelector((state) => state.donate.amount);
 
-const fetchPaymentIntentClientSecret = async()=>{
-  
-}
+  const { confirmPayment, loading } = useConfirmPayment();
+
+  const fetchPaymentIntentClientSecret = async () => {};
 
   const onPress = async () => {
-    if ( !cardDetails?.complete || amount===0) {
-      alert("Please enter complete Card Details and Amount");
-      return
-    }else{
-      const billingDetails={
-        amount: amount
-      }
-        database.uploadDonationHistory(cardDetails, amount);
-        ToastAndroid.show("Payment Successful", ToastAndroid.LONG);
+    if (!cardDetails?.complete || amount === 0) {
+      ToastAndroid.show("Fill the required card fields", ToastAndroid.SHORT);
+      return;
+    } else {
+      const billingDetails = {
+        amount: amount,
+      };
+      database.uploadDonationHistory(cardDetails, amount);
+      ToastAndroid.show("Payment Successful", ToastAndroid.LONG);
     }
   };
   return (
@@ -43,14 +44,14 @@ const fetchPaymentIntentClientSecret = async()=>{
           uri: "https://www.shareicon.net/data/128x128/2016/09/07/826989_heart_512x512.png",
         }}
       />
-<Text style={styles.text}>Card Information</Text>
+      <Text style={styles.text}>Card Information</Text>
       <CardField
         placeholder={{ number: "4200 4200 4200 4200" }}
         postalCodeEnabled={false}
         cardStyle={styles.card}
         style={styles.cardContainer}
         onCardChange={(cardDetails) => {
-          setCardDetails(cardDetails);
+          dispatch(setCardDetails(cardDetails));
         }}
       />
       <TextInput
@@ -59,18 +60,12 @@ const fetchPaymentIntentClientSecret = async()=>{
         placeholderTextColor={COLORS.font_secondary}
         selectionColor={COLORS.primary}
         style={styles.textInput}
-        onChangeText={(value) => setAmount(value.trim())}
+        onChangeText={(value) => dispatch(setAmount(value.trim()))}
       ></TextInput>
       <TouchableOpacity onPress={onPress}>
-        {!isValid ? (
-          <View style={styles.buttonView}>
-            <Text style={styles.button2}>Donate</Text>
-          </View>
-        ) : (
-          <View style={styles.buttonView}>
-            <Text style={styles.button1}>Donate</Text>
-          </View>
-        )}
+        <View style={styles.buttonView}>
+          <Text style={styles.button2}>Donate</Text>
+        </View>
       </TouchableOpacity>
     </SafeAreaView>
   );

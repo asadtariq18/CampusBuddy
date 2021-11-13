@@ -42,7 +42,7 @@ function getUpdatedUserData(mail) {
   return user;
 }
 function getCurrentUser() {
-  const user = getUpdatedUserData(firebase.auth().currentUser.email);
+  const user = getUpdatedUserData("asadtariq070@gmail.com");
   return user;
 }
 function getUserPosts(userID) {
@@ -119,7 +119,7 @@ function uploadUserStory(image) {
   firebase
     .database()
     .ref(
-      `db/stories/story_${user.regNo
+      `db/stories/story_${user.userID
         .toLowerCase()
         .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
     )
@@ -133,21 +133,20 @@ function uploadUserStory(image) {
 }
 
 function uploadUserPost(caption, privacy, type, image) {
-  console.log("database 1");
   const user = getCurrentUser();
   let timestamp = moment().format("YYYY/MM/D hh:mm");
 
   firebase
     .database()
     .ref(
-      `db/posts/post_${user.regNo
+      `db/posts/post_${user.userID
         .toLowerCase()
         .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
     )
     .update({
       mail: user.mail,
       userID: user.mail.split("@")[0],
-      postID: `post_${user.regNo
+      postID: `post_${user.userID
         .toLowerCase()
         .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`,
       caption: caption,
@@ -159,10 +158,9 @@ function uploadUserPost(caption, privacy, type, image) {
       likes_count: 0,
       comments_count: 0,
     });
-console.log("database 2")
   firebase
     .database()
-    .ref(`db/users/user_${user.regNo.toLowerCase()}`)
+    .ref(`db/users/user_${user.userID.toLowerCase()}`)
     .update({
       posts_count: user.posts_count + 1,
       popularity: user.popularity + 3,
@@ -177,7 +175,7 @@ function uploadDonationHistory(cardDetails, amount) {
     firebase
       .database()
       .ref(
-        `db/donation_history/donation_${user.regNo
+        `db/donation_history/donation_${user.userID
           .toLowerCase()
           .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
       )

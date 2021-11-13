@@ -22,12 +22,12 @@ const PasswordVerifyScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-        <Header style={styles.header}>
-          <StatusBar backgroundColor={COLORS.background_dark} />
-          <View style={styles.header}>
-            <Text style={styles.headerText}>Email Sent</Text>
-          </View>
-        </Header>
+      <Header style={styles.header}>
+        <StatusBar backgroundColor={COLORS.background_dark} />
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Email Sent</Text>
+        </View>
+      </Header>
       <View>
         <Image
           style={styles.image}
@@ -38,9 +38,9 @@ const PasswordVerifyScreen = () => {
           password.
         </Text>
         <TouchableOpacity onPress={onLoginPress}>
-            <View style={styles.buttonView}>
-              <Text style={styles.button2}>Go to Login</Text>
-            </View>
+          <View style={styles.buttonView}>
+            <Text style={styles.button2}>Go to Login</Text>
+          </View>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

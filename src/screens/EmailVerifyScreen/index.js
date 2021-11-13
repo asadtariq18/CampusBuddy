@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   Text,
   View,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   Image,
   StatusBar,
   ToastAndroid,
@@ -14,17 +13,18 @@ import { useNavigation } from "@react-navigation/native";
 import Firebase from "../../config/Firebase";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
+import { setMailSent, setLabel } from "../../Redux/VerifyEmail/actions";
+import { useDispatch, useSelector } from "react-redux";
 
 const auth = Firebase.auth();
 
 const EmailVerifyScreen = ({ route }) => {
+  const dispatch = useDispatch();
   const mail = route.params.mail.toLowerCase();
   // const gender = route.params.gender;
 
-  const [mailSent, setMailSent] = useState(false);
-  const [label, setLabel] = useState(
-    "Verify your email address to get registered"
-  );
+  const mailSent = useSelector((state)=> state.emailVerify.mailSent);
+  const label = useSelector((state)=> state.emailVerify.label);
   const navigation = useNavigation();
 
   // useEffect(() => {
@@ -46,9 +46,9 @@ const EmailVerifyScreen = ({ route }) => {
 
   const onVerifyPress = () => {
     auth.currentUser.sendEmailVerification().then(() => {
-      setMailSent(true);
-      setLabel(`Check your email and follow the link we just sent to verify.`);
-    });
+      dispatch(setMailSent(true));
+      dispatch(setLabel(`Check your email and follow the link we just sent to verify.`));
+    })
     ToastAndroid.showWithGravityAndOffset(
       "Email Sent.",
       ToastAndroid.SHORT,

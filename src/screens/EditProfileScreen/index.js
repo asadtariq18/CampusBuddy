@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -17,13 +17,20 @@ import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
-import database from "../../Database/database";
+import Database from "../../Database/database";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsDone, setImage, setInfo } from "../../Redux/EditProfile/actions";
 
 const EditProfileScreen = () => {
-  const [isDone, setIsDone] = useState(false);
-  const [image, setImage] = useState(database.getCurrentUser().avatar);
-  const [info, setInfo] = useState("");
+  const dispatch = useDispatch();
+  const isDone = useSelector((state) => state.editProfile.isDone);
+  const image = useSelector((state) => state.editProfile.image);
+  const info = useSelector((state) => state.editProfile.info);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    dispatch(setImage(Database.getCurrentUser().avatar));
+  }, []);
 
   const pickFromGallery = async () => {
     const { granted } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -35,10 +42,10 @@ const EditProfileScreen = () => {
         quality: 0.5,
       });
       if (!data.cancelled) {
-        setIsDone(true);
-        setImage(data.uri);
-    }
-  } else {
+        dispatch(setIsDone(true));
+        dispatch(setImage(data.uri));
+      }
+    } else {
       Alert.alert("Campus Buddy wants permission to open gallery");
     }
   };
@@ -53,19 +60,19 @@ const EditProfileScreen = () => {
         quality: 0.5,
       });
       if (!data.cancelled) {
-        setIsDone(true);
-        setImage(data.uri);
+        dispatch(setIsDone(true));
+        dispatch(setImage(data.uri));
       }
     } else {
       Alert.alert("Campus Buddy wants permission to access camera");
     }
   };
   const onChangeText = (value) => {
-    setInfo(value);
+    dispatch(setInfo(value));
     if (value !== "") {
-      setIsDone(true);
+      dispatch(setIsDone(true));
     } else {
-      setIsDone(false);
+      dispatch(setIsDone(false));
     }
   };
   const savePressed = () => {
@@ -76,7 +83,7 @@ const EditProfileScreen = () => {
     };
     if (isDone) {
       Keyboard.dismiss();
-      database.updateProfile(newData);
+      Database.updateProfile(newData);
       navigation.navigate("Feed");
       ToastAndroid.showWithGravity(
         "Changes Saved",

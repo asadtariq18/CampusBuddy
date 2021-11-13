@@ -5,27 +5,34 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Image
+  Image,
+  ToastAndroid,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setName,
+  setRegNo,
+  setReason,
+} from "../../../Redux/ApplyDonation/actions";
 import styles from "./style";
 import { COLORS } from "../../../Constants/COLORS";
 
 const RequestScreen = () => {
-  const [isValid, setIsValid] = useState(false);
-  const [name, setName] = useState("");
-  const [regNo, setRegNo] = useState("");
-  const [reason, setReason] = useState("");
+  const dispatch = useDispatch();
+  const name = useSelector((state) => state.applyDonation.name);
+  const regNo = useSelector((state) => state.applyDonation.regNo);
+  const reason = useSelector((state) => state.applyDonation.reason);
 
   const onPress = () => {
     if (name === "" || regNo === "" || reason === "") {
-      alert("Fill the required fields");
+      ToastAndroid.show("Fill the required fields", ToastAndroid.SHORT);
     } else {
       alert(
         "You application has been sent to the accounts management. You will get the confirmation email from university."
       );
-      setName('')
-      setRegNo('')
-      setReason('')
+      dispatch(setName(""));
+      dispatch(setRegNo(""));
+      dispatch(setReason(""));
     }
   };
   return (
@@ -41,14 +48,14 @@ const RequestScreen = () => {
         placeholderTextColor={COLORS.font_secondary}
         selectionColor={COLORS.primary}
         style={styles.textInput}
-        onChangeText={(value) => setName(value.trim())}
+        onChangeText={(value) => dispatch(setName(value.trim()))}
       ></TextInput>
       <TextInput
         placeholder="Registration Number"
         placeholderTextColor={COLORS.font_secondary}
         selectionColor={COLORS.primary}
         style={styles.textInput}
-        onChangeText={(value) => setRegNo(value.trim())}
+        onChangeText={(value) => dispatch(setRegNo(value.trim()))}
       ></TextInput>
       <TextInput
         placeholder="Reason"
@@ -56,18 +63,12 @@ const RequestScreen = () => {
         selectionColor={COLORS.primary}
         multiline
         style={styles.textInput2}
-        onChangeText={(value) => setReason(value.trim())}
+        onChangeText={(value) => dispatch(setReason(value.trim()))}
       ></TextInput>
       <TouchableOpacity onPress={onPress}>
-        {!isValid ? (
-          <View style={styles.buttonView}>
-            <Text style={styles.button2}>Apply</Text>
-          </View>
-        ) : (
-          <View style={styles.buttonView}>
-            <Text style={styles.button1}>Apply</Text>
-          </View>
-        )}
+        <View style={styles.buttonView}>
+          <Text style={styles.button2}>Apply</Text>
+        </View>
       </TouchableOpacity>
     </SafeAreaView>
   );

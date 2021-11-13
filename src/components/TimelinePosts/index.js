@@ -22,7 +22,6 @@ const TimelinePosts = ({ posts }) => {
         keyExtractor={({ id }) => id}
         renderItem={({ item }) => {
           if (item.userID === user.userID) {
-            console.log(item.userID)
             return <PostPreview post={item} />;
           }
           return null;
