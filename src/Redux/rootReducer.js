@@ -11,6 +11,7 @@ import EditProfileReducer from "./EditProfile/reducers";
 import InboxReducer from "./Inbox/reducers";
 import SearchReducer from "./Search/reducers";
 import ProfileReducer from "./Profile/reducers";
+import ThemeReducer from "./Theme/reducers";
 
 export const rootReducer = combineReducers({
   login: LoginReducer,
@@ -24,5 +25,6 @@ export const rootReducer = combineReducers({
   editProfile: EditProfileReducer,
   inbox: InboxReducer,
   search: SearchReducer,
-  profile: ProfileReducer
+  profile: ProfileReducer,
+  theme: ThemeReducer
 });

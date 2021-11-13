@@ -16,6 +16,7 @@ import Database from "../../Database/database";
 import { setRefreshing, setUser, setPosts } from "../../Redux/Home/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/core";
+import { LinearGradient } from "expo-linear-gradient";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -59,40 +60,42 @@ const HomeScreen = () => {
           </Button>
         </Right>
       </Header>
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            progressBackgroundColor={COLORS.background_dark}
-            colors={[COLORS.primary]}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
+      <LinearGradient colors={["#000000", "#000000", "#000000", "#000000"]}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              progressBackgroundColor={COLORS.background_dark}
+              colors={[COLORS.primary]}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
+        >
+          <StatusBar
+            showHideTransition
+            backgroundColor={COLORS.background_dark}
           />
-        }
-      >
-        <StatusBar
-          showHideTransition
-          backgroundColor={COLORS.background_dark}
-        />
-        {user.posts_count === 0 ? (
-          <Text
-            style={[
-              {
-                textAlign: "center",
-                fontSize: 24,
-                color: COLORS.font_secondary,
-                marginTop: 50,
-                justifyContent: "center",
-                alignItems: "center",
-              },
-            ]}
-          >
-            {" "}
-            Welcome to Campus Buddy, {user.name}{" "}
-          </Text>
-        ) : (
-          <Feed posts={posts} />
-        )}
-      </ScrollView>
+          {user.posts_count === 0 ? (
+            <Text
+              style={[
+                {
+                  textAlign: "center",
+                  fontSize: 24,
+                  color: COLORS.font_secondary,
+                  marginTop: 50,
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+              ]}
+            >
+              {" "}
+              Welcome to Campus Buddy, {user.name}{" "}
+            </Text>
+          ) : (
+            <Feed posts={posts} />
+          )}
+        </ScrollView>
+      </LinearGradient>
     </SafeAreaView>
   );
 };
