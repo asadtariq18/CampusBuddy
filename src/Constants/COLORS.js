@@ -6,6 +6,7 @@ const COLORS = {
   font_secondary: "gray",
   icon: "#eee",
   tertiary: "#ed293999",
+  food: "#dc143c",
 };
 export {COLORS};
 

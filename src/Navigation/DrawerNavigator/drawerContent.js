@@ -93,7 +93,7 @@ export function DrawerContent(props) {
               label="Food Order"
               inactiveTintColor={COLORS.font}
               onPress={() => {
-                props.navigation.navigate("Food Order");
+                props.navigation.navigate("GetStarted");
               }}
             />
             <DrawerItem
