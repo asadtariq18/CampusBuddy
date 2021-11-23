@@ -27,6 +27,7 @@ const GetStartedScreen = () => (
         borderTopStartRadius: 100,
       }}
     >
+        
       <Image
         style={styles.image2}
         source={require("../../../Constants/food4.jpg")}

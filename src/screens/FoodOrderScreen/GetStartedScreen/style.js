@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     borderRadius: 200,
     paddingHorizontal: 5,
   },
+  
   image2: {
     justifyContent: "center",
     alignItems: "center",

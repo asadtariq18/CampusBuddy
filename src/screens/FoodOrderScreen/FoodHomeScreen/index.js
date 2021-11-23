@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { COLORS } from "../../../Constants/COLORS";
+import { COLORS } from "../../../Constants/COLORS"
 import styles from "./style";
 
 const FoodHomeScreen = () => (
