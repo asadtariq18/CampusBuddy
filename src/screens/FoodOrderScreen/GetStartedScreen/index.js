@@ -7,9 +7,12 @@ import {
   View,
 } from "react-native";
 import { COLORS } from "../../../Constants/COLORS";
+import { useNavigation } from "@react-navigation/native";
 import styles from "./style";
 
-const GetStartedScreen = () => (
+const GetStartedScreen = () => {
+  const navigation = useNavigation();
+return (
   <SafeAreaView style={styles.container}>
     <Image
       style={styles.image}
@@ -27,7 +30,6 @@ const GetStartedScreen = () => (
         borderTopStartRadius: 100,
       }}
     >
-        
       <Image
         style={styles.image2}
         source={require("../../../Constants/food4.jpg")}
@@ -37,11 +39,15 @@ const GetStartedScreen = () => (
         {" "}
         Now you can order your food from university cafe through Campus Buddy{" "}
       </Text>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("FoodHome");
+        }}
+      >
         <Text style={styles.Button2}> Get Started </Text>
       </TouchableOpacity>
     </View>
   </SafeAreaView>
-);
+)};
 
 export default GetStartedScreen;

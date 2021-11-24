@@ -10,6 +10,7 @@ import ViewPostScreen from "../screens/ViewPostScreen";
 import DonateScreen from "../screens/DonationScreen/DonateScreen";
 import ApplyDonationScreen from "../screens/DonationScreen/ApplyDonationScreen";
 import GetStartedScreen from "../screens/FoodOrderScreen/GetStartedScreen"
+import FoodHomeScreen from "../screens/FoodOrderScreen/FoodHomeScreen";
 import { COLORS } from "../Constants/COLORS";
 import DrawerNavigator from "./DrawerNavigator/drawerNavigator";
 
@@ -139,6 +140,13 @@ const AppStack = () => {
       <Stack.Screen
         name="GetStarted"
         component={GetStartedScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FoodHome"
+        component={FoodHomeScreen}
         options={{
           headerShown: false,
         }}

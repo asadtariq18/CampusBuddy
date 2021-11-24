@@ -1,6 +1,6 @@
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import FoodOrderScreen from "../../screens/FoodOrderScreen";
+import FoodOrderScreen from "../../screens/FoodOrderScreen/GetStartedScreen";
 import DonationScreen from "../../screens/DonationScreen";
 import MapScreen from "../../screens/MapScreen";
 import { DrawerContent } from "./drawerContent";
