@@ -11,19 +11,19 @@ const styles = StyleSheet.create({
     color: COLORS.font,
     fontSize: 25,
     marginHorizontal: 10,
-    marginVertical: 15,
+    marginVertical: 10,
     alignSelf: "center",
     textAlign: "center",
   },
   text: {
-    color: COLORS.font_secondary,
+    color: COLORS.font,
     fontSize: 16,
     marginHorizontal: 10,
-    marginTop: 20,
+    marginBottom: 5,
     alignSelf: "center",
     textAlign: "center",
   },
-  Header: {
+  cafeName: {
     alignSelf: "flex-start",
     fontSize: 30,
     fontWeight: "bold",
@@ -36,6 +36,18 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     marginTop: 20,
   },
+  rating: {
+    alignSelf: "flex-start",
+    fontSize: 12,
+    fontWeight: "bold",
+    color: COLORS.font,
+    backgroundColor: COLORS.secondary2,
+    borderRadius: 30,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    marginTop: 20,
+    marginStart: -20,
+  },
   Button2: {
     fontSize: 15,
     color: COLORS.font,
@@ -44,7 +56,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     marginTop: 10,
-    marginEnd: 5,
+    marginEnd: 5
   },
   image: {
     justifyContent: "center",

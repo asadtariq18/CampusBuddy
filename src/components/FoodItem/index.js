@@ -3,11 +3,12 @@ import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, Text, View, Image } from "react-native";
 
 import styles from "./style";
+import { COLORS } from "../../Constants/COLORS";
 
-const CafeHead = ({ image, name, rating }) => {
+const FoodItem = ({ image, name, price }) => {
   const navigation = useNavigation();
   const onPress = () => {
-    navigation.navigate("CafeMenu", cafe={name: name, rating: rating, image: image});
+    navigation.navigate("CafeMenu");
   };
 
   return (
@@ -26,13 +27,14 @@ const CafeHead = ({ image, name, rating }) => {
       <Text numberOfLines={1} style={styles.name}>
         {name}{" "}
       </Text>
-      <View style={{ backgroundColor: "#3249", justifyContent: "center" }}>
-        <Text numberOfLines={1} style={styles.rating}>
-          Ratings: {rating}{" "}
-        </Text>
+      <View style={{backgroundColor: COLORS.secondary2, justifyContent: "center"}} >
+      <Text numberOfLines={1} style={styles.name}>
+        RS. {price}{" "}
+      </Text>
       </View>
+          
     </TouchableOpacity>
   );
 };
 
-export default CafeHead;
+export default FoodItem;

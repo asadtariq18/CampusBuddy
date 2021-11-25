@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   headerText: {
-    color: COLORS.food,
+    color: COLORS.font,
     fontWeight: "bold",
     fontSize: 30,
     marginHorizontal: 10,
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   text: {
-    color: COLORS.font_secondary,
+    color: COLORS.font,
     fontSize: 16,
     marginHorizontal: 10,
     marginTop: 20,

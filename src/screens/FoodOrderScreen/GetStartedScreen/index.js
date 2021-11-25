@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   View,
+  StatusBar
 } from "react-native";
 import { COLORS } from "../../../Constants/COLORS";
 import { useNavigation } from "@react-navigation/native";
@@ -14,6 +15,7 @@ const GetStartedScreen = () => {
   const navigation = useNavigation();
 return (
   <SafeAreaView style={styles.container}>
+    <StatusBar showHideTransition backgroundColor={COLORS.primary} />
     <Image
       style={styles.image}
       source={require("../../../Constants/food6.jpg")}
@@ -25,7 +27,7 @@ return (
         justifyContent: "flex-start",
         alignItems: "center",
         paddingTop: 40,
-        backgroundColor: COLORS.background_dark,
+        backgroundColor: COLORS.tertiary,
         borderTopEndRadius: 100,
         borderTopStartRadius: 100,
       }}
@@ -48,6 +50,6 @@ return (
       </TouchableOpacity>
     </View>
   </SafeAreaView>
-)};
+);};
 
 export default GetStartedScreen;

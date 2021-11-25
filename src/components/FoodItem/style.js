@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 import { COLORS } from "../../Constants/COLORS";
 
 const styles = StyleSheet.create({
@@ -19,14 +18,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginVertical: 5,
     fontSize: 20,
-    color: COLORS.font,
-  },
-  rating: {
-    paddingHorizontal: 5,
-    alignContent: "center",
-    alignSelf: "center",
-    marginVertical: 5,
-    fontSize: 15,
     color: COLORS.font,
   },
   left: {},
