@@ -27,7 +27,6 @@ const HomeScreen = () => {
   useEffect(() => {
     dispatch(setUser(Database.getCurrentUser()));
     dispatch(setPosts(Database.getPosts()));
-    onRefresh();
   }, []);
 
   const onRefresh = React.useCallback(async () => {

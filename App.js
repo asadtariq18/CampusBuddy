@@ -10,6 +10,7 @@ import Firebase from "././src/config/Firebase";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { Provider } from "react-redux";
 import store from "./src/Redux/store";
+import { MenuProvider } from "react-native-popup-menu";
 
 const auth = Firebase.auth();
 const Stack = createStackNavigator();
@@ -17,7 +18,9 @@ const Stack = createStackNavigator();
 export const AppWrapper = () => {
   return (
     <Provider store={store}>
-      <App />
+      <MenuProvider>
+        <App />
+      </MenuProvider>
     </Provider>
   );
 };
@@ -25,7 +28,14 @@ export const AppWrapper = () => {
 export default function App() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
-  LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
+  LogBox.ignoreLogs([
+    "Setting a timer for a long period of time",
+    `fontFamily "Roboto_medium" is not a system font and has not been loaded through Font.loadAsync.`,
+    `VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.`,
+    "`flexWrap: `wrap`` is not supported with the `VirtualizedList` components.Consider using `numColumns` with `FlatList` instead.",
+    `Each child in a list should have a unique "key" prop.`,
+  ]);
+
   function onAuthStateChanged(user) {
     setUser(user);
     if (initializing) setInitializing(false);

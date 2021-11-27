@@ -12,6 +12,7 @@ import InboxReducer from "./Inbox/reducers";
 import SearchReducer from "./Search/reducers";
 import ProfileReducer from "./Profile/reducers";
 import ThemeReducer from "./Theme/reducers";
+import OrderFoodReducer from "./OrderFood/reducers";
 
 export const rootReducer = combineReducers({
   login: LoginReducer,
@@ -26,5 +27,6 @@ export const rootReducer = combineReducers({
   inbox: InboxReducer,
   search: SearchReducer,
   profile: ProfileReducer,
-  theme: ThemeReducer
+  theme: ThemeReducer,
+  orderFood: OrderFoodReducer
 });

@@ -32,9 +32,8 @@ const FoodHomeScreen = () => {
           paddingVertical: 10,
         }}
       >
-        <Text style={styles.Button2}> Bucket </Text>
-        <Text style={styles.Button2}> History </Text>
         <Text style={styles.Button2}> View Order </Text>
+        <Text style={styles.Button2}> History </Text>
       </View>
       <View
         style={{

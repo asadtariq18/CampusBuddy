@@ -7,7 +7,7 @@ import styles from "./style";
 const CafeHead = ({ image, name, rating }) => {
   const navigation = useNavigation();
   const onPress = () => {
-    navigation.navigate("CafeMenu", cafe={name: name, rating: rating, image: image});
+    navigation.navigate("CafeMenu", {name: name, rating: rating, image: image});
   };
 
   return (
