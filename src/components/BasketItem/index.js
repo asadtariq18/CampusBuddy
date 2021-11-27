@@ -13,13 +13,13 @@ import styles from "./style";
 import { Icon } from "native-base";
 import { COLORS } from "../../Constants/COLORS";
 
-const BasketItem = ({ image, name, price }) => {
+const BasketItem = ({ image, name, price, quantity }) => {
   const item = {
+    quantity: quantity,
     price: price,
     name: name,
     image: image,
   };
-  const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
   const total = useSelector((state) => state.orderFood.total);
   const basket = useSelector((state) => state.orderFood.basket);
@@ -30,8 +30,20 @@ const BasketItem = ({ image, name, price }) => {
       1
     );
     dispatch(setBasket(basket));
-    dispatch(setTotal(total - price))
+    dispatch(setTotal(total - price));
     ToastAndroid.show("Removed", ToastAndroid.SHORT);
+  };
+  const plusPress = () => {
+    basket[basket.findIndex((obj) => obj.name == name)].quantity += 1;
+    dispatch(setTotal(total + item.price));
+    dispatch(setBasket(basket));
+  };
+  const minusPress = () => {
+    if (quantity > 1) {
+    basket[basket.findIndex((obj) => obj.name == name)].quantity -= 1;
+    dispatch(setTotal(total - item.price));
+    dispatch(setBasket(basket));
+    }
   };
 
   return (
@@ -67,13 +79,7 @@ const BasketItem = ({ image, name, price }) => {
               color: COLORS.font,
             }}
             name="minus"
-            onPress={() => {
-              if (quantity > 1) {{
-                setQuantity(quantity - 1);
-            dispatch(setTotal(total - item.price));  
-            }
-              }
-            }}
+            onPress={minusPress}
           />
           <Text
             numberOfLines={1}
@@ -95,9 +101,7 @@ const BasketItem = ({ image, name, price }) => {
               color: COLORS.font,
             }}
             name="plus"
-            onPress={() => {setQuantity(quantity + 1)
-            dispatch(setTotal(total + item.price))
-            }}
+            onPress={plusPress}
           />
           <Icon
             type="FontAwesome"
