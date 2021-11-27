@@ -7,7 +7,6 @@ import {
   ToastAndroid,
 } from "react-native";
 import { COLORS } from "../../Constants/COLORS";
-import CafeHead from "../CafeHead";
 import FoodItem from "../FoodItem";
 
 const MenuList = ({basket}) => {

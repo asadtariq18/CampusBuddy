@@ -25,7 +25,7 @@ const FoodItem = ({ item }) => {
       dispatch(setTotal(total+item.price))
       basket.unshift(item);
       dispatch(setBasket(basket));
-      ToastAndroid.show("Added to Basket", ToastAndroid.SHORT);
+      ToastAndroid.show("Added", ToastAndroid.SHORT);
     }
   };
 
