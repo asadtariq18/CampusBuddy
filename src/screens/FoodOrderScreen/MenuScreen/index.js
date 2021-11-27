@@ -5,7 +5,7 @@ import {
   Image,
   TouchableOpacity,
   View,
-  ScrollView,
+  ToastAndroid,
   StatusBar,
   Modal,
 } from "react-native";
@@ -15,10 +15,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { setTotal } from "../../../Redux/OrderFood/actions";
 import { COLORS } from "../../../Constants/COLORS";
 import styles from "./style";
+import { useNavigation } from "@react-navigation/core";
 
 const MenuScreen = ({ route }) => {
   const dispatch = useDispatch();
-  const total = useSelector((state)=> state.orderFood.total);
+  const navigation  = useNavigation();
+  const total = useSelector((state) => state.orderFood.total);
   const [modal, setModal] = useState(false);
   const basket = useSelector((state) => state.orderFood.basket);
   const cafe = {
@@ -30,6 +32,14 @@ const MenuScreen = ({ route }) => {
   const basketPress = () => {
     setModal(!modal);
   };
+
+  const placeOrder=()=>{
+    if(basket.length !== 0){
+      navigation.navigate("ConfirmOrder")
+    }else{
+      ToastAndroid.show("Basket Empty", ToastAndroid.SHORT);
+    }
+  }
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar showHideTransition backgroundColor={COLORS.primary} />
@@ -52,10 +62,17 @@ const MenuScreen = ({ route }) => {
           paddingVertical: 10,
         }}
       >
-        <TouchableOpacity onPress={basketPress}>
-          <Text style={styles.Button2}> Basket </Text>
-        </TouchableOpacity>
-
+        <View
+          style={{
+            flexDirection: "row",
+            alignSelf: "flex-start",
+          }}
+        >
+          <TouchableOpacity onPress={basketPress}>
+            <Text style={styles.Button2}> Basket </Text>
+          </TouchableOpacity>
+          <Text style={styles.count}> {basket.length} </Text>
+        </View>
         <TouchableOpacity>
           <Text style={styles.Button2}> View Order </Text>
         </TouchableOpacity>
@@ -94,7 +111,9 @@ const MenuScreen = ({ route }) => {
         </View>
         <View style={{ alignSelf: "center" }}>
           <Text style={styles.text}>Your Order</Text>
+          <TouchableOpacity onPress={placeOrder}>
           <Text style={styles.Button3}>Place</Text>
+          </TouchableOpacity>
         </View>
       </View>
       <Modal
