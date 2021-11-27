@@ -30,7 +30,11 @@ export default function App() {
   const [user, setUser] = useState();
   LogBox.ignoreLogs([
     "Setting a timer for a long period of time",
-    `fontFamily "Roboto_medium" is not a system font and has not been loaded through Font.loadAsync.`,
+    `fontFamily "Roboto_medium" is not a system font and has not been loaded through Font.loadAsync.
+
+- If you intended to use a system font, make sure you typed the name correctly and that it is supported by your device operating system.
+
+- If this is a custom font, be sure to load it with Font.loadAsync.`,
     `VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.`,
     "`flexWrap: `wrap`` is not supported with the `VirtualizedList` components.Consider using `numColumns` with `FlatList` instead.",
     `Each child in a list should have a unique "key" prop.`,
