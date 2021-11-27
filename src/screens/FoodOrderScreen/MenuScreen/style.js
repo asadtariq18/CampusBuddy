@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   cafeName: {
+    maxWidth: 210,
     alignSelf: "flex-start",
     fontSize: 30,
     fontWeight: "bold",

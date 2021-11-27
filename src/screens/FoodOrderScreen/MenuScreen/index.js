@@ -39,7 +39,10 @@ const MenuScreen = ({ route }) => {
           alignSelf: "flex-start",
         }}
       >
-        <Text style={styles.cafeName}> {cafe.name}</Text>
+        <Text numberOfLines={1} style={styles.cafeName}>
+          {" "}
+          {cafe.name}
+        </Text>
         <Text style={styles.rating}> {cafe.rating} </Text>
       </View>
       <View
