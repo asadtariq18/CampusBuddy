@@ -14,6 +14,7 @@ import FoodHomeScreen from "../screens/FoodOrderScreen/FoodHomeScreen";
 import { COLORS } from "../Constants/COLORS";
 import DrawerNavigator from "./DrawerNavigator/drawerNavigator";
 import MenuScreen from "../screens/FoodOrderScreen/MenuScreen";
+import ConfirmOrderScreen from "../screens/FoodOrderScreen/ConfirmOrderScreen";
 
 const Stack = createStackNavigator();
 
@@ -155,6 +156,13 @@ const AppStack = () => {
       <Stack.Screen
         name="CafeMenu"
         component={MenuScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ConfirmOrder"
+        component={ConfirmOrderScreen}
         options={{
           headerShown: false,
         }}
