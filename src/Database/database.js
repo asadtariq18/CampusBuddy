@@ -1,6 +1,11 @@
+import React, { useEffect } from "react";
 import * as firebase from "firebase";
 import moment from "moment";
+import Firebase from "../config/Firebase";
+import "firebase/firestore";
 
+const db = firebase.firestore();
+const auth = Firebase.auth();
 function storeUserData(firstName, lastName, mail, gender) {
   firebase
     .database()
@@ -42,7 +47,8 @@ function getUpdatedUserData(mail) {
   return user;
 }
 function getCurrentUser() {
-  const user = getUpdatedUserData("asadtariq070@gmail.com");
+  console.log("");
+  const user = getUpdatedUserData(auth.currentUser.email);
   return user;
 }
 function getUserPosts(userID) {
@@ -58,6 +64,16 @@ function getUserPosts(userID) {
 }
 
 function getPosts() {
+  // let posts = [];
+  // db.collection("posts")
+  //   .get()
+  //   .then((querySnapshot) => {
+  //     querySnapshot.forEach((documentSnapshot) => {
+  //       posts.push(documentSnapshot.data());
+  //     });
+  //     console.log(posts);
+  //     return posts;
+  // });
   let posts = new Object();
   firebase
     .database()
@@ -133,38 +149,54 @@ function uploadUserStory(image) {
 }
 
 function uploadUserPost(caption, privacy, type, image) {
+  const ref = db.collection(`posts`);
   const user = getCurrentUser();
   let timestamp = moment().format("YYYY/MM/D hh:mm");
 
-  firebase
-    .database()
-    .ref(
-      `db/posts/post_${user.userID
-        .toLowerCase()
-        .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
-    )
-    .update({
-      mail: user.mail,
-      userID: user.mail.split("@")[0],
-      postID: `post_${user.userID
-        .toLowerCase()
-        .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`,
-      caption: caption,
-      owner: user.name,
-      privacy: privacy,
-      type: type,
-      image: image,
-      timestamp: timestamp,
-      likes_count: 0,
-      comments_count: 0,
-    });
-  firebase
-    .database()
-    .ref(`db/users/user_${user.userID.toLowerCase()}`)
-    .update({
-      posts_count: user.posts_count + 1,
-      popularity: user.popularity + 3,
-    });
+  ref.add({
+    mail: user.mail,
+    userID: user.mail.split("@")[0],
+    postID: `post_${user.userID
+      .toLowerCase()
+      .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`,
+    caption: caption,
+    owner: user.name,
+    privacy: privacy,
+    type: type,
+    image: image,
+    timestamp: timestamp,
+    likes_count: 0,
+    comments_count: 0,
+  });
+  // firebase
+  //   .database()
+  //   .ref(
+  //     `db/posts/post_${user.userID
+  //       .toLowerCase()
+  //       .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
+  //   )
+  //   .update({
+  //     mail: user.mail,
+  //     userID: user.mail.split("@")[0],
+  //     postID: `post_${user.userID
+  //       .toLowerCase()
+  //       .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`,
+  //     caption: caption,
+  //     owner: user.name,
+  //     privacy: privacy,
+  //     type: type,
+  //     image: image,
+  //     timestamp: timestamp,
+  //     likes_count: 0,
+  //     comments_count: 0,
+  //   });
+  // firebase
+  //   .database()
+  //   .ref(`db/users/user_${user.userID.toLowerCase()}`)
+  //   .update({
+  //     posts_count: user.posts_count + 1,
+  //     popularity: user.popularity + 3,
+  //   });
 }
 
 function uploadDonationHistory(cardDetails, amount) {
@@ -201,7 +233,7 @@ function searchUsers() {
         users = temp;
       });
     return users;
-    console.log(users)
+    console.log(users);
   } catch (error) {
     console.log(error);
   }
