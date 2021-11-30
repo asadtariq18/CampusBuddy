@@ -3,8 +3,8 @@ import Database from "../../Database/database";
 
 const initialState = {
   refreshing: false,
-  user: Database.getCurrentUser(),
-  posts: Database.getPosts(),
+  user: null,
+  posts: null,
 };
 
 function HomeReducer(state = initialState, action) {

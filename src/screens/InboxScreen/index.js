@@ -49,7 +49,7 @@ const InboxScreen = ({ route }) => {
   const user = useSelector((state) => state.inbox.user);
   const { userID } = route.params;
   const chatsRef = db.collection(
-    `Chat_${userID}_&_${database.getCurrentUser().userID}`
+    `Chats`
   );
 
   const [messages, setMessages] = useState([])

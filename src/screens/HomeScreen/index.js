@@ -74,7 +74,7 @@ const HomeScreen = () => {
             showHideTransition
             backgroundColor={COLORS.background_dark}
           />
-          {user.posts_count === 0 ? (
+          {!posts ? (
             <Text
               style={[
                 {
@@ -88,7 +88,7 @@ const HomeScreen = () => {
               ]}
             >
               {" "}
-              Welcome to Campus Buddy, {user.name}{" "}
+              Welcome to Campus Buddy{" "}
             </Text>
           ) : (
             <Feed posts={posts} />
