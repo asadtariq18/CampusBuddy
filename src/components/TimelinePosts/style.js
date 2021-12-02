@@ -9,6 +9,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 7.8,
     paddingBottom: 30,
   },
+  text: {
+    color: COLORS.font,
+    alignSelf: "center",
+  },
 });
 
 export default styles;

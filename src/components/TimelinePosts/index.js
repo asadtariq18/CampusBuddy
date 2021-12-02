@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, ScrollView, View } from "react-native";
+import { FlatList, ScrollView, Text, View } from "react-native";
 import styles from "./style";
 import PostPreview from "../PostPreview";
 import database from "../../Database/database";
+import { COLORS } from "../../Constants/COLORS";
 
-const TimelinePosts = ({ posts }) => {
+const TimelinePosts = ({ posts, user }) => {
   const [postsArray, setPostsArray] = useState(posts);
-  const user = database.getCurrentUser();
   useEffect(() => {
     setPostsArray(
       Object.keys(posts).map(function (_) {
@@ -15,7 +15,26 @@ const TimelinePosts = ({ posts }) => {
     );
   }, [posts]);
   return (
+    
     <ScrollView contentContainerStyle={styles.container}>
+      {user.posts_count === 0 ? (
+        <View style = {{marginStart: 140}}>
+          <Text
+            style={[
+              styles.text,
+              {
+                fontSize: 24,
+                color: COLORS.font_secondary,
+                marginTop: 50,
+                alignSelf: "center"
+              },
+            ]}
+          >
+            {" "}
+            NO POSTS{" "}
+          </Text>
+        </View>
+        ) : (
       <FlatList
         contentContainerStyle={[styles.container, { flexWrap: "wrap" }]}
         data={postsArray}
@@ -27,6 +46,7 @@ const TimelinePosts = ({ posts }) => {
           return null;
         }}
       />
+        )}
     </ScrollView>
   );
 };
