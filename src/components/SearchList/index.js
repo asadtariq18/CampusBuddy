@@ -16,7 +16,10 @@ const SearchList = ({ query }) => {
     );
   }, [query]);
   var filteredResults = searchResult.filter(function (obj) {
-    return obj.name.toLowerCase().includes(query.toLowerCase()) || obj.userID.includes(query.toLowerCase());
+    return (
+      obj.name.toLowerCase().includes(query.toLowerCase()) ||
+      obj.userID.includes(query.toLowerCase())
+    );
   });
 
   if (filteredResults.length === 0) {
@@ -36,13 +39,28 @@ const SearchList = ({ query }) => {
   } else {
     return (
       <View>
-        <Text style={{color: COLORS.font_secondary, marginStart: 10, marginBottom:2, fontSize: 16}}> Users </Text>
-      <FlatList
-        data={filteredResults}
-        keyExtractor={({ id }) => id}
-        renderItem={({ item }) => <SearchHead result={item} />}
+        <Text
+          style={{
+            color: COLORS.font_secondary,
+            marginStart: 10,
+            marginBottom: 2,
+            fontSize: 16,
+          }}
+        >
+          {" "}
+          Users{" "}
+        </Text>
+        <FlatList
+          data={filteredResults}
+          keyExtractor={({ id }) => id}
+          renderItem={({ item }) => {
+            if (item.userID !== database.getCurrentUser().userID) {
+              return <SearchHead result={item} />;
+            }
+            return null;
+          }}
         />
-        </View>
+      </View>
     );
   }
 };

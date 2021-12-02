@@ -8,7 +8,7 @@ import styles from "./style";
 const SearchHead = ({ result }) => {
   const navigation = useNavigation();
   const onPress = () => {
-      alert(`${result.name} Profile`)
+      navigation.navigate("UserProfile", {user: result})
   };
 
   return (
