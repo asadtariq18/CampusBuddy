@@ -17,6 +17,7 @@ import TimelinePosts from "../../components/TimelinePosts";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { setRefreshing, setPosts, setUser } from "../../Redux/Profile/actions";
+import database from "../../Database/database";
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
@@ -127,33 +128,18 @@ const ProfileScreen = () => {
             <Text style={[styles.text, styles.text]}>Popularity</Text>
           </View>
         </View>
-        {user.posts_count === 0 ? (
-          <Text
-            style={[
-              styles.text,
-              {
-                fontSize: 24,
-                color: COLORS.font_secondary,
-                marginTop: 50,
-              },
-            ]}
-          >
-            {" "}
-            NO POSTS{" "}
-          </Text>
-        ) : (
-          <ScrollView
-            contentContainerStyle={{
-              marginTop: 20,
-              backgroundColor: COLORS.secondary,
-              justifyContent: "center",
-              borderRadius: 10,
-              minWidth: 400,
-            }}
-          >
-            <TimelinePosts posts={posts} />
-          </ScrollView>
-        )}
+
+        <ScrollView
+          contentContainerStyle={{
+            marginTop: 20,
+            backgroundColor: COLORS.secondary,
+            justifyContent: "center",
+            borderRadius: 10,
+            minWidth: 400,
+          }}
+        >
+          <TimelinePosts posts={posts} user={user} />
+        </ScrollView>
       </ScrollView>
     </SafeAreaView>
   );
