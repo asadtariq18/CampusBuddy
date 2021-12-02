@@ -22,6 +22,7 @@ function storeUserData(firstName, lastName, mail, gender) {
       popularity: 0,
       friends_count: 0,
       posts_count: 0,
+      friendsList: null
     });
 }
 function updateProfile(data) {
@@ -51,11 +52,22 @@ function getCurrentUser() {
   const user = getUpdatedUserData(auth.currentUser.email);
   return user;
 }
+function getUser(userID) {
+  let user = new Object();
+  firebase
+    .database()
+    .ref(`db/users/user_${userID}`)
+    .on("value", (snapshot) => {
+      const temp = snapshot.val();
+      user = temp;
+    });
+  return user;
+}
 function getUserPosts(userID) {
   let posts = new Object();
   firebase
     .database()
-    .ref(`db/posts`)
+    .ref(`db/posts/${userID}`)
     .on("value", (snapshot) => {
       const temp = snapshot.val();
       posts = temp;
@@ -84,8 +96,56 @@ function getPosts() {
     });
   return posts;
 }
+
+function isFriend(userID) {
+  const self = getCurrentUser();
+  if (self.friendsList.userID === userID) return true;
+  return false;
+}
+
+function isFriendRequestReceived(userID) {
+  console.log(userID)
+  const self = getCurrentUser();
+  if (self.friendRequests) {
+    console.log(self.friendRequests);
+    return true;
+  
+  }return false;
+}
+
+function sendFriendRequest(userID) {
+  let timestamp = moment().format("YYYY/MM/D hh:mm");
+  const self = getCurrentUser();
+  firebase
+    .database()
+    .ref(`db/users/user_${userID}/friendRequests/${self.userID}`)
+    .update({
+        userID: self.userID,
+        name: self.name,
+        image: self.avatar,
+
+    });
+      firebase
+        .database()
+        .ref(
+          `db/users/user_${userID}/notifications/${self.userID
+            .toLowerCase()
+            .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
+        )
+        .update({
+          userID: self.userID,
+          name: self.name,
+          image: self.avatar,
+          notification: "sent you a friend request"
+        });
+}
+
+function getNotifications() {
+  let notifications = getCurrentUser().notifications
+  return notifications;
+}
+
 function likeAction(likes_count, postID) {
-  console.log(postID);
   firebase.database().ref(`db/posts/${postID}`).update({
     likes_count: likes_count,
   });
@@ -149,10 +209,10 @@ function uploadUserStory(image) {
 }
 
 function uploadUserPost(caption, privacy, type, image) {
-  const ref = db.collection(`posts`);
   const user = getCurrentUser();
   let timestamp = moment().format("YYYY/MM/D hh:mm");
 
+  const ref = db.collection(`posts`);
   ref.add({
     mail: user.mail,
     userID: user.mail.split("@")[0],
@@ -168,35 +228,35 @@ function uploadUserPost(caption, privacy, type, image) {
     likes_count: 0,
     comments_count: 0,
   });
-  // firebase
-  //   .database()
-  //   .ref(
-  //     `db/posts/post_${user.userID
-  //       .toLowerCase()
-  //       .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
-  //   )
-  //   .update({
-  //     mail: user.mail,
-  //     userID: user.mail.split("@")[0],
-  //     postID: `post_${user.userID
-  //       .toLowerCase()
-  //       .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`,
-  //     caption: caption,
-  //     owner: user.name,
-  //     privacy: privacy,
-  //     type: type,
-  //     image: image,
-  //     timestamp: timestamp,
-  //     likes_count: 0,
-  //     comments_count: 0,
-  //   });
-  // firebase
-  //   .database()
-  //   .ref(`db/users/user_${user.userID.toLowerCase()}`)
-  //   .update({
-  //     posts_count: user.posts_count + 1,
-  //     popularity: user.popularity + 3,
-  //   });
+  firebase
+    .database()
+    .ref(
+      `db/posts/post_${user.userID
+        .toLowerCase()
+        .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
+    )
+    .update({
+      mail: user.mail,
+      userID: user.mail.split("@")[0],
+      postID: `post_${user.userID
+        .toLowerCase()
+        .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`,
+      caption: caption,
+      owner: user.name,
+      privacy: privacy,
+      type: type,
+      image: image,
+      timestamp: timestamp,
+      likes_count: 0,
+      comments_count: 0,
+    });
+  firebase
+    .database()
+    .ref(`db/users/user_${user.userID.toLowerCase()}`)
+    .update({
+      posts_count: user.posts_count + 1,
+      popularity: user.popularity + 3,
+    });
 }
 
 function uploadDonationHistory(cardDetails, amount) {
@@ -243,10 +303,15 @@ export default {
   storeUserData,
   getUpdatedUserData,
   getCurrentUser,
+  getUser,
   uploadUserPost,
   likeAction,
   uploadUserStory,
   getPosts,
+  isFriend,
+  isFriendRequestReceived,
+  sendFriendRequest,
+  getNotifications,
   searchUsers,
   getUserPosts,
   updateProfile,
