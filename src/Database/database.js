@@ -22,7 +22,7 @@ function storeUserData(firstName, lastName, mail, gender) {
       popularity: 0,
       friends_count: 0,
       posts_count: 0,
-      friendsList: null
+      friendsList: null,
     });
 }
 function updateProfile(data) {
@@ -94,6 +94,7 @@ function getPosts() {
       const temp = snapshot.val();
       posts = temp;
     });
+  // console.log(posts)
   return posts;
 }
 
@@ -104,13 +105,12 @@ function isFriend(userID) {
 }
 
 function isFriendRequestReceived(userID) {
-  console.log(userID)
   const self = getCurrentUser();
   if (self.friendRequests) {
     console.log(self.friendRequests);
     return true;
-  
-  }return false;
+  }
+  return false;
 }
 
 function sendFriendRequest(userID) {
@@ -120,28 +120,27 @@ function sendFriendRequest(userID) {
     .database()
     .ref(`db/users/user_${userID}/friendRequests/${self.userID}`)
     .update({
-        userID: self.userID,
-        name: self.name,
-        image: self.avatar,
-
+      userID: self.userID,
+      name: self.name,
+      image: self.avatar,
     });
-      firebase
-        .database()
-        .ref(
-          `db/users/user_${userID}/notifications/${self.userID
-            .toLowerCase()
-            .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
-        )
-        .update({
-          userID: self.userID,
-          name: self.name,
-          image: self.avatar,
-          notification: "sent you a friend request"
-        });
+  firebase
+    .database()
+    .ref(
+      `db/users/user_${userID}/notifications/${self.userID
+        .toLowerCase()
+        .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
+    )
+    .update({
+      userID: self.userID,
+      name: self.name,
+      image: self.avatar,
+      notification: "sent you a friend request",
+    });
 }
 
 function getNotifications() {
-  let notifications = getCurrentUser().notifications
+  let notifications = getCurrentUser().notifications;
   return notifications;
 }
 
@@ -149,6 +148,30 @@ function likeAction(likes_count, postID) {
   firebase.database().ref(`db/posts/${postID}`).update({
     likes_count: likes_count,
   });
+}
+
+function uploadComment(postID, commentText) {
+  let timestamp = moment().format("YYYY/MM/D hh:mm");
+  let user = getCurrentUser();
+  let commentID = `${user.userID}${moment().format("YYYYMMDDhhmmss")}`;
+  firebase.database().ref(`db/posts/${postID}/comments/${commentID}`).update({
+    commentID: commentID,
+    userID: user.userID,
+    userName: user.name,
+    avatar: user.avatar,
+    commentText: commentText,
+    timestamp: timestamp,
+  });
+}
+
+function getComments(postID) {
+  firebase
+    .database()
+    .ref(`db/posts/${postID}`)
+    .on("value", (snapshot) => {
+      const post = snapshot.val();
+      return post.comments;
+    });
 }
 // const uploadImage = async ({image}) => {
 //   const [uploading, setUploading] = React.useState(false);
@@ -306,6 +329,8 @@ export default {
   getUser,
   uploadUserPost,
   likeAction,
+  uploadComment,
+  getComments,
   uploadUserStory,
   getPosts,
   isFriend,
