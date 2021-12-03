@@ -63,11 +63,13 @@ const MapScreen = () => {
       <GooglePlacesAutocomplete
         placeholder="Search"
         fetchDetails={true}
+        currentLocation={true}
+        currentLocationLabel="Current location"
         GooglePlacesSearchQuery={{
           rankby: "distance",
         }}
         onFail={(e) => {
-          console.log(e);
+          console.log("Error: ", e);
         }}
         onPress={(data, details = null) => {
           // 'details' is provided when fetchDetails = true
@@ -80,17 +82,18 @@ const MapScreen = () => {
           });
         }}
         query={{
-          key: "AIzaSyBklZAtI6iQhA9aG8pfe4jDOLxdeWY4kO4",
+          key: "AIzaSyD8LqtSwhYEG2iLeEOpBD6-R8bgR_27Mio",
           language: "en",
           type: "establishment",
           location: `${region.latitude}, ${region.longitude}`,
         }}
         predefinedPlaces={places}
         onPress={(p) => {
-          setRegion({
-            latitude: p.geometry.location.lat,
-            longitude: p.geometry.location.lng,
-          });
+          console.log("Region: ", p);
+          // setRegion({
+          //   latitude: p.geometry.location.lat,
+          //   longitude: p.geometry.location.lng,
+          // });
         }}
         currentLocation={true}
         styles={{
@@ -147,18 +150,18 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   map: {
-      width: Dimensions.get("window").width - 0,
-      height: Dimensions.get("window").height ,
-      marginTop: 5,
+    width: Dimensions.get("window").width - 0,
+    height: Dimensions.get("window").height,
+    marginTop: 5,
   },
-  text:{
+  text: {
     fontSize: 25,
-    color: COLORS.font
+    color: COLORS.font,
   },
-  header:{
+  header: {
     paddingHorizontal: 10,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginTop: 20,
-  }
+  },
 });
 export default MapScreen;
