@@ -14,7 +14,6 @@ import styles from "./style";
 import database from "../../../Database/database";
 
 const Footer = ({ post }) => {
-
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(post.likes_count);
   const [modalVisible, setModalVisible] = useState(false);
@@ -39,8 +38,7 @@ const Footer = ({ post }) => {
 
   const onPostCommentPress = () => {
     if (comment !== "") {
-      alert(comment);
-    } else {
+      database.uploadComment(post.postID, comment)
     }
   };
 
@@ -127,8 +125,13 @@ const Footer = ({ post }) => {
             <View style={{ alignSelf: "center", marginBottom: 10 }}>
               <Text style={styles.modalText}>Comments</Text>
             </View>
-
-            <CommentList />
+            {post.comments && post.comments ? (
+              <CommentList post={post} />
+            ) : (
+              <View style={styles.centeredView,[{flex: 1, justifyContent: "center", alignItems: "center"}]}>
+              <Text style={{fontSize: 18, color: COLORS.font}}>Be the first to comment</Text>
+              </View>
+            )}
 
             <View
               keyboardShouldPersistTaps="always"

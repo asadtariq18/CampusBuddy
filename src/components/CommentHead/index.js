@@ -5,18 +5,19 @@ import ProfilePicture from "../ProfilePicture";
 
 import styles from "./style";
 
-const CommentHead = ({ imageUri, name, comment }) => {
+const CommentHead = ({ avatar, name, commentText }) => {
+   console.log(commentText)
   const navigation = useNavigation();
   const onPress = () => {
-    navigation.navigate();
+    navigation.navigate("UserProfile",{});
   };
 
   return (
     <View style={styles.container}>
-      <ProfilePicture uri={imageUri} size={25} border={false} />
+      <ProfilePicture uri={avatar} size={25} border={false} />
       <View style={styles.content}>
         <Text style={styles.name}>{name} </Text>
-        <Text style={styles.commentText}>{comment}</Text>
+        <Text style={styles.commentText}>{commentText}</Text>
       </View>
       <View style={{ flexDirection: "row" }}>
       </View>
