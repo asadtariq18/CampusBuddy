@@ -76,10 +76,11 @@ const requestReceived = useSelector((state) => state.userProfile.requestReceived
           </Button>
         </Left>
         <Body style={styles.header}>
-          <Title style={styles.headerText}>{user.name}</Title>
+          <Title style={styles.headerText}>User Profile</Title>
         </Body>
         <Right></Right>
       </Header>
+      {user && user ?
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
@@ -112,7 +113,7 @@ const requestReceived = useSelector((state) => state.userProfile.requestReceived
               { color: COLORS.font_secondary, fontSize: 14 },
             ]}
           >
-            {user.userID.toUpperCase()}
+            {user.userID}
           </Text>
           {database.isFriend(user.userID) ? (
             <TouchableOpacity onPress={messageHandle}>
@@ -207,6 +208,17 @@ const requestReceived = useSelector((state) => state.userProfile.requestReceived
           </View>
         )}
       </ScrollView>
+      :
+      <View
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 300,
+            }}
+          >
+            <ActivityIndicator size={100} color={COLORS.primary} />
+          </View>
+}
     </SafeAreaView>
   );
 };

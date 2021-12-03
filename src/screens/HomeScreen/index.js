@@ -6,6 +6,9 @@ import {
   RefreshControl,
   ToastAndroid,
   Text,
+  View,
+  ActivityIndicator,
+  Platform,
 } from "react-native";
 
 import { Header, Left, Body, Icon, Title, Button, Right } from "native-base";
@@ -60,40 +63,53 @@ const HomeScreen = () => {
         </Right>
       </Header>
       <LinearGradient colors={["#000000", "#000000", "#000000", "#000000"]}>
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              progressBackgroundColor={COLORS.background_dark}
-              colors={[COLORS.primary]}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
+        {user && user ? (
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                progressBackgroundColor={COLORS.background_dark}
+                colors={[COLORS.primary]}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }
+          >
+            <StatusBar
+              showHideTransition
+              backgroundColor={COLORS.background_dark}
             />
-          }
-        >
-          <StatusBar
-            showHideTransition
-            backgroundColor={COLORS.background_dark}
-          />
-          {!posts ? (
-            <Text
-              style={[
-                {
-                  textAlign: "center",
-                  fontSize: 24,
-                  color: COLORS.font_secondary,
-                  marginTop: 50,
-                  justifyContent: "center",
-                  alignItems: "center",
-                },
-              ]}
-            >
-              {" "}
-              Welcome to Campus Buddy{" "}
-            </Text>
-          ) : (
-            <Feed posts={posts} />
-          )}
-        </ScrollView>
+
+            {!posts ? (
+              <Text
+                style={[
+                  {
+                    textAlign: "center",
+                    fontSize: 24,
+                    color: COLORS.font_secondary,
+                    marginTop: 50,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  },
+                ]}
+              >
+                {" "}
+                Welcome to Campus Buddy{" "}
+              </Text>
+            ) : (
+              <Feed posts={posts} />
+            )}
+          </ScrollView>
+        ) : (
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 300,
+            }}
+          >
+            <ActivityIndicator size={100} color={COLORS.primary} />
+          </View>
+        )}
       </LinearGradient>
     </SafeAreaView>
   );

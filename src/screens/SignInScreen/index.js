@@ -9,6 +9,7 @@ import {
   ToastAndroid,
   StatusBar,
   Keyboard,
+  ActivityIndicator
 } from "react-native";
 import { Header } from "native-base";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -26,6 +27,7 @@ import {
   reverseHidePass,
   updateMail,
   updatePass,
+  setLoggingIn
 } from "../../Redux/SignIn/actions";
 import { useDispatch, useSelector } from "react-redux";
 import store from "../../Redux/store";
@@ -40,6 +42,7 @@ const SignInScreen = () => {
   const isEmpty = useSelector((state) => state.login.isEmpty);
   const onFocus = useSelector((state) => state.login.onFocus);
   const hidePass = useSelector((state) => state.login.hidePass);
+  const loggingIn = useSelector((state) => state.login.loggingIn);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -85,6 +88,7 @@ const SignInScreen = () => {
   const onLoginPress = async () => {
     try {
       if (mail !== "" && password !== "") {
+        dispatch(setLoggingIn(true));
         await auth.signInWithEmailAndPassword(mail, password);
         if (auth.currentUser.emailVerified === false) {
           ToastAndroid.showWithGravityAndOffset(
@@ -96,18 +100,19 @@ const SignInScreen = () => {
           );
           navigation.navigate("Email Verification Screen", { mail });
         } else {
-          ToastAndroid.showWithGravityAndOffset(
-            "Logging in...",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER,
-            25,
-            50
-          );
           Database.getUpdatedUserData(mail);
           const user = database.getCurrentUser();
           await AsyncStorage.setItem("user", JSON.stringify(user));
           setUser(user);
-          navigation.navigate("AppStack");
+          dispatch(setLoggingIn(false));
+          ToastAndroid.showWithGravityAndOffset(
+                      "Logged in",
+                      ToastAndroid.SHORT,
+                      ToastAndroid.CENTER,
+                      25,
+                      50
+                    );
+          navigation.getParent.navigate('AppStack')
         }
       }
     } catch (error) {
@@ -115,6 +120,7 @@ const SignInScreen = () => {
         error.message ===
         "There is no user record corresponding to this identifier. The user may have been deleted."
       ) {
+        dispatch(setLoggingIn(false));
         ToastAndroid.showWithGravityAndOffset(
           "This email address is not registered",
           ToastAndroid.SHORT,
@@ -126,6 +132,7 @@ const SignInScreen = () => {
         error.message ===
         "The password is invalid or the user does not have a password."
       ) {
+        dispatch(setLoggingIn(false));
         ToastAndroid.showWithGravityAndOffset(
           "Wrong credentials",
           ToastAndroid.SHORT,
@@ -134,6 +141,7 @@ const SignInScreen = () => {
           50
         );
       } else {
+        dispatch(setLoggingIn(false));
         ToastAndroid.showWithGravityAndOffset(
           "An error occurred",
           ToastAndroid.SHORT,
@@ -200,7 +208,11 @@ const SignInScreen = () => {
             </View>
           ) : (
             <View style={styles.buttonView}>
+              {loggingIn ? 
+              <ActivityIndicator size='large' color={COLORS.primary} />
+              :
               <Text style={styles.button2}>Log in</Text>
+            }
             </View>
           )}
         </TouchableOpacity>

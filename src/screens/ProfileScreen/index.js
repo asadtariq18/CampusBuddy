@@ -63,84 +63,96 @@ const ProfileScreen = () => {
           </Button>
         </Right>
       </Header>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            progressBackgroundColor={COLORS.background_dark}
-            colors={[COLORS.primary]}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }
-      >
-        <View style={{ alignSelf: "center" }}>
-          <View style={styles.profileImage}>
-            <Image
-              source={{
-                uri: `${user.avatar}`,
-              }}
-              style={styles.image}
-            />
-          </View>
-        </View>
-
-        <View style={styles.infoContainer}>
-          <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>
-            {user.name}
-          </Text>
-          <Text
-            style={[
-              styles.text,
-              { color: COLORS.font_secondary, fontSize: 14 },
-            ]}
-          >
-            {user.userID.toUpperCase()}
-          </Text>
-        </View>
-
-        <View style={styles.statsContainer}>
-          <View style={styles.statsBox}>
-            <Text style={[styles.text, { fontSize: 24 }]}>
-              {user.posts_count}
-            </Text>
-            <Text style={[styles.text, styles.text]}>Posts</Text>
-          </View>
-          <View
-            style={[
-              styles.statsBox,
-              {
-                borderColor: COLORS.icon,
-                borderLeftWidth: 1,
-                borderRightWidth: 1,
-              },
-            ]}
-          >
-            <Text style={[styles.text, { fontSize: 24 }]}>
-              {user.friends_count}
-            </Text>
-            <Text style={[styles.text, styles.text]}>Friends</Text>
-          </View>
-          <View style={styles.statsBox}>
-            <Text style={[styles.text, { fontSize: 24 }]}>
-              {user.popularity}
-            </Text>
-            <Text style={[styles.text, styles.text]}>Popularity</Text>
-          </View>
-        </View>
-
+      {user && user ? (
         <ScrollView
-          contentContainerStyle={{
-            marginTop: 20,
-            backgroundColor: COLORS.secondary,
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              progressBackgroundColor={COLORS.background_dark}
+              colors={[COLORS.primary]}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
+        >
+          <View style={{ alignSelf: "center" }}>
+            <View style={styles.profileImage}>
+              <Image
+                source={{
+                  uri: `${user.avatar}`,
+                }}
+                style={styles.image}
+              />
+            </View>
+          </View>
+
+          <View style={styles.infoContainer}>
+            <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>
+              {user.name}
+            </Text>
+            <Text
+              style={[
+                styles.text,
+                { color: COLORS.font_secondary, fontSize: 14 },
+              ]}
+            >
+              {user.userID}
+            </Text>
+          </View>
+
+          <View style={styles.statsContainer}>
+            <View style={styles.statsBox}>
+              <Text style={[styles.text, { fontSize: 24 }]}>
+                {user.posts_count}
+              </Text>
+              <Text style={[styles.text, styles.text]}>Posts</Text>
+            </View>
+            <View
+              style={[
+                styles.statsBox,
+                {
+                  borderColor: COLORS.icon,
+                  borderLeftWidth: 1,
+                  borderRightWidth: 1,
+                },
+              ]}
+            >
+              <Text style={[styles.text, { fontSize: 24 }]}>
+                {user.friends_count}
+              </Text>
+              <Text style={[styles.text, styles.text]}>Friends</Text>
+            </View>
+            <View style={styles.statsBox}>
+              <Text style={[styles.text, { fontSize: 24 }]}>
+                {user.popularity}
+              </Text>
+              <Text style={[styles.text, styles.text]}>Popularity</Text>
+            </View>
+          </View>
+
+          <ScrollView
+            contentContainerStyle={{
+              marginTop: 20,
+              backgroundColor: COLORS.secondary,
+              justifyContent: "center",
+              borderRadius: 10,
+              minWidth: 400,
+            }}
+          >
+            <TimelinePosts posts={posts} user={user} />
+          </ScrollView>
+        </ScrollView>
+      ) : (
+        <View
+          style={{
+            alignItems: "center",
             justifyContent: "center",
-            borderRadius: 10,
-            minWidth: 400,
+            marginTop: 300,
           }}
         >
-          <TimelinePosts posts={posts} user={user} />
-        </ScrollView>
-      </ScrollView>
+          <ActivityIndicator size={100} color={COLORS.primary} />
+        </View>
+      )}
     </SafeAreaView>
   );
 };

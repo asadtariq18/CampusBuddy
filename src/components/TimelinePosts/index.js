@@ -40,6 +40,7 @@ const TimelinePosts = ({ posts, user }) => {
         data={postsArray}
         keyExtractor={({ id }) => id}
         renderItem={({ item }) => {
+          //console.log(item)
           if (item.userID === user.userID) {
             return <PostPreview post={item} />;
           }

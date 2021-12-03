@@ -1,13 +1,16 @@
 export const IS_EMPTY_CHANGE = "IS_EMPTY_CHANGE";
+export const LOGGING_IN = "LOGGING_IN";
 export const UPDATE_MAIL = "UPDATE_MAIL";
 export const UPDATE_PASS = "UPDATE_PASS";
 export const REVERSE_HIDE_PASS = "REVERSE_HIDE PASS";
-export const ON_FOCUS_CHANGE= "ON_FOCUS_CHANGE"
+export const ON_FOCUS_CHANGE= "ON_FOCUS_CHANGE";
 
 export const isEmptyChange=(value)=>{
     return {actionValue: value, type: IS_EMPTY_CHANGE}
 }
-
+export const setLoggingIn = (value) => {
+  return { actionValue: value, type: LOGGING_IN};
+};
 export const onFocusChange=(value)=>{
     return {actionValue: value, type: ON_FOCUS_CHANGE}
 }
