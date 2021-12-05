@@ -20,6 +20,8 @@ import * as Permissions from "expo-permissions";
 import Database from "../../Database/database";
 import { useDispatch, useSelector } from "react-redux";
 import { setCaption, setType, setPrivacy, setImage } from "../../Redux/CreatePost/actions";
+import { setPosts } from "../../Redux/Home/actions";
+import database from "../../Database/database";
 const CreatePostScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -70,7 +72,13 @@ const CreatePostScreen = () => {
       } else {
         ToastAndroid.show("Uploading your post", ToastAndroid.LONG);
         Database.uploadUserPost(caption, privacy, type, image);
+            dispatch(
+              setPosts(
+               database.getPosts()
+              )
+            );
         navigation.navigate("Home");
+
         dispatch(setCaption(""));
         dispatch(setImage(icon));
         dispatch(setType("status"));

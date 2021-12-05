@@ -20,6 +20,7 @@ import * as Permissions from "expo-permissions";
 import Database from "../../Database/database";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsDone, setImage, setInfo } from "../../Redux/EditProfile/actions";
+import { setUser} from "../../Redux/Profile/actions";
 
 const EditProfileScreen = () => {
   const dispatch = useDispatch();
@@ -85,6 +86,7 @@ const EditProfileScreen = () => {
       Keyboard.dismiss();
       Database.updateProfile(newData);
       navigation.navigate("Feed");
+      dispatch(setUser(Database.getCurrentUser()));
       ToastAndroid.showWithGravity(
         "Changes Saved",
         ToastAndroid.TOP,
