@@ -12,6 +12,8 @@ import { COLORS } from "../../../Constants/COLORS";
 import CommentList from "../../CommentList/index";
 import styles from "./style";
 import database from "../../../Database/database";
+import { setCommentsArray } from "../../../Redux/Post/actions";
+import { useDispatch, useSelector } from "react-redux";
 
 const Footer = ({ post }) => {
   const [isLiked, setIsLiked] = useState(false);
@@ -19,8 +21,13 @@ const Footer = ({ post }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isEmpty, setIsEmpty] = useState(true);
   const [comment, setComment] = useState("");
+  const commentsArray = useSelector((state)=> state.post.commentsArray)
   const [refreshing, setRefreshing] = React.useState(false);
+const dispatch = useDispatch()
 
+  useEffect(() => {
+    dispatch(setCommentsArray(database.getComments(post.postID)));
+  }, [post]);
   const onLikePressed = () => {
     const amount = isLiked ? -1 : 1;
     setLikesCount(likesCount + amount);
@@ -33,12 +40,19 @@ const Footer = ({ post }) => {
   };
 
   const onCommentPressed = () => {
+    if(database.getComments(post.postID)){
+      dispatch(setCommentsArray(database.getComments(post.postID)))
+      console.log(commentsArray)
+    }
     setModalVisible(true);
   };
 
   const onPostCommentPress = () => {
-    if (comment !== "") {
+    if (comment) {
       database.uploadComment(post.postID, comment)
+      dispatch(setCommentsArray(database.getComments(post.postID)))
+      setComment('')
+      onRefresh()
     }
   };
 
@@ -60,8 +74,8 @@ const Footer = ({ post }) => {
     setRefreshing(true);
     if (true) {
       try {
+        dispatch(setCommentsArray(database.getComments(post.postID)))
         setRefreshing(false);
-        ToastAndroid.show("Updated", ToastAndroid.SHORT);
       } catch (error) {
         console.error(error);
       }
@@ -125,7 +139,7 @@ const Footer = ({ post }) => {
             <View style={{ alignSelf: "center", marginBottom: 10 }}>
               <Text style={styles.modalText}>Comments</Text>
             </View>
-            {post.comments && post.comments ? (
+            {commentsArray ? (
               <CommentList post={post} />
             ) : (
               <View style={styles.centeredView,[{flex: 1, justifyContent: "center", alignItems: "center"}]}>

@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.secondary,
     flexDirection: "row",
     marginBottom: 10,
-    padding: 5
+    padding: 5,
   },
   name: {
     fontWeight: "bold",
@@ -17,10 +17,14 @@ const styles = StyleSheet.create({
   commentText: {
     color: COLORS.font_secondary,
   },
-  content:{
-    paddingEnd:40
-
-  }
+  timestamp: {
+    color: COLORS.font_secondary,
+    textAlign: 'right',
+    fontSize: 12,
+  },
+  content: {
+    paddingEnd: 40,
+  },
 });
 
 export default styles;

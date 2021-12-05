@@ -6,36 +6,26 @@ import {
   ToastAndroid,
 } from "react-native";
 import CommentHead from "../CommentHead/index";
-import data from "../../Data/CommentData/commentData";
 import { COLORS } from "../../Constants/COLORS";
-import { View } from "native-base";
 import database from "../../Database/database";
+import { setCommentsArray } from "../../Redux/Post/actions";
+import { useDispatch, useSelector } from "react-redux";
 
 const CommentList = ({ post }) => {
+  const dispatch = useDispatch();
   const [refreshing, setRefreshing] = React.useState(false);
-  const [comments, setComments] = React.useState(post.comments);
-  const [commentsArray, setCommentsArray] = React.useState();
+  const commentsArray = useSelector((state) => state.post.commentsArray);
 
   React.useEffect(() => {
-    setComments(database.getComments(post.postID));
-    setCommentsArray(
-      Object.keys(comments).map(function (_) {
-        return comments[_];
-      })
-    );
+    dispatch(setCommentsArray(database.getComments(post.postID)));
+    onRefresh();
   }, [post]);
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     if (true) {
       try {
-        setComments(database.getComments(post.postID));
-        setCommentsArray(
-          Object.keys(comments).map(function (_) {
-            return comments[_];
-          })
-        );
+        dispatch(setCommentsArray(database.getComments(post.postID)));
         setRefreshing(false);
-        ToastAndroid.show("Updated", ToastAndroid.SHORT);
       } catch (error) {
         console.error(error);
       }
@@ -58,17 +48,7 @@ const CommentList = ({ post }) => {
         />
       }
       renderItem={({ item }) => {
-        let comment = {};
-        Object.keys(item).forEach(function (key) {
-          comment = item[key];
-        });
-        return (
-          <CommentHead
-            avatar={comment.avatar}
-            name={comment.userName}
-            commentText={comment.commentText}
-          />
-        );
+        return <CommentHead comment={item} />;
       }}
     />
   );
