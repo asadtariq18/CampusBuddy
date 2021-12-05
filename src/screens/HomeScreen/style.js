@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.background_dark,
     flex: 1,
+    marginBottom: 60
   },
   header: {
     backgroundColor: COLORS.background_dark,
