@@ -63,7 +63,7 @@ export function DrawerContent(props) {
             <View style={styles.row}>
               <View style={styles.section}>
                 <Paragraph style={[styles.paragraph, styles.caption]}>
-                  {Database.getCurrentUser().friends_count}
+                  {Database.getFriends(Database.getCurrentUser().userID).length}
                 </Paragraph>
                 <Caption style={styles.caption}>Friends</Caption>
                 <Paragraph style={[styles.paragraph, styles.caption]}>

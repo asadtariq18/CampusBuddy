@@ -32,9 +32,12 @@ const UserProfileScreen = ({ route }) => {
   const { user } = route.params;
   const posts = useSelector((state) => state.userProfile.posts);
   const requestSent = useSelector((state) => state.userProfile.requestSent);
-const requestReceived = useSelector((state) => state.userProfile.requestReceived);
+  const requestReceived = useSelector(
+    (state) => state.userProfile.requestReceived
+  );
   useEffect(() => {
     dispatch(setPosts(Database.getPosts()));
+    dispatch(setRequestReceived(database.isFriendRequestReceived()));
   }, []);
 
   const onRefresh = React.useCallback(async () => {
@@ -51,16 +54,21 @@ const requestReceived = useSelector((state) => state.userProfile.requestReceived
   const addFriendHandle = () => {
     database.sendFriendRequest(user.userID);
     dispatch(setRequestSent(true));
+    onRefresh();
     ToastAndroid.show("Request Sent", ToastAndroid.SHORT);
   };
   const CancelRequestHandle = () => {
-    //database.cancelFriendRequest(user.userID);
+    database.removeFriendRequest();
     dispatch(setRequestSent(false));
+    onRefresh();
     ToastAndroid.show("Request Cancelled", ToastAndroid.SHORT);
   };
-    const acceptRequestHandle = () => {
-    //database.cancelFriendRequest(user.userID);
-    ToastAndroid.show("Accepting Request", ToastAndroid.SHORT);
+  const acceptRequestHandle = () => {
+    database.acceptFriendRequest(user.userID);
+    database.removeFriendRequest();
+    dispatch(setRequestReceived(false));
+    dispatch(setRequestSent(false));
+    onRefresh();
   };
   const messageHandle = () => {
     //database.cancelFriendRequest(user.userID);
@@ -80,66 +88,60 @@ const requestReceived = useSelector((state) => state.userProfile.requestReceived
         </Body>
         <Right></Right>
       </Header>
-      {user && user ?
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            progressBackgroundColor={COLORS.background_dark}
-            colors={[COLORS.primary]}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }
-      >
-        <View style={{ alignSelf: "center" }}>
-          <View style={styles.profileImage}>
-            <Image
-              source={{
-                uri: `${user.avatar}`,
-              }}
-              style={styles.image}
+      {user && user ? (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              progressBackgroundColor={COLORS.background_dark}
+              colors={[COLORS.primary]}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
             />
+          }
+        >
+          <View style={{ alignSelf: "center" }}>
+            <View style={styles.profileImage}>
+              <Image
+                source={{
+                  uri: `${user.avatar}`,
+                }}
+                style={styles.image}
+              />
+            </View>
           </View>
-        </View>
-
-        <View style={styles.infoContainer}>
-          <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>
-            {user.name}
-          </Text>
-          <Text
-            style={[
-              styles.text,
-              { color: COLORS.font_secondary, fontSize: 14 },
-            ]}
-          >
-            {user.userID}
-          </Text>
           {database.isFriend(user.userID) ? (
-            <TouchableOpacity onPress={messageHandle}>
-              <Text style={[styles.button, { fontSize: 20 }]}>Message</Text>
-            </TouchableOpacity>
+            <View style={styles.infoContainer}>
+              <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>
+                {user.name}
+              </Text>
+              <Text
+                style={[
+                  styles.text,
+                  { color: COLORS.font_secondary, fontSize: 14 },
+                ]}
+              >
+                {user.userID}
+              </Text>
+
+              <TouchableOpacity onPress={messageHandle}>
+                <Text style={[styles.button, { fontSize: 20 }]}>Message</Text>
+              </TouchableOpacity>
+            </View>
           ) : (
-            [
-              !requestSent ? (
-                <TouchableOpacity onPress={addFriendHandle}>
-                  <Text style={[styles.button, { fontSize: 20 }]}>
-                    Add Friend
-                  </Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity onPress={CancelRequestHandle}>
-                  <Text
-                    style={[
-                      styles.button,
-                      { fontSize: 20, backgroundColor: COLORS.tertiary },
-                    ]}
-                  >
-                    Cancel Request
-                  </Text>
-                </TouchableOpacity>
-              ),
-              requestReceived ? (
+            <View style={styles.infoContainer}>
+              <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>
+                {user.name}
+              </Text>
+              <Text
+                style={[
+                  styles.text,
+                  { color: COLORS.font_secondary, fontSize: 14 },
+                ]}
+              >
+                {user.userID}
+              </Text>
+              {database.isFriendRequestReceived(user.userID) ? (
                 <TouchableOpacity onPress={acceptRequestHandle}>
                   <Text
                     style={[
@@ -150,75 +152,108 @@ const requestReceived = useSelector((state) => state.userProfile.requestReceived
                     Accept Request
                   </Text>
                 </TouchableOpacity>
-              ) : null,
-            ]
+              ) : (
+                [
+                  requestSent ? (
+                    <TouchableOpacity onPress={CancelRequestHandle}>
+                      <Text
+                        style={[
+                          styles.button,
+                          { fontSize: 20, backgroundColor: COLORS.tertiary },
+                        ]}
+                      >
+                        Cancel Request
+                      </Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity onPress={addFriendHandle}>
+                      <Text style={[styles.button, { fontSize: 20 }]}>
+                        Add Friend
+                      </Text>
+                    </TouchableOpacity>
+                  ),
+
+                  null,
+                ]
+              )}
+            </View>
           )}
-        </View>
 
-        <View style={styles.statsContainer}>
-          <View style={styles.statsBox}>
-            <Text style={[styles.text, { fontSize: 24 }]}>
-              {user.posts_count}
-            </Text>
-            <Text style={[styles.text, styles.text]}>Posts</Text>
+          <View style={styles.statsContainer}>
+            <View style={styles.statsBox}>
+              <Text style={[styles.text, { fontSize: 24 }]}>
+                {user.posts_count}
+              </Text>
+              <Text style={[styles.text, styles.text]}>Posts</Text>
+            </View>
+            <View
+              style={[
+                styles.statsBox,
+                {
+                  borderColor: COLORS.icon,
+                  borderLeftWidth: 1,
+                  borderRightWidth: 1,
+                },
+              ]}
+            >
+              {database.isFriend(user.userID) ? (
+                <TouchableOpacity onPress={()=> navigation.navigate('FriendsListScreen', {userID : user.userID} )}>
+                  <Text style={[styles.text, { fontSize: 24 }]}>
+                    {database.getFriends(user.userID).length}
+                  </Text>
+                  <Text style={[styles.text, styles.text]}>Friends</Text>
+                </TouchableOpacity>
+              ) : (
+                <View>
+                  <Text style={[styles.text, { fontSize: 24 }]}>
+                    {database.getFriends(user.userID).length}
+                  </Text>
+                  <Text style={[styles.text, styles.text]}>Friends</Text>
+                </View>
+              )}
+            </View>
+            <View style={styles.statsBox}>
+              <Text style={[styles.text, { fontSize: 24 }]}>
+                {user.popularity}
+              </Text>
+              <Text style={[styles.text, styles.text]}>Popularity</Text>
+            </View>
           </View>
-          <View
-            style={[
-              styles.statsBox,
-              {
-                borderColor: COLORS.icon,
-                borderLeftWidth: 1,
-                borderRightWidth: 1,
-              },
-            ]}
-          >
-            <Text style={[styles.text, { fontSize: 24 }]}>
-              {user.friends_count}
-            </Text>
-            <Text style={[styles.text, styles.text]}>Friends</Text>
-          </View>
-          <View style={styles.statsBox}>
-            <Text style={[styles.text, { fontSize: 24 }]}>
-              {user.popularity}
-            </Text>
-            <Text style={[styles.text, styles.text]}>Popularity</Text>
-          </View>
-        </View>
-        {database.isFriend(user.userID) ? (
-          <ScrollView
-            contentContainerStyle={{
-              marginTop: 20,
-              backgroundColor: COLORS.secondary,
-              justifyContent: "center",
-              borderRadius: 10,
-              minWidth: 400,
-            }}
-          >
-            <TimelinePosts posts={posts} user={user} />
-          </ScrollView>
-        ) : (
-          <View style={{ alignItems: "center", marginTop: 50 }}>
-            <Text style={styles.headerText}> Private </Text>
+          {database.isFriend(user.userID) ? (
+            <ScrollView
+              contentContainerStyle={{
+                marginTop: 20,
+                backgroundColor: COLORS.secondary,
+                justifyContent: "center",
+                borderRadius: 10,
+                minWidth: 400,
+              }}
+            >
+              <TimelinePosts posts={posts} user={user} />
+            </ScrollView>
+          ) : (
+            <View style={{ alignItems: "center", marginTop: 50 }}>
+              <Text style={styles.headerText}> Private </Text>
 
-            <Image
-              style={styles.image2}
-              source={require("../../Constants/profileLock.png")}
-            />
-            <Text style={styles.headerText}> Add friend to see posts </Text>
-          </View>
-        )}
-      </ScrollView>
-      :
-      <View
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              marginTop: 300,
-            }}
-          >
-            <ActivityIndicator size={100} color={COLORS.primary} />
-          </View>
-}
+              <Image
+                style={styles.image2}
+                source={require("../../Constants/profileLock.png")}
+              />
+              <Text style={styles.headerText}> Add friend to see posts </Text>
+            </View>
+          )}
+        </ScrollView>
+      ) : (
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 300,
+          }}
+        >
+          <ActivityIndicator size={100} color={COLORS.primary} />
+        </View>
+      )}
     </SafeAreaView>
   );
 };

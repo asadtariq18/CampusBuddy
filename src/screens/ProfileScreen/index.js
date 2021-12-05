@@ -8,6 +8,7 @@ import {
   RefreshControl,
   ToastAndroid,
   StatusBar,
+  TouchableOpacity
 } from "react-native";
 import { Header, Left, Body, Icon, Title, Button, Right } from "native-base";
 import styles from "./style";
@@ -29,6 +30,7 @@ const ProfileScreen = () => {
   useEffect(() => {
     dispatch(setUser(Database.getCurrentUser()));
     dispatch(setPosts(Database.getPosts()));
+    onRefresh()
   }, []);
 
   const onRefresh = React.useCallback(async () => {
@@ -117,10 +119,12 @@ const ProfileScreen = () => {
                 },
               ]}
             >
+              <TouchableOpacity onPress={()=> navigation.navigate('FriendsListScreen', {userID : user.userID})} >
               <Text style={[styles.text, { fontSize: 24 }]}>
-                {user.friends_count}
+                {database.getFriends(user.userID).length}
               </Text>
               <Text style={[styles.text, styles.text]}>Friends</Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.statsBox}>
               <Text style={[styles.text, { fontSize: 24 }]}>

@@ -15,6 +15,8 @@ import ThemeReducer from "./Theme/reducers";
 import OrderFoodReducer from "./OrderFood/reducers";
 import UserProfileReducer from "./UserProfile/reducers";
 import TimelineReducer from "./Timeline/reducers";
+import PostReducer from "./Post/reducers";
+import FeedReducer from "./Feed/reducers";
 
 export const rootReducer = combineReducers({
   login: LoginReducer,
@@ -33,4 +35,7 @@ export const rootReducer = combineReducers({
   theme: ThemeReducer,
   orderFood: OrderFoodReducer,
   userProfile: UserProfileReducer,
+  post: PostReducer,
+  feed: FeedReducer,
+  
 });

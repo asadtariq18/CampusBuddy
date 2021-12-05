@@ -16,6 +16,7 @@ import DrawerNavigator from "./DrawerNavigator/drawerNavigator";
 import MenuScreen from "../screens/FoodOrderScreen/MenuScreen";
 import ConfirmOrderScreen from "../screens/FoodOrderScreen/ConfirmOrderScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
+import FriendsListScreen from "../screens/FriendsListScreen";
 
 const Stack = createStackNavigator();
 
@@ -171,6 +172,13 @@ const AppStack = () => {
       <Stack.Screen
         name="UserProfile"
         component={UserProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FriendsListScreen"
+        component={FriendsListScreen}
         options={{
           headerShown: false,
         }}

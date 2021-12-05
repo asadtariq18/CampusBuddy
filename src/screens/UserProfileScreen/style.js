@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   profileImage: {
+    backgroundColor: COLORS.primary,
     width: 200,
     height: 200,
     marginTop: 20,
