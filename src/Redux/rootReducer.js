@@ -17,6 +17,7 @@ import UserProfileReducer from "./UserProfile/reducers";
 import TimelineReducer from "./Timeline/reducers";
 import PostReducer from "./Post/reducers";
 import FeedReducer from "./Feed/reducers";
+import StoryReducer from "./Story/reducers";
 
 export const rootReducer = combineReducers({
   login: LoginReducer,
@@ -37,5 +38,6 @@ export const rootReducer = combineReducers({
   userProfile: UserProfileReducer,
   post: PostReducer,
   feed: FeedReducer,
+  story: StoryReducer,
   
 });

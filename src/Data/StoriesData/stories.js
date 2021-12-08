@@ -6,18 +6,20 @@ export default [
         "https://cdn.izoomyou.app/aHR0cHM6Ly9zY29udGVudC1pYWQzLTEuY2RuaW5zdGFncmFtLmNvbS92L3Q1MS4yODg1LTE5LzY3NjA3MDMzXzEzNzExNTA0MTMwMjI5MTJfNDY1MDQwMDcyNDc4NDUxMzAyNF9uLmpwZz9fbmNfaHQ9c2NvbnRlbnQtaWFkMy0xLmNkbmluc3RhZ3JhbS5jb20mX25jX29oYz1mVUk4X2wwaGoxZ0FYLTZIaHlWJmVkbT1BRUY4dFlZQkFBQUEmY2NiPTctNCZvaD1jNjBlNzc4ODFlMzc0MDVjN2QwNmQwMzlhOTlhZDZmMiZvZT02MTNEMTE0NCZfbmNfc2lkPWE5NTEzZA==",
       name: "Asad",
     },
-    stories: {
-      id: "s1",
-      media:
-        "https://camo.envatousercontent.com/5ca5bae8a99298ea2a8be3e35d304000060a2085/687474703a2f2f6e69782d73747564696f2d65646974696f6e2e72752f696d616765732f766964656f686976652f666f6f642d696e7374612e6a7067",
-      postedAt: '12:00 AM'
+    stories: [
+      {
+        id: "s1",
+        imageUri:
+          "https://camo.envatousercontent.com/5ca5bae8a99298ea2a8be3e35d304000060a2085/687474703a2f2f6e69782d73747564696f2d65646974696f6e2e72752f696d616765732f766964656f686976652f666f6f642d696e7374612e6a7067",
+        postedAt: "12:00 AM",
       },
+    ],
   },
   {
     user: {
       id: "1",
       imageUri:
-        "https://cdn.izoomyou.app/aHR0cHM6Ly9zY29udGVudC1pYWQzLTEuY2RuaW5zdGFncmFtLmNvbS92L3Q1MS4yODg1LTE5LzE5ODI5MTgzMF8xMDgyNTg5MzE0ODI3NjJfNjQ4MzU1MDU1MDk3MTkyMTIyN19uLmpwZz9fbmNfaHQ9c2NvbnRlbnQtaWFkMy0xLmNkbmluc3RhZ3JhbS5jb20mX25jX29oYz1vdndaQmpjMkh1TUFYX2xRMFZUJmVkbT1BRUY4dFlZQkFBQUEmY2NiPTctNCZvaD1hMzQxZTkzZWU5YzY5NGJhMTQ4ZGU1MGZjYWU3OGQyYiZvZT02MTNEMzYwOSZfbmNfc2lkPWE5NTEzZA==",
+        "https://images.pexels.com/photos/1212487/pexels-photo-1212487.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
       name: "Alina",
     },
     stories: [
@@ -26,18 +28,21 @@ export default [
         imageUri:
           "https://i.insider.com/5d03aa8e6fc9201bc7002b43?width=1136&format=jpeg",
         postedTime: "25 m",
+        views: 50,
       },
       {
         id: "2w",
         imageUri:
           "https://images.unsplash.com/photo-1526512340740-9217d0159da9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80",
         postedTime: "25 m",
+        views: 45,
       },
       {
         id: "3w",
         imageUri:
-          "https://lh3.googleusercontent.com/proxy/cTB66Af39yCQmn0Z5Dy9YGYG8NCTmtLVB4QzOYNMs6ejl3SpWcGK6rEsIKCDpeeetC8b5jE5iyDk-suYMRDJe5zvmfjYAmuzDG5JcKnQQ59pI9caMwYrg5aTjqoEgVzaBNH7BvUkGk8TXsqSYTutYCkuBYp6osmM",
+          "https://images.unsplash.com/photo-1611068813580-b07ef920964b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8d2FsbHBhcGVyJTIwZm9yJTIwbW9iaWxlfGVufDB8fDB8fA%3D%3D&w=1000&q=80",
         postedTime: "25 m",
+        views: 23,
       },
     ],
   },

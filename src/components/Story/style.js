@@ -3,7 +3,11 @@ import {COLORS} from '../../Constants/COLORS';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.secondary,
+    borderRadius: 20,
+    padding: 15,
+    marginHorizontal: 3,
+  },
+  myContainer: {
     borderRadius: 20,
     padding: 15,
     marginHorizontal: 3,

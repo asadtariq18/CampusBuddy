@@ -150,8 +150,9 @@ function removeFriendRequest(userID) {
     .remove();
 }
 function sendFriendRequest(userID) {
-  let timestamp = moment().format("YYYY/MM/D hh:mm");
+  let timestamp = moment().format("YYYYMMDDhhmmss");
   const self = getCurrentUser();
+  const notificationText = "sent you a friend request"
   firebase
     .database()
     .ref(`db/users/user_${userID}/friendRequests/${self.userID}`)
@@ -160,6 +161,11 @@ function sendFriendRequest(userID) {
       name: self.name,
       image: self.avatar,
     });
+    sendNotification(userID, timestamp, notificationText)
+}
+
+function sendNotification(userID, timestamp, notificationText){
+    const self = getCurrentUser();
   firebase
     .database()
     .ref(
@@ -169,9 +175,8 @@ function sendFriendRequest(userID) {
     )
     .update({
       userID: self.userID,
-      name: self.name,
-      image: self.avatar,
-      notification: "sent you a friend request",
+      notification: notificationText,
+      timestamp: timestamp
     });
 }
 function getFriends(userID) {
@@ -181,7 +186,7 @@ function getFriends(userID) {
     .ref(`db/users/user_${userID}`)
     .on("value", (snapshot) => {
       const u = snapshot.val();
-      console.log(u.friendsList)
+      // console.log(u.friendsList);
       if (u.friendsList) {
         friendsArray = Object.keys(u.friendsList).map(function (_) {
           return u.friendsList[_];
@@ -223,11 +228,11 @@ function getComments(postID) {
     .ref(`db/posts/${postID}`)
     .on("value", (snapshot) => {
       const p = snapshot.val();
-      if(p.comments){
-      commentsArray = Object.keys(p.comments).map(function (_) {
-        return p.comments[_];
-      });
-    }
+      if (p.comments) {
+        commentsArray = Object.keys(p.comments).map(function (_) {
+          return p.comments[_];
+        });
+      }
     });
   return commentsArray;
 }
@@ -235,7 +240,10 @@ const uploadImage = async (uri) => {
   let timestamp = moment().format("YYYYMMDDhhmmss");
   const response = await fetch(uri);
   const blob = await response.blob();
-  var ref = firebase.storage().ref().child("image"+timestamp);
+  var ref = firebase
+    .storage()
+    .ref()
+    .child("image" + timestamp);
   return ref.put(blob);
 };
 // const uploadImage = async ({image}) => {
@@ -278,22 +286,44 @@ const uploadImage = async (uri) => {
 
 function uploadUserStory(image) {
   const user = getCurrentUser();
-  let timestamp = moment().format("YYYY/MM/D hh:mm");
+  let timestamp = moment().format("YYYYMMDDhhmmss");
 
   firebase
     .database()
-    .ref(
-      `db/stories/story_${user.userID
-        .toLowerCase()
-        .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
-    )
+    .ref(`db/stories/${user.userID.toLowerCase()}`)
     .update({
-      userID: user.mail.split("@")[0],
-      owner: user.name,
-      image: image,
-      timestamp: timestamp,
-      views: 0,
+      user:{
+        userID: user.userID
+      },
     });
+
+      firebase
+        .database()
+        .ref(`db/stories/${user.userID.toLowerCase()}/stories/`)
+        .update({
+          [`story${timestamp}`]: {
+            id: "story" + timestamp,
+            imageUri: image,
+            postedAt: timestamp,
+            views: 0,
+          },
+        });
+
+}
+
+function getUserStories(){
+    let userStoriesList;
+    firebase
+      .database()
+      .ref(`db/stories/`)
+      .on("value", (snapshot) => {
+        const userStories = snapshot.val();
+        // console.log(userStories)
+          userStoriesList = Object.keys(userStories).map(function (_) {
+            return userStories[_];
+          });
+      });
+    return userStoriesList;
 }
 
 function uploadUserPost(caption, privacy, type, image) {
@@ -404,6 +434,7 @@ export default {
   uploadComment,
   getComments,
   uploadUserStory,
+  getUserStories,
   getPosts,
   isFriend,
   isFriendRequestReceived,
