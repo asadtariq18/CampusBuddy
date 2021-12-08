@@ -15,8 +15,9 @@ const NotificationList = ({notifications}) => {
           return notifications[_];
         })
       );
+      const sortedArray = notificationsArray.sort(function(a, b){return (b.timestamp < a.timestamp)})
+      setNotificationsArray(sortedArray)
     }, [notifications]);
-
   return (
     <FlatList
       data={notificationsArray}
