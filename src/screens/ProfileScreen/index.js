@@ -8,7 +8,8 @@ import {
   RefreshControl,
   ToastAndroid,
   StatusBar,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { Header, Left, Body, Icon, Title, Button, Right } from "native-base";
 import styles from "./style";
@@ -30,7 +31,7 @@ const ProfileScreen = () => {
   useEffect(() => {
     dispatch(setUser(Database.getCurrentUser()));
     dispatch(setPosts(Database.getPosts()));
-    onRefresh()
+    onRefresh();
   }, []);
 
   const onRefresh = React.useCallback(async () => {
@@ -39,11 +40,20 @@ const ProfileScreen = () => {
       dispatch(setUser(Database.getCurrentUser()));
       dispatch(setPosts(Database.getPosts()));
       dispatch(setRefreshing(false));
-      ToastAndroid.show("Updated", ToastAndroid.SHORT);
     } catch (error) {
       ToastAndroid.show(error.message, ToastAndroid.SHORT);
     }
   }, [refreshing]);
+
+  if (!user) {
+    return (
+      <ActivityIndicator
+        style={{ marginTop: 20, marginHorizontal: 40 }}
+        color={COLORS.primary}
+        size={25}
+      />
+    );
+  }
   return (
     <SafeAreaView style={styles.container}>
       <Header style={styles.header}>
@@ -65,6 +75,7 @@ const ProfileScreen = () => {
           </Button>
         </Right>
       </Header>
+
       {user && user ? (
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -119,11 +130,17 @@ const ProfileScreen = () => {
                 },
               ]}
             >
-              <TouchableOpacity onPress={()=> navigation.navigate('FriendsListScreen', {userID : user.userID})} >
-              <Text style={[styles.text, { fontSize: 24 }]}>
-                {database.getFriends(user.userID).length}
-              </Text>
-              <Text style={[styles.text, styles.text]}>Friends</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("FriendsListScreen", {
+                    userID: user.userID,
+                  })
+                }
+              >
+                <Text style={[styles.text, { fontSize: 24 }]}>
+                  {database.getFriends(user.userID).length}
+                </Text>
+                <Text style={[styles.text, styles.text]}>Friends</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.statsBox}>
