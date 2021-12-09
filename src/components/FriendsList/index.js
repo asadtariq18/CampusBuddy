@@ -7,7 +7,7 @@ import FriendHead from "../FriendHead";
 const FriendsList = ({ userID, query }) => {
   const [friendsList, setFriendsList] = useState();
   useEffect(() => {
-    setFriendsList(database.getFriends(userID));
+    setFriendsList(Object.values(database.getFriends(userID)));
   }, [query]);
   if (friendsList) {
     var filteredResults = friendsList.filter(function (obj) {
