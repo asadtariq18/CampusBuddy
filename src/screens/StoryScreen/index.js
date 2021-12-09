@@ -54,6 +54,7 @@ const StoryScreen = () => {
   };
 
   const handleMessage = () => {
+    navigation.navigate("InboxScreen", { name: username, userID, imageUri });
     alert(userID + messageText);
   };
     const handleDelete = () => {

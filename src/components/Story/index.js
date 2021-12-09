@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, Text, View, ActivityIndicator } from "react-native";
 import ProfilePicture from "../ProfilePicture";
+import { LinearProgress } from 'react-native-elements';
 
 
 import styles from "./style";
@@ -45,6 +46,7 @@ const myStory  = useSelector((state)=> state.story.myStory)
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={[styles.container, { backgroundColor: color }]}>
+        <LinearProgress value={1} style={{ }} color={ COLORS.primary} trackColor={COLORS.secondary2}/>
         <ProfilePicture borderColor={borderColor} uri={user.avatar} />
         <Text style={styles.name}>{user.name}</Text>
       </View>
