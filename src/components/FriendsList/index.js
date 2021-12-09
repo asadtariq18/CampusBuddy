@@ -4,7 +4,7 @@ import database from "../../Database/database";
 import { COLORS } from "../../Constants/COLORS";
 import FriendHead from "../FriendHead";
 
-const FriendsList = ({ userID, query }) => {
+const FriendsList = ({ userID, query, newChat }) => {
   const [friendsList, setFriendsList] = useState();
   useEffect(() => {
     setFriendsList(Object.values(database.getFriends(userID)));
@@ -35,22 +35,36 @@ const FriendsList = ({ userID, query }) => {
     } else {
       return (
         <View>
-          <Text
-            style={{
-              color: COLORS.font_secondary,
-              marginStart: 10,
-              marginBottom: 2,
-              fontSize: 16,
-            }}
-          >
-            {" "}
-            Users{" "}
-          </Text>
+          {newChat ? (
+            <Text
+              style={{
+                color: COLORS.font_secondary,
+                marginStart: 10,
+                marginBottom: 5,
+                fontSize: 16,
+              }}
+            >
+              {" "}
+              Select a user to start chat{" "}
+            </Text>
+          ) : (
+            <Text
+              style={{
+                color: COLORS.font_secondary,
+                marginStart: 10,
+                marginBottom: 5,
+                fontSize: 16,
+              }}
+            >
+              {" "}
+              Users{" "}
+            </Text>
+          )}
           <FlatList
             data={filteredResults}
             keyExtractor={({ id }) => id}
             renderItem={({ item }) => {
-              return <FriendHead userID={item.userID} />;
+              return <FriendHead userID={item.userID} newChat={newChat} />;
             }}
           />
         </View>

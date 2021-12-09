@@ -11,12 +11,34 @@ import { useRoute } from "@react-navigation/core";
 
 const FriendsListScreen = ({ route }) => {
   const dispatch = useDispatch();
-  const [query, setQuery] = useState(''); 
+  const [query, setQuery] = useState("");
   const { userID } = route.params;
 
   const onChange = (input) => {
     setQuery(input);
   };
+  if (route.params.newChat) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Header
+          searchBar
+          rounded
+          style={{ backgroundColor: COLORS.background_dark }}
+        >
+          <Item style={{ backgroundColor: COLORS.secondary }}>
+            <Icon name="ios-search" />
+            <Input
+              placeholder="Search Friend"
+              onChangeText={(input) => onChange(input)}
+              style={{ color: COLORS.font }}
+            />
+          </Item>
+          <StatusBar backgroundColor={COLORS.background_dark} />
+        </Header>
+        <FriendsList userID={userID} query={query} newChat={route.params.newChat} />
+      </SafeAreaView>
+    );
+  }
   return (
     <SafeAreaView style={styles.container}>
       <Header
@@ -27,7 +49,7 @@ const FriendsListScreen = ({ route }) => {
         <Item style={{ backgroundColor: COLORS.secondary }}>
           <Icon name="ios-search" />
           <Input
-            placeholder="Search"
+            placeholder="Search Friend"
             onChangeText={(input) => onChange(input)}
             style={{ color: COLORS.font }}
           />
@@ -37,7 +59,7 @@ const FriendsListScreen = ({ route }) => {
           <Text>Search</Text>
         </Button>
       </Header>
-      <FriendsList userID={userID} query={query}/>
+      <FriendsList userID={userID} query={query} />
     </SafeAreaView>
   );
 };
