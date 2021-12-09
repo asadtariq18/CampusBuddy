@@ -47,6 +47,7 @@ LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
 const db = firebase.firestore();
 
 const InboxScreen = ({ route }) => {
+  
   const dispatch = useDispatch();
   let recording = new Audio.Recording();
   const user = useSelector((state) => state.inbox.user);
@@ -117,23 +118,26 @@ const InboxScreen = ({ route }) => {
   }
 
   async function handleSend(messages) {
+    let lm;
     const writes = messages.map((m) => {
       if (image) {
         m.image = image;
         dispatch(setImage(null));
         dispatch(setLastMessage("*IMAGE*"));
+        lm = "*IMAGE*";
       } else if (audio) {
         m.audio = audio;
         dispatch(setAudio(null));
         dispatch(setLastMessage("*VOICE MESSAGE*"));
+        lm = "*VOICE MESSAGE*";
       } else {
         dispatch(setLastMessage(m.text));
-        console.log(m.text);
+        lm = m.text;
       }
       chatsRef.add(m);
     });
     await Promise.all(writes).then(() => {
-      database.addToChatList(chatID, route.params.userID, lastMessage);
+      database.addToChatList(chatID, route.params.userID, lm);
     });
   }
 
@@ -152,7 +156,7 @@ const InboxScreen = ({ route }) => {
         Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
       );
       await recording.startAsync();
-      
+
       console.log("Recording started");
     } catch (err) {
       console.error("Failed to start recording", err);
@@ -189,7 +193,7 @@ const InboxScreen = ({ route }) => {
           style={{
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: 'transparent'
+            backgroundColor: "transparent",
           }}
         >
           <Text style={styles.text2}> Recording... </Text>
@@ -202,7 +206,6 @@ const InboxScreen = ({ route }) => {
             color={COLORS.primary}
             trackColor={COLORS.secondary2}
           />
-
         </View>
       ) : null}
       <GiftedChat
