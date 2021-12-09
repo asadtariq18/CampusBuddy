@@ -229,14 +229,13 @@ function likeAction(likes_count, postID) {
 }
 
 function uploadComment(postID, commentText) {
-  let timestamp = moment().format("YYYY/MM/D hh:mm");
+  let timestamp = moment().format("YYYYMMDDhhmmss");
   let user = getCurrentUser();
-  let commentID = `${user.userID}${moment().format("YYYYMMDDhhmmss")}`;
+  let commentID = `${user.userID}${timestamp}`;
   firebase.database().ref(`db/posts/${postID}/comments/${commentID}`).update({
     commentID: commentID,
     userID: user.userID,
     userName: user.name,
-    avatar: user.avatar,
     commentText: commentText,
     timestamp: timestamp,
   });
