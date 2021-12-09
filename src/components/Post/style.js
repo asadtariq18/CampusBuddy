@@ -3,12 +3,12 @@ import { COLORS } from "../../Constants/COLORS";
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 15,
-    backgroundColor: COLORS.secondary,
     marginTop: 10,
-    padding: 10,
     opacity: 100,
     marginHorizontal: 5,
+    borderBottomColor: COLORS.font_secondary,
+    borderBottomWidth: 0.2,
+
   },
 });
 

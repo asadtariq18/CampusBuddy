@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   bottom: {
     flexDirection: "column",
     marginLeft: 10,
-    marginBottom: 10,
+    marginBottom: 2,
     marginTop: 2,
   },
 });

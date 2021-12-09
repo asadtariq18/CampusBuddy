@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { View } from "react-native";
 import Header from "./Header";
 import Body from "./Body";
@@ -6,18 +6,14 @@ import Footer from "./Footer";
 import styles from "./style";
 import database from "../../Database/database";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setPost,
-  setComments,
-  setRefreshing,
-} from "../../Redux/Post/actions";
+import { setPost, setComments, setRefreshing } from "../../Redux/Post/actions";
 
-const Post = ({post}) => {
-  const dispatch = useDispatch()
+const Post = ({ post }) => {
+  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(setPost(post))
-  }, [post])
-  const avatar = database.getUpdatedUserData(post.mail).avatar
+    dispatch(setPost(post));
+  }, [post]);
+  const avatar = database.getUpdatedUserData(post.mail).avatar;
   return (
     <View style={styles.container}>
       <Header
@@ -26,8 +22,8 @@ const Post = ({post}) => {
         userID={post.userID}
         caption={post.caption}
       />
-      <Body image={post.image} />
-      <Footer post={post}/>
+      {post.image ? <Body image={post.image} /> : null}
+      <Footer post={post} />
     </View>
   );
 };

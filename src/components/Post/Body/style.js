@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width -20,
         height: Dimensions.get('window').width -20,
         alignSelf: 'center',
-        borderRadius: 20
+        borderRadius: 10
     },
     view:{
         justifyContent: 'center',
