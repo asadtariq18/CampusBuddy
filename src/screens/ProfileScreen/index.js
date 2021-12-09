@@ -20,8 +20,9 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { setRefreshing, setPosts, setUser } from "../../Redux/Profile/actions";
 import database from "../../Database/database";
+import UserProfileScreen from "../UserProfileScreen";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ route }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const refreshing = useSelector((state) => state.profile.refreshing);
@@ -54,6 +55,7 @@ const ProfileScreen = () => {
       />
     );
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <Header style={styles.header}>
@@ -137,9 +139,11 @@ const ProfileScreen = () => {
                   })
                 }
               >
-                <Text style={[styles.text, { fontSize: 24 }]}>
-                  {database.getFriends(user.userID).length}
-                </Text>
+                {user.friendsList ? (
+                  <Text style={[styles.text, { fontSize: 24 }]}>
+                    {Object.values(user.friendsList).length}
+                  </Text>
+                ) : null}
                 <Text style={[styles.text, styles.text]}>Friends</Text>
               </TouchableOpacity>
             </View>

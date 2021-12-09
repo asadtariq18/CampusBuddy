@@ -24,7 +24,6 @@ const NotificationScreen = () => {
     try {
       setNotifications(database.getNotifications())
       setRefreshing(false);
-      ToastAndroid.show("Updated", ToastAndroid.SHORT);
     } catch (error) {
       setRefreshing(false);
       console.error(error);
@@ -45,7 +44,7 @@ const NotificationScreen = () => {
       <Header style={styles.header}>
         <StatusBar backgroundColor={COLORS.background_dark} />
         <View style={styles.header}>
-          <Text style={styles.headerText}>Notification</Text>
+          <Text style={styles.headerText}>Notifications</Text>
         </View>
       </Header>
       <RefreshControl
@@ -54,7 +53,7 @@ const NotificationScreen = () => {
         refreshing={refreshing}
         onRefresh={onRefresh}
       />
-      {notifications ? (
+      {!notifications ? (
         <NotificationList notifications={notifications} />
       ) : (
         <Text
@@ -66,7 +65,7 @@ const NotificationScreen = () => {
           }}
         >
           {" "}
-          No Notifications{" "}
+          No Notification{" "}
         </Text>
       )}
     </ScrollView>

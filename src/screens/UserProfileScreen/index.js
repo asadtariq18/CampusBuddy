@@ -71,8 +71,14 @@ const UserProfileScreen = ({ route }) => {
     onRefresh();
   };
   const messageHandle = () => {
-    //database.cancelFriendRequest(user.userID);
+    // database.cancelFriendRequest(user.userID);
+
     ToastAndroid.show("Opening Inbox", ToastAndroid.SHORT);
+    navigation.navigate("InboxScreen", {
+      name: user.name,
+      userID: user.userID,
+      imageUri: user.avatar,
+    });
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -197,16 +203,22 @@ const UserProfileScreen = ({ route }) => {
               ]}
             >
               {database.isFriend(user.userID) ? (
-                <TouchableOpacity onPress={()=> navigation.navigate('FriendsListScreen', {userID : user.userID} )}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("FriendsListScreen", {
+                      userID: user.userID,
+                    })
+                  }
+                >
                   <Text style={[styles.text, { fontSize: 24 }]}>
-                    {database.getFriends(user.userID).length}
+                    {Object.values(user.friendsList).length}
                   </Text>
                   <Text style={[styles.text, styles.text]}>Friends</Text>
                 </TouchableOpacity>
               ) : (
                 <View>
                   <Text style={[styles.text, { fontSize: 24 }]}>
-                    {database.getFriends(user.userID).length}
+                    {Object.values(user.friendsList).length}
                   </Text>
                   <Text style={[styles.text, styles.text]}>Friends</Text>
                 </View>
