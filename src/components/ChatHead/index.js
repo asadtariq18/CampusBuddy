@@ -20,18 +20,22 @@ const Chat = ({ userID, lastmessage, timestamp }) => {
       imageUri: user.avatar,
     });
   };
-
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <View style={styles.left}>
-        <ProfilePicture uri={user.avatar} border={false} />
-        <Text style={styles.name}>{user.name}</Text>
+      <ProfilePicture uri={user.avatar} size={45} border={false} />
+      <View style={styles.content}>
+        <Text style={styles.name}>{user.name} </Text>
+        <Text style={styles.commentText}>{lastmessage}</Text>
       </View>
-      <View style={styles.messageView}>
-        <Text style={styles.messageText}>
-          {lastmessage}
-        </Text>
-        <Text style={styles.postedAt}>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          alignItems: "flex-end",
+        }}
+      >
+        <Text style={styles.timestamp}>
           {moment(timestamp, "YYYYMMDDhhmmss").fromNow()}
         </Text>
       </View>

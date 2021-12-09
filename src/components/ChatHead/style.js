@@ -3,40 +3,29 @@ import { COLORS } from '../../Constants/COLORS';
 
 const styles = StyleSheet.create({
   container: {
+    width: Dimensions.get('window').width,
+    borderRadius: 10,
     backgroundColor: COLORS.secondary,
-    borderBottomColor: COLORS.font_secondary,
-    // borderBottomWidth: 0.15,
-    // borderBottomStartRadius: 100,
-    // borderBottomEndRadius: 20,
-    borderRadius: 20,
-    marginBottom: 5,
+    flexDirection: "row",
+    marginBottom: 2,
+    padding: 5,
   },
   name: {
-    alignContent: "center",
-    alignSelf: "center",
-    marginTop: -15,
-    marginStart: 3,
     fontWeight: "bold",
     color: COLORS.font,
   },
-  left: {
-    flexDirection: "row",
-    marginLeft: 2,
-  },
-  messageText: {
-    position: "absolute",
-    marginLeft: 70,
-    marginTop: -28,
+  commentText: {
     color: COLORS.font_secondary,
   },
-  postedAt: {
-    position: "absolute",
-    marginLeft: Dimensions.get('window').width /1.4,
-    marginTop: -28,
+  timestamp: {
     color: COLORS.font_secondary,
+    textAlign: "right",
+    paddingHorizontal: 5,
+    fontSize: 12,
   },
-  messageView: {
-    flexDirection: "column",
+  content: {
+    alignSelf: 'center',
+    paddingEnd: 40,
   },
 });
 
