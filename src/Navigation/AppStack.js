@@ -1,6 +1,7 @@
 import React from "react";
+import { Icon } from "native-base";
 import { createStackNavigator } from "@react-navigation/stack";
-import BottomTabNavigator from "./BottomTabNavigator/bottomTabNavigator";
+import { useNavigation } from "@react-navigation/native";
 import StoryScreen from "../screens/StoryScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import ProfileScreen from "../screens/ProfileScreen";
@@ -17,10 +18,11 @@ import MenuScreen from "../screens/FoodOrderScreen/MenuScreen";
 import ConfirmOrderScreen from "../screens/FoodOrderScreen/ConfirmOrderScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
 import FriendsListScreen from "../screens/FriendsListScreen";
+import database from "../Database/database";
 
 const Stack = createStackNavigator();
-
 const AppStack = () => {
+  const navigation = useNavigation()
   return (
     <Stack.Navigator initialRouteName="Feed">
       <Stack.Screen
@@ -95,7 +97,16 @@ const AppStack = () => {
           headerStyle: {
             backgroundColor: COLORS.background_dark,
           },
-
+          headerRight: () => (
+            <Icon
+              name="add"
+              style={{ color: COLORS.font }}
+              onPress={()=> navigation.navigate("FriendsListScreen", {userID: database.getCurrentUser().userID, newChat: true})}
+            />
+          ),
+          headerRightContainerStyle: {
+            marginEnd: 8,
+          },
           headerTitleStyle: {
             fontWeight: "bold",
             fontSize: 20,
@@ -122,7 +133,6 @@ const AppStack = () => {
           },
         }}
       />
-
       <Stack.Screen
         name="DonateScreen"
         component={DonateScreen}
