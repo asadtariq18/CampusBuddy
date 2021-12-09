@@ -206,7 +206,7 @@ const UserProfileScreen = ({ route }) => {
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate("FriendsListScreen", {
-                      userID: user.userID,
+                      userID: user.userID, newChat: false
                     })
                   }
                 >
