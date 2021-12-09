@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ActivityIndicator, FlatList } from "react-native";
-import styles from "./style";
 import ChatHead from "../ChatHead";
-import { COLORS } from "../../Constants/COLORS";
 
 const ChatList = ({ chatsObj }) => {
   const [chats, setChats] = useState(chatsObj);
@@ -11,7 +9,7 @@ const ChatList = ({ chatsObj }) => {
     setChats(chatsObj);
     setChatsArray(
       Object.values(chats).sort(function (a, b) {
-        return b.timestamp < a.timestamp;
+        return b.timestamp > a.timestamp;
       })
     );
   }, [chats]);
