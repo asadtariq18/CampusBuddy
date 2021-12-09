@@ -1,8 +1,9 @@
-import { AUDIO, IMAGE, MESSAGES, ON_FOCUS, USER } from "./actions";
+import { AUDIO, IMAGE, LAST_MESSAGE, MESSAGES, ON_FOCUS, USER } from "./actions";
 
 const initialState = {
   user: null,
   messages: null,
+  lastMessage: '',
   image: null,
   audio: null,
   onFocus: false,
@@ -12,6 +13,8 @@ function InboxReducer(state = initialState, action) {
   switch (action.type) {
     case USER:
       return { ...state, user: action.actionValue };
+    case LAST_MESSAGE:
+      return { ...state, lastMessage: action.actionValue };
     case MESSAGES:
       return { ...state, messages: action.actionValue };
     case IMAGE:

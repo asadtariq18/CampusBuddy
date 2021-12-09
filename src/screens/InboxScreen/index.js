@@ -1,14 +1,16 @@
 // @refresh reset
 
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, Keyboard } from "react-native";
+import { View, Text, Keyboard, Dimensions } from "react-native";
 import { Icon, Button } from "native-base";
 import {
   GiftedChat,
   InputToolbar,
   Send,
   Bubble,
+  Avatar,
 } from "react-native-gifted-chat";
+import { LinearProgress } from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import { Audio } from "expo-av";
@@ -23,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setUser,
   setMessages,
+  setLastMessage,
   setImage,
   setAudio,
   setOnFocus,
@@ -47,15 +50,16 @@ const InboxScreen = ({ route }) => {
   const dispatch = useDispatch();
   let recording = new Audio.Recording();
   const user = useSelector((state) => state.inbox.user);
-  const { userID } = route.params;
-  const chatsRef = db.collection(
-    `Chats`
-  );
+  let id = `${route.params.userID}+${user.userID}`;
+  const chatID = sort(id);
+  const chatsRef = db.collection(`Chats/c/${chatID}`);
 
-  const [messages, setMessages] = useState([])
+  const [messages, setMessages] = useState([]);
+  const [isRecording, setIsRecording] = useState(false);
   const image = useSelector((state) => state.inbox.image);
   const audio = useSelector((state) => state.inbox.audio);
   const onFocus = useSelector((state) => state.inbox.onFocus);
+  const lastMessage = useSelector((state) => state.inbox.lastMessage);
 
   useEffect(() => {
     readUser();
@@ -72,9 +76,11 @@ const InboxScreen = ({ route }) => {
     };
   }, []);
 
+  function sort(id) {
+    return id.split("").sort().join("");
+  }
   useEffect(() => {
     readUser();
-    console.log(messages);
     const unsubscribe = chatsRef.onSnapshot((querySnapshot) => {
       const messagesFirestore = querySnapshot
         .docChanges()
@@ -91,9 +97,9 @@ const InboxScreen = ({ route }) => {
 
   const appendMessages = useCallback(
     (messages) => {
-        setMessages((previousMessages) =>
-          GiftedChat.append(previousMessages, messages)
-        )
+      setMessages((previousMessages) =>
+        GiftedChat.append(previousMessages, messages)
+      );
     },
     [messages]
   );
@@ -101,7 +107,12 @@ const InboxScreen = ({ route }) => {
   async function readUser() {
     const user = await AsyncStorage.getItem("user");
     if (user) {
-      dispatch(setUser(JSON.parse(user)));
+      dispatch(
+        setUser({
+          userID: JSON.parse(user).userID,
+          name: JSON.parse(user).name,
+        })
+      );
     }
   }
 
@@ -110,14 +121,20 @@ const InboxScreen = ({ route }) => {
       if (image) {
         m.image = image;
         dispatch(setImage(null));
-      }
-      if (audio) {
+        dispatch(setLastMessage("*IMAGE*"));
+      } else if (audio) {
         m.audio = audio;
         dispatch(setAudio(null));
+        dispatch(setLastMessage("*VOICE MESSAGE*"));
+      } else {
+        dispatch(setLastMessage(m.text));
+        console.log(m.text);
       }
       chatsRef.add(m);
     });
-    await Promise.all(writes);
+    await Promise.all(writes).then(() => {
+      database.addToChatList(chatID, route.params.userID, lastMessage);
+    });
   }
 
   async function startRecording() {
@@ -128,11 +145,14 @@ const InboxScreen = ({ route }) => {
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
       });
+      setIsRecording(true);
       console.log("Starting recording..");
+
       await recording.prepareToRecordAsync(
         Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
       );
       await recording.startAsync();
+      
       console.log("Recording started");
     } catch (err) {
       console.error("Failed to start recording", err);
@@ -140,6 +160,7 @@ const InboxScreen = ({ route }) => {
   }
 
   async function stopRecording() {
+    setIsRecording(false);
     console.log("Stopping recording..");
     await recording.stopAndUnloadAsync();
     const uri = recording.getURI();
@@ -163,17 +184,43 @@ const InboxScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      {isRecording ? (
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: 'transparent'
+          }}
+        >
+          <Text style={styles.text2}> Recording... </Text>
+          <LinearProgress
+            value={1}
+            style={{
+              marginVertical: 5,
+              width: Dimensions.get("window").width / 2,
+            }}
+            color={COLORS.primary}
+            trackColor={COLORS.secondary2}
+          />
+
+        </View>
+      ) : null}
       <GiftedChat
         renderBubble={(props) => {
           return (
             <Bubble
               {...props}
+              textStyle={{
+                left: {
+                  color: COLORS.font,
+                },
+              }}
               wrapperStyle={{
                 right: {
                   backgroundColor: COLORS.primary,
                 },
                 left: {
-                  backgroundColor: COLORS.font_secondary,
+                  backgroundColor: COLORS.secondary2,
                 },
               }}
             />
@@ -189,6 +236,21 @@ const InboxScreen = ({ route }) => {
           );
         }}
         renderAvatar={null}
+        renderLoadEarlier={(props) => {
+          return (
+            <LinearProgress
+              {...props}
+              value={1}
+              style={{
+                marginVertical: 10,
+                width: Dimensions.get("window").width / 2,
+                backgroundColor: "transparent",
+              }}
+              color={COLORS.primary}
+              trackColor={COLORS.secondary2}
+            />
+          );
+        }}
         renderSend={(props) => {
           return (
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -222,7 +284,40 @@ const InboxScreen = ({ route }) => {
                 alignItems: "center",
               }}
             >
-              <Text style={styles.text}> No Message, Start your chat </Text>
+              <LinearProgress
+                value={1}
+                style={{
+                  marginVertical: 10,
+                  width: Dimensions.get("window").width / 2,
+                }}
+                color={COLORS.primary}
+                trackColor={COLORS.secondary2}
+              />
+
+              <Text style={styles.text}> No Messages, Start your chat </Text>
+            </View>
+          );
+        }}
+        renderLoading={(props) => {
+          return (
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "transparent",
+              }}
+            >
+              <LinearProgress
+                {...props}
+                value={1}
+                style={{
+                  marginBottom: Dimensions.get("window").height / 2.2,
+                  width: Dimensions.get("window").width,
+                }}
+                color={COLORS.primary}
+                trackColor={COLORS.secondary2}
+              />
+              <Text style={styles.text2}> Loading Messages... </Text>
             </View>
           );
         }}

@@ -3,6 +3,7 @@ import * as firebase from "firebase";
 import moment from "moment";
 import Firebase from "../config/Firebase";
 import "firebase/firestore";
+import database from "@react-native-firebase/database";
 
 const db = firebase.firestore();
 const auth = Firebase.auth();
@@ -152,7 +153,7 @@ function removeFriendRequest(userID) {
 function sendFriendRequest(userID) {
   let timestamp = moment().format("YYYYMMDDhhmmss");
   const self = getCurrentUser();
-  const notificationText = "sent you a friend request"
+  const notificationText = "sent you a friend request";
   firebase
     .database()
     .ref(`db/users/user_${userID}/friendRequests/${self.userID}`)
@@ -161,11 +162,11 @@ function sendFriendRequest(userID) {
       name: self.name,
       image: self.avatar,
     });
-    sendNotification(userID, timestamp, notificationText)
+  sendNotification(userID, timestamp, notificationText);
 }
 
-function sendNotification(userID, timestamp, notificationText){
-    const self = getCurrentUser();
+function sendNotification(userID, timestamp, notificationText) {
+  const self = getCurrentUser();
   firebase
     .database()
     .ref(
@@ -176,24 +177,44 @@ function sendNotification(userID, timestamp, notificationText){
     .update({
       userID: self.userID,
       notification: notificationText,
-      timestamp: timestamp
+      timestamp: timestamp,
     });
 }
+function addToChatList(chatID, userID, lastMessage) {
+  const self = getCurrentUser();
+  let timestamp = moment().format("YYYYMMDDhhmmss");
+  firebase
+    .database()
+    .ref(`db/users/user_${self.userID}/chatList/${chatID}`)
+    .update({
+      userID: userID,
+      chatID: chatID,
+      timestamp: timestamp,
+      lastMessage: lastMessage,
+    });
+
+  firebase.database().ref(`db/users/user_${userID}/chatList/${chatID}`).update({
+    userID: self.userID,
+    chatID: chatID,
+    timestamp: timestamp,
+    lastMessage: lastMessage,
+  });
+}
+function getChatList() {
+  let chatList = getCurrentUser().chatList;
+  return chatList;
+}
+
 function getFriends(userID) {
-  let friendsArray = [];
+  let friendsList;
   firebase
     .database()
     .ref(`db/users/user_${userID}`)
     .on("value", (snapshot) => {
       const u = snapshot.val();
-      // console.log(u.friendsList);
-      if (u.friendsList) {
-        friendsArray = Object.keys(u.friendsList).map(function (_) {
-          return u.friendsList[_];
-        });
-      }
+      friendsList = u.friendsList;
     });
-  return friendsArray;
+  return friendsList;
 }
 
 function getNotifications() {
@@ -292,38 +313,37 @@ function uploadUserStory(image) {
     .database()
     .ref(`db/stories/${user.userID.toLowerCase()}`)
     .update({
-      user:{
-        userID: user.userID
+      user: {
+        userID: user.userID,
       },
     });
 
-      firebase
-        .database()
-        .ref(`db/stories/${user.userID.toLowerCase()}/stories/`)
-        .update({
-          [`story${timestamp}`]: {
-            id: "story" + timestamp,
-            imageUri: image,
-            postedAt: timestamp,
-            views: 0,
-          },
-        });
-
+  firebase
+    .database()
+    .ref(`db/stories/${user.userID.toLowerCase()}/stories/`)
+    .update({
+      [`story${timestamp}`]: {
+        id: "story" + timestamp,
+        imageUri: image,
+        postedAt: timestamp,
+        views: 0,
+      },
+    });
 }
 
-function getUserStories(){
-    let userStoriesList;
-    firebase
-      .database()
-      .ref(`db/stories/`)
-      .on("value", (snapshot) => {
-        const userStories = snapshot.val();
-        // console.log(userStories)
-          userStoriesList = Object.keys(userStories).map(function (_) {
-            return userStories[_];
-          });
+function getUserStories() {
+  let userStoriesList;
+  firebase
+    .database()
+    .ref(`db/stories/`)
+    .on("value", (snapshot) => {
+      const userStories = snapshot.val();
+      // console.log(userStories)
+      userStoriesList = Object.keys(userStories).map(function (_) {
+        return userStories[_];
       });
-    return userStoriesList;
+    });
+  return userStoriesList;
 }
 
 function uploadUserPost(caption, privacy, type, image) {
@@ -443,6 +463,8 @@ export default {
   removeFriendRequest,
   getFriends,
   getNotifications,
+  getChatList,
+  addToChatList,
   searchUsers,
   getUserPosts,
   uploadImage,

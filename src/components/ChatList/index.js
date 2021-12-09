@@ -1,48 +1,28 @@
-import React from "react";
-import { FlatList, RefreshControl, ToastAndroid } from "react-native";
+import React, { useState, useEffect } from "react";
+import { ActivityIndicator, FlatList } from "react-native";
 import styles from "./style";
 import ChatHead from "../ChatHead";
-import ChatData from "../../Data/ChatData/chatdata";
 import { COLORS } from "../../Constants/COLORS";
 
-const ChatList = () => {
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
-    if (ChatData.length < 1) {
-      try {
-        setRefreshing(false);
-        ToastAndroid.show("Updated", ToastAndroid.SHORT);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      ToastAndroid.show("No more new chats", ToastAndroid.SHORT);
-      setRefreshing(false);
-    }
-  }, [refreshing]);
+const ChatList = ({ chatsObj }) => {
+  const [chats, setChats] = useState(chatsObj);
+  const [chatsArray, setChatsArray] = useState([]);
+  useEffect(() => {
+    setChats(chatsObj);
+    setChatsArray(
+      Object.values(chats).sort(function (a, b) {
+        return b.timestamp < a.timestamp;
+      })
+    );
+  }, [chats]);
   return (
     <FlatList
-      style={styles.container}
-      data={ChatData}
+      style={{marginTop: 8}}
+      data={chatsArray}
       keyExtractor={({ name }) => name}
       renderItem={({ item }) => (
-        <ChatHead
-          imageUri={item.imageUri}
-          name={item.name}
-          userID={item.userID}
-          lastmessage={item.lastmessage}
-        />
+        <ChatHead userID={item.userID} timestamp={item.timestamp} lastmessage={item.lastMessage} />
       )}
-      refreshControl={
-        <RefreshControl
-          progressBackgroundColor={COLORS.background_dark}
-          colors={[COLORS.primary]}
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-        />
-      }
     />
   );
 };

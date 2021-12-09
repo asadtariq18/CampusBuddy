@@ -1,5 +1,6 @@
 export const USER = "USER";
 export const MESSAGES = "MESSAGES";
+export const LAST_MESSAGE = "LAST_MESSAGE";
 export const IMAGE = "IMAGE";
 export const AUDIO = "AUDIO";
 export const ON_FOCUS = "ON_FOCUS";
@@ -10,6 +11,9 @@ export const setUser = (value) => {
 
 export const setMessages = (value) => {
   return { actionValue: value, type: MESSAGES };
+};
+export const setLastMessage = (value) => {
+  return { actionValue: value, type: LAST_MESSAGE };
 };
 
 export const setImage = (value) => {
