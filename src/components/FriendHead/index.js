@@ -7,28 +7,37 @@ import styles from "./style";
 import database from "../../Database/database";
 import { COLORS } from "../../Constants/COLORS";
 
-
-const FriendHead = ({ userID }) => {
+const FriendHead = ({ userID, newChat }) => {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
   const onPress = () => {
     navigation.navigate("UserProfile", { user: user });
+  };
+  const handleNewChat = () => {
+    navigation.navigate("InboxScreen", {
+      name: user.name,
+      userID,
+      imageUri: user.avatar,
+    });
   };
   useEffect(() => {
     setUser(database.getUser(userID));
   }, [userID]);
 
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={newChat ? handleNewChat : onPress}
+    >
       <View style={styles.left}>
-          <ProfilePicture uri={user.avatar} size={50} border={false} />
-          {/* <LinearProgress
+        <ProfilePicture uri={user.avatar} size={45} border={false} />
+        {/* <LinearProgress
             value={1}
             style={{}}
             color={COLORS.primary}
             trackColor={COLORS.secondary2}
           /> */}
-        
+
         <View style={{ marginTop: 10 }}>
           <Text style={styles.name}>{user.name} </Text>
           <Text style={styles.text2}>@{user.userID}</Text>
