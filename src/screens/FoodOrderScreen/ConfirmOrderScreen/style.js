@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { COLORS } from "../../../Constants/COLORS";
 
 const styles = StyleSheet.create({
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   cafeName: {
     maxWidth: 210,
     alignSelf: "flex-start",
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: "bold",
     color: COLORS.font,
     backgroundColor: COLORS.tertiary,
@@ -43,6 +43,12 @@ const styles = StyleSheet.create({
     paddingEnd: 30,
     paddingVertical: 15,
     marginTop: 20,
+  },
+  activityIndicator: {
+    marginTop: 10,
+  },
+  loadingText: {
+    color: COLORS.font,
   },
   centeredView: {
     flex: 1,

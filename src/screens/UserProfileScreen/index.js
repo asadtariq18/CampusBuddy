@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -9,6 +9,7 @@ import {
   ToastAndroid,
   StatusBar,
   TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 import { Header, Left, Body, Icon, Title, Button, Right } from "native-base";
 import styles from "./style";
@@ -32,6 +33,7 @@ const UserProfileScreen = ({ route }) => {
   const { user } = route.params;
   const posts = useSelector((state) => state.userProfile.posts);
   const requestSent = useSelector((state) => state.userProfile.requestSent);
+  const [loading, setLoading] = useState(false)
   const requestReceived = useSelector(
     (state) => state.userProfile.requestReceived
   );
@@ -45,7 +47,7 @@ const UserProfileScreen = ({ route }) => {
     try {
       dispatch(setPosts(Database.getPosts()));
       dispatch(setRefreshing(false));
-      ToastAndroid.show("Updated", ToastAndroid.SHORT);
+      // ToastAndroid.show("Updated", ToastAndroid.SHORT);
     } catch (error) {
       ToastAndroid.show(error.message, ToastAndroid.SHORT);
     }
@@ -113,6 +115,18 @@ const UserProfileScreen = ({ route }) => {
                   uri: `${user.avatar}`,
                 }}
                 style={styles.image}
+                onLoadStart={() => {
+                  setLoading(true);
+                }}
+                onLoadStart={() => {
+                  setLoading(false);
+                }}
+              />
+              <ActivityIndicator
+                style={styles.activityIndicator}
+                color={COLORS.primary}
+                size={"large"}
+                animating={loading}
               />
             </View>
           </View>
@@ -206,7 +220,8 @@ const UserProfileScreen = ({ route }) => {
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate("FriendsListScreen", {
-                      userID: user.userID, newChat: false
+                      userID: user.userID,
+                      newChat: false,
                     })
                   }
                 >

@@ -22,46 +22,46 @@ const SearchList = ({ query }) => {
     );
   });
 
-  if (filteredResults.length === 0) {
-    return (
+  return (
+    <View>
       <Text
         style={{
-          fontSize: 18,
           color: COLORS.font_secondary,
-          marginTop: 30,
-          alignSelf: "center",
+          marginStart: 10,
+          marginBottom: 2,
+          fontSize: 16,
         }}
       >
         {" "}
-        No Search results{" "}
+        Users{" "}
       </Text>
-    );
-  } else {
-    return (
-      <View>
-        <Text
-          style={{
-            color: COLORS.font_secondary,
-            marginStart: 10,
-            marginBottom: 2,
-            fontSize: 16,
-          }}
-        >
-          {" "}
-          Users{" "}
-        </Text>
-        <FlatList
-          data={filteredResults}
-          keyExtractor={({ id }) => id}
-          renderItem={({ item }) => {
-            if (item.userID !== database.getCurrentUser().userID) {
-              return <SearchHead result={item} />;
-            }
-            return null;
-          }}
-        />
-      </View>
-    );
-  }
+      <FlatList
+        initialNumToRender={2}
+        ListEmptyComponent={() => {
+          return (
+            <Text
+              style={{
+                fontSize: 18,
+                color: COLORS.font_secondary,
+                marginTop: 30,
+                alignSelf: "center",
+              }}
+            >
+              {" "}
+              No Search results{" "}
+            </Text>
+          );
+        }}
+        data={filteredResults}
+        keyExtractor={({ id }) => id}
+        renderItem={({ item }) => {
+          if (item.userID !== database.getCurrentUser().userID) {
+            return <SearchHead result={item} />;
+          }
+          return null;
+        }}
+      />
+    </View>
+  );
 };
 export default SearchList;

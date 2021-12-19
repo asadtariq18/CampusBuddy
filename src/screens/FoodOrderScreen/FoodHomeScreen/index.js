@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   Text,
@@ -7,12 +7,26 @@ import {
   View,
   ScrollView,
   StatusBar,
+  Modal
 } from "react-native";
 import CafeList from "../../../components/CafeList";
+import PendingOrdersList from "../../../components/PendingOrdersList";
 import { COLORS } from "../../../Constants/COLORS";
+import database from "../../../Database/database";
 import styles from "./style";
 
 const FoodHomeScreen = () => {
+const [pendingOrders, setPendingOrders] = useState([])
+  const [modal, setModal] = useState(false);
+
+const handlePendingOrdersPress=()=>{
+  let orders = database.getPendingOrders(database.getCurrentUser().userID);
+  if(orders){
+    setPendingOrders(Object.values(orders));
+  }
+  console.log(pendingOrders)
+  setModal(!modal)
+}
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar showHideTransition backgroundColor={COLORS.primary} />
@@ -32,8 +46,9 @@ const FoodHomeScreen = () => {
           paddingVertical: 10,
         }}
       >
-        <Text style={styles.Button2}> View Order </Text>
-        <Text style={styles.Button2}> History </Text>
+        <TouchableOpacity onPress={handlePendingOrdersPress}>
+          <Text style={styles.Button2}> Pending Orders </Text>
+        </TouchableOpacity>
       </View>
       <View
         style={{
@@ -49,6 +64,43 @@ const FoodHomeScreen = () => {
 
         <CafeList />
       </View>
+      <Modal
+        keyboardShouldPersistTaps={"always"}
+        animationType="slide"
+        transparent={true}
+        visible={modal}
+        onRequestClose={() => {
+          setModal(!modal);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <TouchableOpacity
+            onPressIn={() => {
+              setModal(false);
+            }}
+            style={styles.modalClose}
+          ></TouchableOpacity>
+          <View style={styles.modalView}>
+            <Text style={styles.headerText}> Pending Orders </Text>
+            {pendingOrders.length === 0 ? (
+              <View
+                style={{
+                  alignSelf: "center",
+                  marginTop: 100,
+                }}
+              >
+                <Image
+                  style={styles.image}
+                  source={require("../../../Constants/emptyCart.png")}
+                />
+                <Text style={styles.headerText2}> No pending order</Text>
+              </View>
+            ) : (
+              <PendingOrdersList pendingOrders={pendingOrders} />
+            )}
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };

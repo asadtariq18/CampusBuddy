@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import * as firebase from "firebase";
 import moment from "moment";
 import Firebase from "../config/Firebase";
 import "firebase/firestore";
 import database from "@react-native-firebase/database";
+import * as firebase from "firebase";
 
 const db = firebase.firestore();
 const auth = Firebase.auth();
@@ -25,13 +25,16 @@ function storeUserData(firstName, lastName, mail, gender) {
       posts_count: 0,
     });
 }
-function updateProfile(data) {
+async function updateProfile(data) {
   const mail = getCurrentUser().mail;
+  console.log(data.image);
+
+  const imageURL = await uploadImage(data.image);
   firebase
     .database()
     .ref(`db/users/user_${mail.split("@")[0]}`)
     .update({
-      avatar: data.image,
+      avatar: imageURL,
       bio: data.bio,
     });
 }
@@ -75,26 +78,19 @@ function getUserPosts(userID) {
 }
 
 function getPosts() {
-  // let posts = [];
-  // db.collection("posts")
-  //   .get()
-  //   .then((querySnapshot) => {
-  //     querySnapshot.forEach((documentSnapshot) => {
-  //       posts.push(documentSnapshot.data());
-  //     });
-  //     console.log(posts);
-  //     return posts;
-  // });
   let posts = new Object();
-  firebase
-    .database()
-    .ref(`db/posts`)
-    .on("value", (snapshot) => {
-      const temp = snapshot.val();
-      posts = temp;
-    });
-  // console.log(posts)
-  return posts;
+  try {
+    firebase
+      .database()
+      .ref(`db/posts`)
+      .on("value", (snapshot) => {
+        let temp = snapshot.val();
+        posts = temp;
+      });
+    return posts;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function isFriend(userID) {
@@ -217,6 +213,18 @@ function getFriends(userID) {
   return friendsList;
 }
 
+function getStoryViews(storyID, userID) {
+  let viewsList;
+  firebase
+    .database()
+    .ref(`db/stories/${userID}/${storyID}/`)
+    .on("value", (snapshot) => {
+      const s = snapshot.val();
+      viewsList = s.viewers;
+    });
+  return viewsList;
+}
+
 function getNotifications() {
   let notifications = getCurrentUser().notifications;
   return notifications;
@@ -230,6 +238,13 @@ function likeAction(likes_count, postID) {
 
 function uploadComment(postID, commentText) {
   let timestamp = moment().format("YYYYMMDDhhmmss");
+  console.log(moment(timestamp, "YYYYMMDDhhmmss").fromNow())
+  // if(moment(timestamp, "YYYYMMDDhhmmss").fromNow() === "12 hours ago")
+  // {
+  //   console.log(moment(timestamp, "YYYYMMDDhhmmss").fromNow())
+  //   timestamp = moment().add(12, "hours").format("YYYYMMDDhhmmss"); 
+  //   console.log(moment(timestamp, "YYYYMMDDhhmmss").fromNow());
+  // }
   let user = getCurrentUser();
   let commentID = `${user.userID}${timestamp}`;
   firebase.database().ref(`db/posts/${postID}/comments/${commentID}`).update({
@@ -260,54 +275,27 @@ const uploadImage = async (uri) => {
   let timestamp = moment().format("YYYYMMDDhhmmss");
   const response = await fetch(uri);
   const blob = await response.blob();
-  var ref = firebase
+  const ref = firebase
     .storage()
     .ref()
     .child("image" + timestamp);
-  return ref.put(blob);
+  const snapshot = await ref.put(blob);
+  blob.close();
+
+  const url = await snapshot.ref
+    .getDownloadURL()
+    .then((result) => {
+      return result;
+    })
+    .catch((error) => console.log(error));
+
+  return url;
 };
-// const uploadImage = async ({image}) => {
-//   const [uploading, setUploading] = React.useState(false);
-//   const blob = await new Promise((resolve, reject) => {
-//     const xhr = new XMLHttpRequest();
-//     xhr.onload = function () {
-//       resolve(xhr.response);
-//     };
-//     xhr.onerror = function () {
-//       reject(new TypeError("Network request failed"));
-//     };
-//     xhr.responseType = "blob";
-//     xhr.open("GET", image, true);
-//     xhr.send(null);
-//   });
 
-//   const ref = firebase.storage().ref().child(new Date().toISOString);
-//   snapshot.on(
-//     firebase.storage.TaskEvent.STATE_CHANGED,
-//     () => {
-//       setUploading(true);
-//     },
-//     (error) => {
-//       setUploading(false);
-//       console.log(error);
-//       blob.close();
-//       return;
-//     },
-//     () => {
-//       snapshot.snapshot.ref.getDownloadURL().then((url) => {
-//         console.log("URL: ", url);
-//         setUploading(false);
-//         blob.close();
-//         return uri;
-//       });
-//     }
-//   );
-// };
-
-function uploadUserStory(image) {
+async function uploadUserStory(image) {
   const user = getCurrentUser();
   let timestamp = moment().format("YYYYMMDDhhmmss");
-
+  let imageURL = await uploadImage(image);
   firebase
     .database()
     .ref(`db/stories/${user.userID.toLowerCase()}`)
@@ -323,9 +311,9 @@ function uploadUserStory(image) {
     .update({
       [`story${timestamp}`]: {
         id: "story" + timestamp,
-        imageUri: image,
+        imageUri: imageURL,
         postedAt: timestamp,
-        views: 0,
+        viewers: null,
       },
     });
 }
@@ -345,26 +333,11 @@ function getUserStories() {
   return userStoriesList;
 }
 
-function uploadUserPost(caption, privacy, type, image) {
+async function uploadUserPost(caption, privacy, type, image) {
   const user = getCurrentUser();
-  let timestamp = moment().format("YYYY/MM/D hh:mm");
+  let timestamp = moment().format("YYYYMMDDhhmmss");
+  const imageURL = await uploadImage(image);
 
-  // const ref = db.collection(`posts`);
-  // ref.add({
-  //   mail: user.mail,
-  //   userID: user.mail.split("@")[0],
-  //   postID: `post_${user.userID
-  //     .toLowerCase()
-  //     .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`,
-  //   caption: caption,
-  //   owner: user.name,
-  //   privacy: privacy,
-  //   type: type,
-  //   image: image,
-  //   timestamp: timestamp,
-  //   likes_count: 0,
-  //   comments_count: 0,
-  // });
   firebase
     .database()
     .ref(
@@ -382,18 +355,12 @@ function uploadUserPost(caption, privacy, type, image) {
       owner: user.name,
       privacy: privacy,
       type: type,
-      image: image,
+      image: imageURL,
       timestamp: timestamp,
       likes_count: 0,
       comments_count: 0,
     });
-  uploadImage(image)
-    .then((a) => {
-      console.log(a);
-    })
-    .catch((e) => {
-      alert(e);
-    });
+
   firebase
     .database()
     .ref(`db/users/user_${user.userID.toLowerCase()}`)
@@ -421,6 +388,61 @@ function uploadDonationHistory(cardDetails, amount) {
         amount: amount,
         timestamp: timestamp,
       });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function placeFoodOrder(orderDetails,total, cafeID, location, cafeName) {
+  try {
+    let cords = `${location.coords.latitude},${location.coords.longitude}`;
+    const user = getCurrentUser();
+    loc = `geo:${cords}?center=${cords}&q=${cords}&z=20`;
+    // locationURL = `http://maps.google.com/maps?q=${location.coords.latitude},${location.coords.longitude}`;
+    let timestamp = moment().format("YYYYMMDDhhmmss");
+    let orderID = `order${timestamp}`;
+    firebase.database().ref(`db/FoodOrders/cafes/${cafeID}/${orderID}`).update({
+      userID: user.userID,
+      customerName: user.name,
+      orderDetails: orderDetails,
+      total: total,
+      cafeID: cafeID,
+      timestamp: timestamp,
+      status: "New",
+      orderID: orderID,
+      location: loc,
+    });
+
+    firebase
+      .database()
+      .ref(`db/FoodOrders/customers/${user.userID}/${orderID}`)
+      .update({
+        userID: user.userID,
+        username: user.name,
+        orderDetails: orderDetails,
+        cafeID: cafeID,
+        cafeName: cafeName,
+        timestamp: timestamp,
+        status: "New",
+        orderID: orderID,
+      });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function getPendingOrders(userID) {
+  let orders = new Object();
+  try {
+    firebase
+      .database()
+      .ref(`db/FoodOrders/customers/${userID}`)
+      .on("value", (snapshot) => {
+        let temp = snapshot.val();
+        orders = temp;
+      });
+    return orders;
+    console.log(orders);
   } catch (error) {
     console.log(error);
   }
@@ -461,6 +483,7 @@ export default {
   acceptFriendRequest,
   removeFriendRequest,
   getFriends,
+  getStoryViews,
   getNotifications,
   getChatList,
   addToChatList,
@@ -469,4 +492,6 @@ export default {
   uploadImage,
   updateProfile,
   uploadDonationHistory,
+  placeFoodOrder,
+  getPendingOrders,
 };

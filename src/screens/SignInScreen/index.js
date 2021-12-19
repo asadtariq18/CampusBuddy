@@ -68,12 +68,19 @@ const SignInScreen = () => {
   }
 
   const onChangeMail = (input1) => {
+    // let reg = /[SP|FA|sp|fa|Sp|Fa][0-9][0-9]-[B|b][a-zA-Z][a-zA-Z]-\d\d\d@student\.comsats\.edu\.pk/;
+    // if (reg.test(input1.toLowerCase()) == true) {
     dispatch(updateMail(input1));
-    if (input1 !== "" && password !== "") {
+    if (input1 !== "" && password !== "" ){
       dispatch(isEmptyChange(false));
     } else {
       dispatch(isEmptyChange(true));
     }
+  // }
+  // else{
+  //   dispatch(isEmptyChange(true));
+
+  // }
   };
 
   const onChangePass = (input2) => {

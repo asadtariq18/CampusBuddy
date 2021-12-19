@@ -18,6 +18,15 @@ const styles = StyleSheet.create({
     color: COLORS.font,
     transform: [{ rotateY: "180deg" }, { rotateZ: "180deg" }],
   },
+  image: {
+    borderColor: COLORS.primary,
+    borderRadius: 10,
+    borderWidth: 0.5,
+    alignSelf: 'center',
+    marginBottom: 4,
+    width: 50,
+    height: 50,
+  },
   textInput: {
     backgroundColor: COLORS.background_dark,
     fontSize: 15,
@@ -44,7 +53,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginRight: 2,
   },
-
 });
 
 export default styles;

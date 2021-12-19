@@ -1,7 +1,8 @@
-import { BASKET, TOTAL } from "./actions";
+import { BASKET, TOTAL , PENDING_ORDERS_LIST} from "./actions";
 
 const initialState = {
   basket: [],
+  pendingOrdersList: [],
   total: 0,
 };
 
@@ -11,6 +12,8 @@ function OrderFoodReducer(state = initialState, action) {
       return { ...state, basket: action.actionValue };
     case TOTAL:
       return { ...state, total: action.actionValue };
+          case PENDING_ORDERS_LIST:
+      return { ...state, pendingOrdersList: action.actionValue };
     default:
       return state;
   }

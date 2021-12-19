@@ -108,7 +108,8 @@ const SignUpScreen = () => {
 
   const ValidateFirstName = (str) => {
     var hasNumber = /\d/;
-    if (!hasNumber.test(str) && str !== "") {
+    var re = /[A-Za-z][A-Za-z]+/;
+    if (!hasNumber.test(str) && re.test(str) && str !== "") {
       dispatch(setFirstName(str));
       dispatch(setIsValidFirstName(true));
     } else {
@@ -118,7 +119,8 @@ const SignUpScreen = () => {
 
   const ValidateLastName = (str) => {
     var hasNumber = /\d/;
-    if (!hasNumber.test(str) && str !== "") {
+    var re = /[A-Za-z][A-Za-z]+/;
+    if (!hasNumber.test(str) && re.test(str) && str !== "") {
       dispatch(setLastName(str));
       dispatch(setIsValidLastName(true));
     } else {
@@ -128,7 +130,7 @@ const SignUpScreen = () => {
 
   const ValidateMail = (str) => {
     const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      /[SP|FA|sp|fa|Sp|Fa][0-9][0-9]-[B|b][a-zA-Z][a-zA-Z]-\d\d\d@student\.comsats\.edu\.pk/;
     if (re.test(String(str).toLowerCase())) {
       dispatch(setMail(str));
       dispatch(setIsValidMail(true));

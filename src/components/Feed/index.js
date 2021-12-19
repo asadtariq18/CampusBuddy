@@ -23,6 +23,8 @@ const Feed = ({ posts }) => {
     );
   }, [posts]);
 
+  
+
   return (
     <View style={{ paddingBottom: 50 }}>
       <FlatList

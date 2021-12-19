@@ -24,9 +24,10 @@ const MenuScreen = ({ route }) => {
   const [modal, setModal] = useState(false);
   const basket = useSelector((state) => state.orderFood.basket);
   const cafe = {
-    name: route.params.name,
+    cafeName: route.params.cafeName,
     image: route.params.image,
     rating: route.params.rating,
+    cafeID: route.params.cafeID
   };
 
   const basketPress = () => {
@@ -35,7 +36,7 @@ const MenuScreen = ({ route }) => {
 
   const placeOrder=()=>{
     if(basket.length !== 0){
-      navigation.navigate("ConfirmOrder")
+      navigation.navigate("ConfirmOrder", {cafe: cafe})
     }else{
       ToastAndroid.show("Basket Empty", ToastAndroid.SHORT);
     }
@@ -51,9 +52,8 @@ const MenuScreen = ({ route }) => {
       >
         <Text numberOfLines={1} style={styles.cafeName}>
           {" "}
-          {cafe.name}
+          {cafe.cafeName}
         </Text>
-        <Text style={styles.rating}> {cafe.rating} </Text>
       </View>
       <View
         style={{
@@ -66,6 +66,7 @@ const MenuScreen = ({ route }) => {
           style={{
             flexDirection: "row",
             alignSelf: "flex-start",
+            marginRight: 10
           }}
         >
           <TouchableOpacity onPress={basketPress}>
@@ -73,12 +74,6 @@ const MenuScreen = ({ route }) => {
           </TouchableOpacity>
           <Text style={styles.count}> {basket.length} </Text>
         </View>
-        <TouchableOpacity>
-          <Text style={styles.Button2}> View Order </Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.Button2}> History </Text>
-        </TouchableOpacity>
       </View>
 
       <View

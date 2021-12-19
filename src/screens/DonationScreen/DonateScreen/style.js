@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.background_dark,
     fontSize: 15,
     height: 50,
     width: 350,
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     color: COLORS.font,
   },
   card: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.secondary2,
     borderRadius: 20,
   },
   cardContainer: {

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, StatusBar, Text } from "react-native";
+import { SafeAreaView, StatusBar, Text, ScrollView } from "react-native";
 import { Header, Item, Input, Icon, Button } from "native-base";
 import { COLORS } from "../../Constants/COLORS";
 import styles from "../SearchScreen/style";
 import SearchList from "../../components/SearchList";
 import { useDispatch, useSelector } from "react-redux";
 import { setQuery } from "../../Redux/Search/actions";
+import PostsSearchList from "../../components/PostsSearchList";
 
 const SearchScreen = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const SearchScreen = () => {
         </Button>
       </Header>
       <SearchList query={query} />
+      <PostsSearchList query={query}/>
     </SafeAreaView>
   );
 };

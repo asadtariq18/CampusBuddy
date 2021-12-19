@@ -65,6 +65,43 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     borderRadius: 40,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  modalClose: {
+    flex: 1,
+    margin: 3,
+    backgroundColor: "transparent",
+    paddingHorizontal: "100%",
+  },
+  modalView: {
+    height: 500,
+    width: "95%",
+    backgroundColor: COLORS.primary,
+    borderTopEndRadius: 20,
+    borderTopStartRadius: 20,
+    padding: 10,
+    shadowColor: COLORS.font_secondary,
+  },
+  headerText2: {
+    color: COLORS.font,
+    fontSize: 15,
+    marginTop: 20,
+    marginHorizontal: 10,
+    alignSelf: "center",
+    textAlign: "center",
+  },
+  modalText: {
+    fontWeight: "bold",
+    margin: 3,
+    color: COLORS.font,
+    backgroundColor: COLORS.secondary,
+    paddingHorizontal: 120,
+    paddingVertical: 2,
+    borderRadius: 20,
+  },
 });
 
 export default styles;

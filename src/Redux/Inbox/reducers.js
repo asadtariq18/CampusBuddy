@@ -1,7 +1,7 @@
 import { AUDIO, IMAGE, LAST_MESSAGE, MESSAGES, ON_FOCUS, USER } from "./actions";
 
 const initialState = {
-  user: null,
+  user: {},
   messages: null,
   lastMessage: '',
   image: null,

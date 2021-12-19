@@ -132,7 +132,16 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: COLORS.font,
     borderRadius: 25,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  },
+  textView: {
+    alignSelf: "center",
+    fontWeight: "bold",
+    marginTop: 10,
+    color: COLORS.font,
+    borderRadius: 25,
+    paddingHorizontal: 10,
     paddingVertical: 10,
   },
 });

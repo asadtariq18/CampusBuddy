@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -28,6 +28,7 @@ const ProfileScreen = ({ route }) => {
   const refreshing = useSelector((state) => state.profile.refreshing);
   const user = useSelector((state) => state.profile.user);
   const posts = useSelector((state) => state.profile.posts);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     dispatch(setUser(Database.getCurrentUser()));
@@ -97,6 +98,18 @@ const ProfileScreen = ({ route }) => {
                   uri: `${user.avatar}`,
                 }}
                 style={styles.image}
+                onLoadStart={() => {
+                  setLoading(true);
+                }}
+                onLoadEnd={() => {
+                  setLoading(false);
+                }}
+              />
+              <ActivityIndicator
+                style={styles.activityIndicator}
+                color={COLORS.primary}
+                size={"large"}
+                animating={loading}
               />
             </View>
           </View>
@@ -135,7 +148,8 @@ const ProfileScreen = ({ route }) => {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("FriendsListScreen", {
-                    userID: user.userID, newChat: false
+                    userID: user.userID,
+                    newChat: false,
                   })
                 }
               >

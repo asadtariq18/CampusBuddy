@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     backgroundColor: COLORS.background_dark,
     marginTop: 20,
-    marginBottom: 10,
+    marginBottom: -10,
   },
   headerText: {
     fontWeight: "bold",
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 150,
     height: 150,
-    marginTop: 20,
+    marginTop: 40,
     marginBottom: 40,
     borderRadius: 20,
   },

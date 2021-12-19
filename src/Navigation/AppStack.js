@@ -10,7 +10,7 @@ import InboxScreen from "../screens/InboxScreen";
 import ViewPostScreen from "../screens/ViewPostScreen";
 import DonateScreen from "../screens/DonationScreen/DonateScreen";
 import ApplyDonationScreen from "../screens/DonationScreen/ApplyDonationScreen";
-import GetStartedScreen from "../screens/FoodOrderScreen/GetStartedScreen"
+import GetStartedScreen from "../screens/FoodOrderScreen/GetStartedScreen";
 import FoodHomeScreen from "../screens/FoodOrderScreen/FoodHomeScreen";
 import { COLORS } from "../Constants/COLORS";
 import DrawerNavigator from "./DrawerNavigator/drawerNavigator";
@@ -19,10 +19,11 @@ import ConfirmOrderScreen from "../screens/FoodOrderScreen/ConfirmOrderScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
 import FriendsListScreen from "../screens/FriendsListScreen";
 import database from "../Database/database";
+import OrderPlacedScreen from "../screens/FoodOrderScreen/OrderPlacedScreen";
 
 const Stack = createStackNavigator();
 const AppStack = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   return (
     <Stack.Navigator initialRouteName="Feed">
       <Stack.Screen
@@ -101,7 +102,12 @@ const AppStack = () => {
             <Icon
               name="add"
               style={{ color: COLORS.font }}
-              onPress={()=> navigation.navigate("FriendsListScreen", {userID: database.getCurrentUser().userID, newChat: true})}
+              onPress={() =>
+                navigation.navigate("FriendsListScreen", {
+                  userID: database.getCurrentUser().userID,
+                  newChat: true,
+                })
+              }
             />
           ),
           headerRightContainerStyle: {
@@ -175,6 +181,13 @@ const AppStack = () => {
       <Stack.Screen
         name="ConfirmOrder"
         component={ConfirmOrderScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="OrderPlaced"
+        component={OrderPlacedScreen}
         options={{
           headerShown: false,
         }}

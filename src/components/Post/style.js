@@ -6,8 +6,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     opacity: 100,
     marginHorizontal: 5,
-    borderBottomColor: COLORS.font_secondary,
-    borderBottomWidth: 0.2,
 
   },
 });

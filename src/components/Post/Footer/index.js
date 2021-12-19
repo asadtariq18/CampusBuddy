@@ -8,6 +8,7 @@ import {
   TextInput,
   ToastAndroid,
 } from "react-native";
+import moment from 'moment'
 import { COLORS } from "../../../Constants/COLORS";
 import CommentList from "../../CommentList/index";
 import styles from "./style";
@@ -117,7 +118,7 @@ const dispatch = useDispatch()
       </View>
 
       <View style={styles.left}>
-        <Text style={styles.timestamp}>{post.timestamp.split(" ")[1]}</Text>
+        <Text style={styles.timestamp}>{moment(post.timestamp, "YYYYMMDDhhmmss").fromNow()}</Text>
       </View>
       <Modal
         keyboardShouldPersistTaps={"handled"}
@@ -156,8 +157,8 @@ const dispatch = useDispatch()
               }}
             >
               <TextInput
-                keyboardShouldPersistTaps={"always"}
                 placeholder="Comment"
+                value={comment}
                 multiline
                 placeholderTextColor={COLORS.font_secondary}
                 selectionColor={COLORS.primary}

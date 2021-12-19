@@ -21,7 +21,6 @@
       "versionCode": 1
     },
     "orientation": "portrait",
-    "android.config.googleMaps.apiKey": "AIzaSyD8LqtSwhYEG2iLeEOpBD6-R8bgR_27Mio",
     "version": "1.0.0",
     "assetBundlePatterns": ["*/"]
   }

@@ -10,6 +10,7 @@ import {
   ToastAndroid,
   Image,
   SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
 import { Header } from "native-base";
 import { useNavigation } from "@react-navigation/native";
@@ -36,6 +37,7 @@ const CreatePostScreen = () => {
   const type = useSelector((state) => state.createPost.type);
   const privacy = useSelector((state) => state.createPost.privacy);
   const image = useSelector((state) => state.createPost.image);
+  const [uploading, setUploading] = useState(false);
 
   const onChangeCaption = (input) => {
     dispatch(setCaption(input));
@@ -50,7 +52,9 @@ const CreatePostScreen = () => {
         aspect: [1, 1],
         quality: 0.5,
       });
-      dispatch(setImage(data.uri));
+      if (!data.cancelled) {
+        dispatch(setImage(data.uri));
+      }
     } else {
       Alert.alert("you need to give permission to work");
     }
@@ -65,18 +69,26 @@ const CreatePostScreen = () => {
         aspect: [1, 1],
         quality: 0.5,
       });
-      dispatch(setImage(data.uri));
+      if (!data.cancelled) {
+        dispatch(setImage(data.uri));
+      }
     } else {
       Alert.alert("you need to give permission to work");
     }
   };
 
-  const postPressed = () => {
+  const postPressed = async () => {
     try {
-      if (image === icon) {
-        if (caption !== "") {
+      if (caption === "" && image === icon) {
+        ToastAndroid.show("Empty Post", ToastAndroid.LONG);
+      } else {
+        if (image === icon) {
+          ToastAndroid.show("Select an image", ToastAndroid.LONG);
+        } else {
+          setUploading(true);
           ToastAndroid.show("Uploading your post", ToastAndroid.LONG);
-          Database.uploadUserPost(caption, privacy, type, null);
+          await Database.uploadUserPost(caption, privacy, type, image);
+          setUploading(false)
           dispatch(setPosts(database.getPosts()));
           navigation.navigate("Home");
 
@@ -85,20 +97,7 @@ const CreatePostScreen = () => {
           dispatch(setType("status"));
           dispatch(setPrivacy("public"));
           ToastAndroid.show("Post Uploaded", ToastAndroid.SHORT);
-        } else {
-          ToastAndroid.show("Empty Post", ToastAndroid.LONG);
         }
-      } else {
-        ToastAndroid.show("Uploading your post", ToastAndroid.LONG);
-        Database.uploadUserPost(caption, privacy, type, image);
-        dispatch(setPosts(database.getPosts()));
-        navigation.navigate("Home");
-
-        dispatch(setCaption(""));
-        dispatch(setImage(icon));
-        dispatch(setType("status"));
-        dispatch(setPrivacy("public"));
-        ToastAndroid.show("Post Uploaded", ToastAndroid.SHORT);
       }
     } catch (error) {
       console.log(error);
@@ -131,6 +130,7 @@ const CreatePostScreen = () => {
             style={styles.textInput}
             onChangeText={onChangeCaption}
             placeholder={"caption..."}
+            value={caption}
           ></TextInput>
         </View>
 
@@ -151,83 +151,13 @@ const CreatePostScreen = () => {
           </View>
         </View>
       </ScrollView>
-      <View style={styles.cardView}>
-        <View style={{ flexDirection: "row", marginTop: 8 }}>
-          <TouchableWithoutFeedback
-            onPress={() => dispatch(setPrivacy("public"))}
-          >
-            {privacy === "public" ? (
-              <View style={styles.buttonView}>
-                <Text style={styles.button_pressed}>Public</Text>
-              </View>
-            ) : (
-              <View style={styles.buttonView}>
-                <Text style={styles.button}>Public</Text>
-              </View>
-            )}
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback
-            onPress={() => dispatch(setPrivacy("private"))}
-          >
-            {privacy === "private" ? (
-              <View style={styles.buttonView}>
-                <Text style={styles.button_pressed}>Private</Text>
-              </View>
-            ) : (
-              <View style={styles.buttonView}>
-                <Text style={styles.button}>Private</Text>
-              </View>
-            )}
-          </TouchableWithoutFeedback>
+      {uploading ? 
+        <View style={{ marginBottom: 20 }}>
+          <Text style={styles.textView}>Uploading...</Text>
+          <ActivityIndicator color={COLORS.primary} size={60} />
         </View>
-        <View style={{ flexDirection: "row", marginTop: 8 }}>
-          <TouchableWithoutFeedback onPress={() => dispatch(setType("status"))}>
-            {type === "status" ? (
-              <View style={styles.buttonView}>
-                <Text style={styles.button_pressed}>Status</Text>
-              </View>
-            ) : (
-              <View style={styles.buttonView}>
-                <Text style={styles.button}>Status</Text>
-              </View>
-            )}
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => dispatch(setType("ask"))}>
-            {type === "ask" ? (
-              <View style={styles.buttonView}>
-                <Text style={styles.button_pressed}>Ask</Text>
-              </View>
-            ) : (
-              <View style={styles.buttonView}>
-                <Text style={styles.button}>Ask</Text>
-              </View>
-            )}
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => dispatch(setType("lost"))}>
-            {type === "lost" ? (
-              <View style={styles.buttonView}>
-                <Text style={styles.button_pressed}>Lost</Text>
-              </View>
-            ) : (
-              <View style={styles.buttonView}>
-                <Text style={styles.button}>Lost</Text>
-              </View>
-            )}
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => dispatch(setType("found"))}>
-            {type === "found" ? (
-              <View style={styles.buttonView}>
-                <Text style={styles.button_pressed}>Found</Text>
-              </View>
-            ) : (
-              <View style={styles.buttonView}>
-                <Text style={styles.button}>Found</Text>
-              </View>
-            )}
-          </TouchableWithoutFeedback>
-        </View>
-      </View>
-      <View></View>
+       : null}
+
       <TouchableWithoutFeedback onPress={postPressed}>
         <View style={styles.postButton}>
           <Text style={styles.h1text}>Post</Text>

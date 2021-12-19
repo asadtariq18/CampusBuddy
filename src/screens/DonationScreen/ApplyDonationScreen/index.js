@@ -40,7 +40,7 @@ const RequestScreen = () => {
       <Image
         style={styles.image}
         source={{
-          uri: "https://www.kindpng.com/picc/m/182-1822049_donation-png-free-download-international-day-for-charity.png",
+          uri: "https://www.shareicon.net/data/128x128/2016/09/07/826989_heart_512x512.png",
         }}
       />
       <TextInput

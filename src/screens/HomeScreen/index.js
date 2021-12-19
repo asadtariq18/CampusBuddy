@@ -17,19 +17,35 @@ import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import Database from "../../Database/database";
 import { setRefreshing, setUser, setPosts } from "../../Redux/Home/actions";
+import { setLoad } from "../../Redux/LoadDB/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/core";
 import { LinearGradient } from "expo-linear-gradient";
+import database from "../../Database/database";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const refreshing = useSelector((state) => state.home.refreshing);
+  const load = useSelector((state) => state.loadDB.load);
+
   const user = useSelector((state) => state.home.user);
   const posts = useSelector((state) => state.home.posts);
+
+    useEffect(() => {
+      // dispatch(setLoad(true));
+      console.log("Loaded");
+      dispatch(setUser(Database.getCurrentUser()));
+      dispatch(setPosts(Database.getPosts()));
+      // dispatch(setLoad(false));
+    }, []);
+  
   useEffect(() => {
+    dispatch(setLoad(true));
+    console.log("STart");
     dispatch(setUser(Database.getCurrentUser()));
     dispatch(setPosts(Database.getPosts()));
+    onRefresh()
   }, []);
 
   const onRefresh = React.useCallback(async () => {

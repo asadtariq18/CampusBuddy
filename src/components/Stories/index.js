@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, FlatList, TouchableOpacity, Text } from "react-native";
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  Text,
+  ActivityIndicator,
+  ToastAndroid,
+} from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
@@ -9,9 +16,16 @@ import data from "../../Data/StoriesData/stories";
 import database from "../../Database/database";
 import { COLORS } from "../../Constants/COLORS";
 import { useSelector } from "react-redux";
+import MyStory from "../MyStory";
 const Stories = () => {
-  const storiesData = database.getUserStories();
-  const myStory = useSelector((state) => state.story.myStory);
+  const [storiesData, setStoriesData] = useState(null);
+  // const myStory = useSelector((state) => state.story.myStory);
+  const [myStory, setMyStory] = useState(null);
+  const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    setStoriesData(database.getUserStories());
+  }, []);
   const pickFromGallery = async () => {
     const { granted } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (granted) {
@@ -21,7 +35,13 @@ const Stories = () => {
         aspect: [1, 1],
         quality: 0.5,
       });
-      database.uploadUserStory(media.uri);
+      if (!media.cancelled) {
+        setUploading(true);
+        await database.uploadUserStory(media.uri);
+        setUploading(false);
+        setStoriesData(database.getUserStories());
+        ToastAndroid.show("Story Uploaded", ToastAndroid.SHORT);
+      }
     } else {
       Alert.alert("you need to give up permission to work");
     }
@@ -37,7 +57,14 @@ const Stories = () => {
           aspect: [9, 16],
           quality: 1,
         });
-        database.uploadUserStory(media.uri);
+        if (!media.cancelled) {
+          setUploading(true);
+          database.uploadUserStory(media.uri).then(() => {
+            setUploading(false);
+            setStoriesData(database.getUserStories());
+            ToastAndroid.show("Story Uploaded", ToastAndroid.SHORT);
+          });
+        }
       } else {
         Alert.alert("you need to give up permission to work");
       }
@@ -47,13 +74,23 @@ const Stories = () => {
   };
 
   const renderStory = (item) => {
-    return (
-      <StoryPreview
-        userStoriesObj={item}
-        color={COLORS.secondary2}
-        borderColor={COLORS.primary}
-      />
-    );
+    if (item.user.userID === database.getCurrentUser().userID) {
+      return (
+        <StoryPreview
+          userStoriesObj={item}
+          color={COLORS.primary}
+          borderColor={COLORS.secondary2}
+        />
+      );
+    } else {
+      return (
+        <StoryPreview
+          userStoriesObj={item}
+          color={COLORS.primary}
+          borderColor={COLORS.secondary2}
+        />
+      );
+    }
 
     //   friendsList.filter((value) =>{ console.log(value.userID)
     //   console.log(Object.values(item.user)[0])
@@ -71,19 +108,31 @@ const Stories = () => {
   };
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={camPress}>
-        <View style={styles.plusIcon}>
-          <Icon name="pluscircleo" color="gray" size={50} />
-          <Text style={styles.name}>Add</Text>
+      {uploading ? (
+        <View style={styles.loadingView}>
+          <ActivityIndicator color={COLORS.primary} size={"small"} />
+          <Text style={styles.name}>Uploading</Text>
         </View>
-      </TouchableOpacity>
-      {myStory ? (
-        <StoryPreview
+      ) : (
+        <TouchableOpacity onPress={camPress}>
+          <View style={styles.plusIcon}>
+            <Icon
+              style={{ marginBottom: 4 }}
+              name="pluscircleo"
+              color="gray"
+              size={50}
+            />
+            <Text style={styles.name}>Add</Text>
+          </View>
+        </TouchableOpacity>
+      )}
+      {/* {myStory ? (
+        <MyStory
           userStoriesObj={myStory}
           color={COLORS.primary}
           borderColor={COLORS.secondary}
         />
-      ) : null}
+      ) : null} */}
       <View style={styles.container}>
         <FlatList
           style={styles.storiesContainer}

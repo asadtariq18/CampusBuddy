@@ -7,28 +7,70 @@ import {
   View,
   StatusBar,
   Modal,
+  ActivityIndicator,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { COLORS } from "../../../Constants/COLORS";
 import styles from "./style";
 import { useNavigation } from "@react-navigation/core";
 import OrderList from "../../../components/OrderList";
-import Basket from '../../../components/Basket'
+import Basket from "../../../components/Basket";
+import database from "../../../Database/database";
+import { setBasket, setTotal } from "../../../Redux/OrderFood/actions";
+import * as Location from "expo-location";
 
-const ConfirmOrderScreen = () => {
+const ConfirmOrderScreen = ({ route }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [modal, setModal] = useState(false)
+  const [modal, setModal] = useState(false);
   const total = useSelector((state) => state.orderFood.total);
   const basket = useSelector((state) => state.orderFood.basket);
+  const { cafe } = route.params;
+  const [loading, setLoading] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState("getting your location");
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
-  const confirmOrder = () => {
-    alert("Order Placed");
-    // navigation.navigate("ConfirmOrder");
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+
+  let text = "Waiting..";
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+  }
+  const confirmOrder =  async () => {
+    if (basket.length >= 1) {
+      if (location) {
+        setLoading(true);
+        await  database.placeFoodOrder(basket, total, cafe.cafeID, location, cafe.cafeName);
+        setLoadingStatus("getting your location");
+        setLoading(false);
+        dispatch(setTotal(0));
+        dispatch(setBasket([]));
+        navigation.navigate("OrderPlaced");
+      } else {
+        alert("Please add your location");
+      }
+    } else {
+      alert("Select some food to order");
+    }
   };
-    const basketPress = () => {
-      setModal(!modal);
-    };
+  const basketPress = () => {
+    setModal(!modal);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar showHideTransition backgroundColor={COLORS.primary} />
@@ -53,6 +95,7 @@ const ConfirmOrderScreen = () => {
           style={{
             flexDirection: "row",
             alignSelf: "flex-start",
+            marginRight: 8
           }}
         >
           <TouchableOpacity onPress={basketPress}>
@@ -60,12 +103,7 @@ const ConfirmOrderScreen = () => {
           </TouchableOpacity>
           <Text style={styles.count}> {basket.length} </Text>
         </View>
-        <TouchableOpacity>
-          <Text style={styles.Button2}> View Order </Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.Button2}> History </Text>
-        </TouchableOpacity>
+
       </View>
 
       <View
@@ -133,12 +171,24 @@ const ConfirmOrderScreen = () => {
           <Text style={styles.headerText}>Total: {total}</Text>
           <Text style={styles.text}>Rs. 10 delivery charges</Text>
         </View>
-        <View style={{ alignSelf: "center" }}>
-          <Text style={styles.text}>Your Order</Text>
-          <TouchableOpacity onPress={confirmOrder}>
-            <Text style={styles.Button3}>Confirm</Text>
-          </TouchableOpacity>
-        </View>
+        {loading ? (
+          <View style={{ alignSelf: "center" }}>
+            <Text style={styles.loadingText}> {loadingStatus} </Text>
+            <ActivityIndicator
+              style={styles.activityIndicator}
+              color={COLORS.font}
+              size={"large"}
+              animating={loading}
+            />
+          </View>
+        ) : (
+          <View style={{ alignSelf: "center" }}>
+            <Text style={styles.text}>Your Order</Text>
+            <TouchableOpacity onPress={confirmOrder}>
+              <Text style={styles.Button3}>Confirm</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );

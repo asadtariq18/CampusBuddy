@@ -1,7 +1,7 @@
 // @refresh reset
 
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, Keyboard, Dimensions } from "react-native";
+import { View, Text, Keyboard, Dimensions, Image } from "react-native";
 import { Icon, Button } from "native-base";
 import {
   GiftedChat,
@@ -47,11 +47,11 @@ LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
 const db = firebase.firestore();
 
 const InboxScreen = ({ route }) => {
-  
   const dispatch = useDispatch();
   let recording = new Audio.Recording();
-  const user = useSelector((state) => state.inbox.user);
-  let id = `${route.params.userID}+${user.userID}`;
+  const [user, setUser] = useState();
+
+  let id = `${route.params.userID}+${database.getCurrentUser().userID}`;
   const chatID = sort(id);
   const chatsRef = db.collection(`Chats/c/${chatID}`);
 
@@ -61,9 +61,16 @@ const InboxScreen = ({ route }) => {
   const audio = useSelector((state) => state.inbox.audio);
   const onFocus = useSelector((state) => state.inbox.onFocus);
   const lastMessage = useSelector((state) => state.inbox.lastMessage);
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
-    readUser();
+    let user = {
+      userID: database.getCurrentUser().userID,
+      name: database.getCurrentUser().name,
+    };
+
+    setUser(user);
+    //readUser();
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
       dispatch(setOnFocus(true));
     });
@@ -81,7 +88,7 @@ const InboxScreen = ({ route }) => {
     return id.split("").sort().join("");
   }
   useEffect(() => {
-    readUser();
+    //readUser();
     const unsubscribe = chatsRef.onSnapshot((querySnapshot) => {
       const messagesFirestore = querySnapshot
         .docChanges()
@@ -108,33 +115,40 @@ const InboxScreen = ({ route }) => {
   async function readUser() {
     const user = await AsyncStorage.getItem("user");
     if (user) {
-      dispatch(
-        setUser({
-          userID: JSON.parse(user).userID,
-          name: JSON.parse(user).name,
-        })
-      );
+      console.log("USer: ", user);
+      // dispatch(
+      //   setUser({
+      //     userID: JSON.parse(user).userID,
+      //     name: JSON.parse(user).name,
+      //   })
+      // );
     }
   }
 
   async function handleSend(messages) {
     let lm;
-    const writes = messages.map((m) => {
+    const writes = messages.map(async (m) => {
       if (image) {
+        setSending(true);
+        const imageURL = await database.uploadImage(image);
         m.image = image;
         dispatch(setImage(null));
         dispatch(setLastMessage("*IMAGE*"));
         lm = "*IMAGE*";
+        chatsRef.add(m);
+        setSending(false);
       } else if (audio) {
         m.audio = audio;
         dispatch(setAudio(null));
         dispatch(setLastMessage("*VOICE MESSAGE*"));
         lm = "*VOICE MESSAGE*";
+        chatsRef.add(m);
       } else {
         dispatch(setLastMessage(m.text));
         lm = m.text;
+        chatsRef.add(m);
+        // console.log(m);
       }
-      chatsRef.add(m);
     });
     await Promise.all(writes).then(() => {
       database.addToChatList(chatID, route.params.userID, lm);
@@ -143,6 +157,7 @@ const InboxScreen = ({ route }) => {
 
   async function startRecording() {
     try {
+      console.log(user);
       console.log("Requesting permissions..");
       await Audio.requestPermissionsAsync();
       await Audio.setAudioModeAsync({
@@ -182,12 +197,46 @@ const InboxScreen = ({ route }) => {
       });
       dispatch(setImage(data.uri));
     } else {
+      alert("you need to give permission to work");
+    }
+  };
+  const pickFromGallery = async () => {
+    const { granted } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (granted) {
+      let data = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.5,
+      });
+      dispatch(setImage(data.uri));
+    } else {
       Alert.alert("you need to give permission to work");
     }
   };
 
   return (
     <View style={styles.container}>
+      {sending ? (
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "transparent",
+          }}
+        >
+          <Text style={styles.text2}> Sending image... </Text>
+          <LinearProgress
+            value={1}
+            style={{
+              marginVertical: 5,
+              width: Dimensions.get("window").width / 2,
+            }}
+            color={COLORS.primary}
+            trackColor={COLORS.secondary2}
+          />
+        </View>
+      ) : null}
       {isRecording ? (
         <View
           style={{
@@ -208,134 +257,156 @@ const InboxScreen = ({ route }) => {
           />
         </View>
       ) : null}
-      <GiftedChat
-        renderBubble={(props) => {
-          return (
-            <Bubble
-              {...props}
-              textStyle={{
-                left: {
-                  color: COLORS.font,
-                },
-              }}
-              wrapperStyle={{
-                right: {
-                  backgroundColor: COLORS.primary,
-                },
-                left: {
-                  backgroundColor: COLORS.secondary2,
-                },
-              }}
-            />
-          );
-        }}
-        renderInputToolbar={(props) => {
-          return (
-            <InputToolbar
-              {...props}
-              containerStyle={styles.textInput}
-              textInputStyle={{ color: COLORS.font }}
-            ></InputToolbar>
-          );
-        }}
-        renderAvatar={null}
-        renderLoadEarlier={(props) => {
-          return (
-            <LinearProgress
-              {...props}
-              value={1}
-              style={{
-                marginVertical: 10,
-                width: Dimensions.get("window").width / 2,
-                backgroundColor: "transparent",
-              }}
-              color={COLORS.primary}
-              trackColor={COLORS.secondary2}
-            />
-          );
-        }}
-        renderSend={(props) => {
-          return (
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Button transparent style={styles.button3} onPress={camPress}>
-                <Icon name="ios-camera" />
-              </Button>
-              {onFocus ? null : (
-                <Button
-                  transparent
-                  style={styles.button3}
-                  onPressIn={startRecording}
-                  onPressOut={stopRecording}
-                >
-                  <Icon name="ios-mic" />
-                </Button>
-              )}
-              <Send
+      {user != undefined ? (
+        <GiftedChat
+          renderBubble={(props) => {
+            return (
+              <Bubble
                 {...props}
-                containerStyle={styles.button2}
-                textStyle={styles.text2}
+                textStyle={{
+                  left: {
+                    color: COLORS.font,
+                  },
+                }}
+                wrapperStyle={{
+                  right: {
+                    backgroundColor: COLORS.primary,
+                  },
+                  left: {
+                    backgroundColor: COLORS.secondary2,
+                  },
+                }}
               />
-            </View>
-          );
-        }}
-        renderChatEmpty={() => {
-          return (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            );
+          }}
+          alwaysShowSend
+          renderInputToolbar={(props) => {
+            return (
+              <InputToolbar
+                {...props}
+                containerStyle={styles.textInput}
+                textInputStyle={{ color: COLORS.font }}
+              ></InputToolbar>
+            );
+          }}
+          renderAvatar={null}
+          renderLoadEarlier={(props) => {
+            return (
               <LinearProgress
+                {...props}
                 value={1}
                 style={{
                   marginVertical: 10,
                   width: Dimensions.get("window").width / 2,
+                  backgroundColor: "transparent",
                 }}
                 color={COLORS.primary}
                 trackColor={COLORS.secondary2}
               />
-
-              <Text style={styles.text}> No Messages, Start your chat </Text>
-            </View>
-          );
-        }}
-        renderLoading={(props) => {
-          return (
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "transparent",
-              }}
-            >
-              <LinearProgress
-                {...props}
-                value={1}
+            );
+          }}
+          renderSend={(props) => {
+            return (
+              <View>
+                {image ? (
+                  <Image
+                    style={styles.image}
+                    source={{
+                      uri: image,
+                    }}
+                  />
+                ) : null}
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  {image ? null : (
+                    <Button
+                      transparent
+                      style={styles.button3}
+                      onPress={pickFromGallery}
+                    >
+                      <Icon name="ios-camera" />
+                    </Button>
+                  )}
+                  {onFocus || image ? null : (
+                    <Button
+                      transparent
+                      style={styles.button3}
+                      onPressIn={startRecording}
+                      onPressOut={stopRecording}
+                    >
+                      <Icon name="ios-mic" />
+                    </Button>
+                  )}
+                  <Send
+                    {...props}
+                    containerStyle={styles.button2}
+                    textStyle={styles.text2}
+                  />
+                </View>
+              </View>
+            );
+          }}
+          renderChatEmpty={() => {
+            return (
+              <View
                 style={{
-                  marginBottom: Dimensions.get("window").height / 2.2,
-                  width: Dimensions.get("window").width,
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-                color={COLORS.primary}
-                trackColor={COLORS.secondary2}
-              />
-              <Text style={styles.text2}> Loading Messages... </Text>
-            </View>
-          );
-        }}
-        messagesContainerStyle={{
-          borderTopStartRadius: 20,
-          borderTopEndRadius: 20,
-          backgroundColor: "#0f0f0f",
-          paddingBottom: 60,
-          height: "100%",
-        }}
-        style={styles.container}
-        messages={messages}
-        user={user}
-        onSend={handleSend}
-      />
+              >
+                <LinearProgress
+                  value={1}
+                  style={{
+                    marginVertical: 10,
+                    width: Dimensions.get("window").width / 2,
+                  }}
+                  color={COLORS.primary}
+                  trackColor={COLORS.secondary2}
+                />
+
+                <Text style={styles.text}> No Messages, Start your chat </Text>
+              </View>
+            );
+          }}
+          renderLoading={(props) => {
+            return (
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "transparent",
+                }}
+              >
+                <LinearProgress
+                  {...props}
+                  value={1}
+                  style={{
+                    marginBottom: Dimensions.get("window").height / 2.2,
+                    width: Dimensions.get("window").width,
+                  }}
+                  color={COLORS.primary}
+                  trackColor={COLORS.secondary2}
+                />
+                <Text style={styles.text2}> Loading Messages... </Text>
+              </View>
+            );
+          }}
+          messagesContainerStyle={{
+            borderTopStartRadius: 20,
+            borderTopEndRadius: 20,
+            backgroundColor: "#0f0f0f",
+            paddingBottom: 60,
+            height: "100%",
+          }}
+          style={styles.container}
+          messages={messages}
+          user={{
+            _id: database.getCurrentUser().userID,
+            name: database.getCurrentUser().name,
+          }}
+          onSend={handleSend}
+        />
+      ) : null}
     </View>
   );
 };

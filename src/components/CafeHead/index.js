@@ -4,10 +4,10 @@ import { TouchableOpacity, Text, View, Image } from "react-native";
 
 import styles from "./style";
 
-const CafeHead = ({ image, name, rating }) => {
+const CafeHead = ({ image, name, rating, cafeID }) => {
   const navigation = useNavigation();
   const onPress = () => {
-    navigation.navigate("CafeMenu", {name: name, rating: rating, image: image});
+    navigation.navigate("CafeMenu", {cafeName: name, rating: rating, image: image, cafeID: cafeID});
   };
 
   return (

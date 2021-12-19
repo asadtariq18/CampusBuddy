@@ -30,6 +30,8 @@ const StoryScreen = () => {
   const [activeStory, setActiveStory] = useState(null);
   const [emptyInput, setEmptyInput] = useState(true);
   const [messageText, setMessageText] = useState("");
+  const [views, setViews] = useState(0)
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setUsername(route.params.username);
@@ -37,11 +39,17 @@ const StoryScreen = () => {
     setUserID(route.params.userID);
     setUserStories(route.params.stories);
     setActiveStoryIndex(0);
+    
   }, []);
 
   useEffect(() => {
     if (userStories && userStories.length > activeStoryIndex - 1) {
       setActiveStory(userStories[activeStoryIndex]);
+      console.log(activeStory)
+      // let viewers = database.getStoryViews(activeStory.storyID=, userID)
+      // if(viewers){
+      //   setViews(viewers.length);
+      // }
     }
   }, [activeStoryIndex]);
 
@@ -61,7 +69,8 @@ const StoryScreen = () => {
       alert("Delete Story");
     };
   const handleNextStory = () => {
-    if (activeStoryIndex >= stories.length - 1) {
+    if (activeStoryIndex >= stories.length -1) {
+      navigation.goBack();
       return;
     }
     setActiveStoryIndex(activeStoryIndex + 1);
@@ -91,7 +100,7 @@ const StoryScreen = () => {
     return (
       <TouchableHighlight onPress={onPress}>
         <SafeAreaView style={styles.container}>
-          <ActivityIndicator color={COLORS.primary} size={60} />
+          <ActivityIndicator color={COLORS.primary} size={30} />
         </SafeAreaView>
       </TouchableHighlight>
     );
@@ -102,6 +111,12 @@ const StoryScreen = () => {
         <ImageBackground
           style={styles.image}
           source={{ uri: activeStory.imageUri }}
+          onLoadEnd={() => {
+            setLoading(false);
+          }}
+          onLoadStart={() => {
+            setLoading(true);
+          }}
         >
           <View style={styles.top}>
             <ProfilePicture border={0} size={35} uri={imageUri} />
@@ -110,14 +125,22 @@ const StoryScreen = () => {
               {moment(activeStory.postedAt, "YYYYMMDDhhmmss").fromNow()}
             </Text>
           </View>
-
+          <ActivityIndicator
+            color={COLORS.primary}
+            size={60}
+            animating={loading}
+          />
           {userID === database.getCurrentUser().userID ? (
             <View style={styles.bottomContainer}>
-                <View style={{flexDirection: "row"}}>
-              <Text style={styles.messageButton2}>Views</Text>
-              <Text style={styles.viewsCount}>{activeStory.views}</Text>
-                </View>
-              <TouchableOpacity  onPress={handleDelete}>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={styles.messageButton2}>Views</Text>
+                {views ? (
+                  <Text style={styles.viewsCount}>{views}</Text>
+                ) : (
+                  <Text style={styles.viewsCount}>0</Text>
+                )}
+              </View>
+              <TouchableOpacity onPress={handleDelete}>
                 <Text style={styles.messageButton2}>Delete</Text>
               </TouchableOpacity>
             </View>

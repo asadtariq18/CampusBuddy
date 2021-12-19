@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     backgroundColor: COLORS.background_dark,
     marginTop: 20,
-    marginBottom: 10,
+    marginBottom: -10,
   },
   headerText: {
     fontWeight: "bold",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   View,
@@ -7,34 +7,81 @@ import {
   TouchableOpacity,
   Image,
   ToastAndroid,
+  ActivityIndicator,
 } from "react-native";
-import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
+import {
+  CardField,
+  useConfirmPayment,
+  useStripe,
+} from "@stripe/stripe-react-native";
 import styles from "./style";
 import { COLORS } from "../../../Constants/COLORS";
 import database from "../../../Database/database";
 import { useDispatch, useSelector } from "react-redux";
 import { setCardDetails, setAmount } from "../../../Redux/Donate/actions";
+import axios from "axios";
 
 const DonateScreen = () => {
   const dispatch = useDispatch();
   const cardDetails = useSelector((state) => state.donate.cardDetails);
-  const amount = useSelector((state) => state.donate.amount);
+  const [amount, setAmount] = useState(0);
+  const [key, setKey] = useState("");
 
-  const { confirmPayment, loading } = useConfirmPayment();
+  const [loading, setLoading] = useState(false);
+  const { confirmPayment } = useStripe();
+  useEffect(() => {
+    getSecretKey();
+  }, []);
+  useEffect(() => {
+    console.log(amount);
+  }, [amount]);
 
-  const fetchPaymentIntentClientSecret = async () => {};
+  const getSecretKey = () => {
+    axios
+      .post("http://192.168.1.100:3030/create-payment-intent", {
+        amount,
+      })
+      .then((response) => {
+        console.log(response.data.clientSecret);
+        setKey(response.data.clientSecret);
+      })
+      .catch((err) => console.log("Errr", err));
+  };
 
-  const onPress = async () => {
-    if (!cardDetails?.complete || amount === 0) {
-      ToastAndroid.show("Fill the required card fields", ToastAndroid.SHORT);
-      return;
+  // const { confirmPayment, loading } = useConfirmPayment();
+  const handlePayment = async () => {
+    
+    getSecretKey();
+    setLoading(true);
+    const { error } = await confirmPayment(key, {
+      type: "Card",
+      billingDetails: {
+        email: database.getCurrentUser().mail,
+      },
+    });
+    setLoading(false);
+    if (error) {
+      console.log(error, error.message);
     } else {
-      const billingDetails = {
-        amount: amount,
-      };
-      database.uploadDonationHistory(cardDetails, amount);
-      ToastAndroid.show("Payment Successful", ToastAndroid.LONG);
+      alert("Payment Successful!");
     }
+  };
+
+  // const onPress = async () => {
+  //   if (!cardDetails?.complete || amount === 0) {
+  //     ToastAndroid.show("Fill the required card fields", ToastAndroid.SHORT);
+  //     return;
+  //   } else {
+  //     const billingDetails = {
+  //       amount: amount,
+  //     };
+  //     database.uploadDonationHistory(cardDetails, amount);
+  //     ToastAndroid.show("Payment Successful", ToastAndroid.LONG);
+  //   }
+  // };
+
+  const changeAmount = (value) => {
+    setAmount(value);
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -60,11 +107,17 @@ const DonateScreen = () => {
         placeholderTextColor={COLORS.font_secondary}
         selectionColor={COLORS.primary}
         style={styles.textInput}
-        onChangeText={(value) => dispatch(setAmount(value.trim()))}
+        onChangeText={(value) => {
+          changeAmount(value.trim());
+        }}
       ></TextInput>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity onPress={handlePayment}>
         <View style={styles.buttonView}>
-          <Text style={styles.button2}>Donate</Text>
+          {loading ? (
+            <ActivityIndicator size={30} color={COLORS.font} />
+          ) : (
+            <Text style={styles.button2}>Donate</Text>
+          )}
         </View>
       </TouchableOpacity>
     </SafeAreaView>
