@@ -32,13 +32,10 @@ const DonateScreen = () => {
   useEffect(() => {
     getSecretKey();
   }, []);
-  useEffect(() => {
-    console.log(amount);
-  }, [amount]);
 
   const getSecretKey = () => {
     axios
-      .post("http://192.168.1.100:3030/create-payment-intent", {
+      .post("http://10.113.51.70:3020/create-payment-intent", {
         amount,
       })
       .then((response) => {
@@ -50,7 +47,6 @@ const DonateScreen = () => {
 
   // const { confirmPayment, loading } = useConfirmPayment();
   const handlePayment = async () => {
-    
     getSecretKey();
     setLoading(true);
     const { error } = await confirmPayment(key, {
@@ -61,24 +57,11 @@ const DonateScreen = () => {
     });
     setLoading(false);
     if (error) {
-      console.log(error, error.message);
+      ToastAndroid.show("Server is busy, try again", ToastAndroid.LONG);
     } else {
       alert("Payment Successful!");
     }
   };
-
-  // const onPress = async () => {
-  //   if (!cardDetails?.complete || amount === 0) {
-  //     ToastAndroid.show("Fill the required card fields", ToastAndroid.SHORT);
-  //     return;
-  //   } else {
-  //     const billingDetails = {
-  //       amount: amount,
-  //     };
-  //     database.uploadDonationHistory(cardDetails, amount);
-  //     ToastAndroid.show("Payment Successful", ToastAndroid.LONG);
-  //   }
-  // };
 
   const changeAmount = (value) => {
     setAmount(value);
@@ -111,15 +94,19 @@ const DonateScreen = () => {
           changeAmount(value.trim());
         }}
       ></TextInput>
-      <TouchableOpacity onPress={handlePayment}>
+      {loading ? (
+        <ActivityIndicator size={30} color={COLORS.font} />
+      ) : (
         <View style={styles.buttonView}>
-          {loading ? (
-            <ActivityIndicator size={30} color={COLORS.font} />
+          {amount != 0 ? (
+            <TouchableOpacity onPress={handlePayment}>
+              <Text style={styles.button2}>Donate</Text>
+            </TouchableOpacity>
           ) : (
-            <Text style={styles.button2}>Donate</Text>
+            <Text style={styles.button1}>Donate</Text>
           )}
         </View>
-      </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 };

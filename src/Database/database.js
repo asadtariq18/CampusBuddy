@@ -92,6 +92,14 @@ function getPosts() {
     console.log(error);
   }
 }
+function isPostExist(postID) {
+  let posts = getPosts();
+  let res = false;
+  Object.values(posts).forEach((post) => {
+    if (post.postID === postID) res = true;
+  });
+  return res;
+}
 
 function isFriend(userID) {
   const self = getCurrentUser();
@@ -147,7 +155,7 @@ function removeFriendRequest(userID) {
     .remove();
 }
 function sendFriendRequest(userID) {
-  let timestamp = moment().format("YYYYMMDDhhmmss");
+  let timestamp = moment().format("YYYYMMDDHHmmss");
   const self = getCurrentUser();
   const notificationText = "sent you a friend request";
   firebase
@@ -160,7 +168,49 @@ function sendFriendRequest(userID) {
     });
   sendNotification(userID, timestamp, notificationText);
 }
+function deleteAccount() {
+  // try {
+  // let userID = getCurrentUser().userID;
+  // var user = firebase.auth().currentUser;
+  // user
+  //   .delete().then(function () {
+  //     console.log("Account Deleted")
+  //   })
+  //       // firebase.database().ref(`db/users/user_${userID}`).remove();
+  //       // firebase
+  //       //   .database()
+  //       //   .ref(`db/FoodOrders/customers/${userID}`)
+  //       //   .remove();
+  //       // firebase.database().ref(`db/stories/${userID}`).remove();
 
+  //       // firebase
+  //       //   .database()
+  //       //   .ref(`db/posts`)
+  //       //   .on("child_added", (snapshot) => {
+  //       //     const post = snapshot.val();
+  //       //     if (post.postID.includes(userID)) {
+  //       //       console.log(post.postID);
+  //       //       firebase.database().ref(`db/posts/${post.postID}`).remove();
+  //       //     }
+  //       //     // auth.signOut();
+  //       //   });
+  //     } catch (error) {
+  //       auth.reauthenticateWithCredential()
+  //       console.log(error);
+  //     }
+    }
+
+function check() {
+  firebase
+    .database()
+    .ref(`db/posts`)
+    .on("child_added", (snapshot) => {
+      const post = snapshot.val();
+      if (post.postID.includes("asadtariq070")) {
+        console.log(post.postID);
+      }
+    });
+}
 function sendNotification(userID, timestamp, notificationText) {
   const self = getCurrentUser();
   firebase
@@ -168,7 +218,7 @@ function sendNotification(userID, timestamp, notificationText) {
     .ref(
       `db/users/user_${userID}/notifications/${self.userID
         .toLowerCase()
-        .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
+        .replace(/-/g, "")}_${moment().format("YYYYMMDDHHmmss")}`
     )
     .update({
       userID: self.userID,
@@ -201,6 +251,18 @@ function getChatList() {
   return chatList;
 }
 
+function getUsers() {
+  let users;
+  firebase
+    .database()
+    .ref(`db/users`)
+    .on("value", (snapshot) => {
+      const u = snapshot.val();
+      users = u;
+    });
+  return users;
+}
+
 function getFriends(userID) {
   let friendsList;
   firebase
@@ -224,6 +286,23 @@ function getStoryViews(storyID, userID) {
     });
   return viewsList;
 }
+function storyViewed(storyID, userID) {
+  console.log(storyID);
+  let viewers = [];
+  firebase
+    .database()
+    .ref(`db/stories/${userID}/stories/${storyID}`)
+    .on("value", (snapshot) => {
+      const story = snapshot.val();
+      if (story.views) {
+        viewers = Object.values(story.views);
+      }
+    });
+  viewers.push(userID);
+  firebase.database().ref(`db/stories/${userID}/stories/${storyID}`).update({
+    views: viewers,
+  });
+}
 
 function getNotifications() {
   let notifications = getCurrentUser().notifications;
@@ -237,14 +316,7 @@ function likeAction(likes_count, postID) {
 }
 
 function uploadComment(postID, commentText) {
-  let timestamp = moment().format("YYYYMMDDhhmmss");
-  console.log(moment(timestamp, "YYYYMMDDhhmmss").fromNow())
-  // if(moment(timestamp, "YYYYMMDDhhmmss").fromNow() === "12 hours ago")
-  // {
-  //   console.log(moment(timestamp, "YYYYMMDDhhmmss").fromNow())
-  //   timestamp = moment().add(12, "hours").format("YYYYMMDDhhmmss"); 
-  //   console.log(moment(timestamp, "YYYYMMDDhhmmss").fromNow());
-  // }
+  let timestamp = moment().format("YYYYMMDDHHmmss");
   let user = getCurrentUser();
   let commentID = `${user.userID}${timestamp}`;
   firebase.database().ref(`db/posts/${postID}/comments/${commentID}`).update({
@@ -272,7 +344,7 @@ function getComments(postID) {
   return commentsArray;
 }
 const uploadImage = async (uri) => {
-  let timestamp = moment().format("YYYYMMDDhhmmss");
+  let timestamp = moment().format("YYYYMMDDHHmmss");
   const response = await fetch(uri);
   const blob = await response.blob();
   const ref = firebase
@@ -294,7 +366,7 @@ const uploadImage = async (uri) => {
 
 async function uploadUserStory(image) {
   const user = getCurrentUser();
-  let timestamp = moment().format("YYYYMMDDhhmmss");
+  let timestamp = moment().format("YYYYMMDDHHmmss");
   let imageURL = await uploadImage(image);
   firebase
     .database()
@@ -302,6 +374,7 @@ async function uploadUserStory(image) {
     .update({
       user: {
         userID: user.userID,
+        lastStoryTime: timestamp,
       },
     });
 
@@ -325,17 +398,18 @@ function getUserStories() {
     .ref(`db/stories/`)
     .on("value", (snapshot) => {
       const userStories = snapshot.val();
-      // console.log(userStories)
-      userStoriesList = Object.keys(userStories).map(function (_) {
-        return userStories[_];
-      });
+      if (userStories) {
+        userStoriesList = Object.keys(userStories).map(function (_) {
+          return userStories[_];
+        });
+      }
     });
   return userStoriesList;
 }
 
 async function uploadUserPost(caption, privacy, type, image) {
   const user = getCurrentUser();
-  let timestamp = moment().format("YYYYMMDDhhmmss");
+  let timestamp = moment().format("YYYYMMDDHHmmss");
   const imageURL = await uploadImage(image);
 
   firebase
@@ -343,14 +417,14 @@ async function uploadUserPost(caption, privacy, type, image) {
     .ref(
       `db/posts/post_${user.userID
         .toLowerCase()
-        .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
+        .replace(/-/g, "")}_${moment().format("YYYYMMDDHHmmss")}`
     )
     .update({
       mail: user.mail,
       userID: user.mail.split("@")[0],
       postID: `post_${user.userID
         .toLowerCase()
-        .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`,
+        .replace(/-/g, "")}_${moment().format("YYYYMMDDHHmmss")}`,
       caption: caption,
       owner: user.name,
       privacy: privacy,
@@ -380,7 +454,7 @@ function uploadDonationHistory(cardDetails, amount) {
       .ref(
         `db/donation_history/donation_${user.userID
           .toLowerCase()
-          .replace(/-/g, "")}_${moment().format("YYYYMMDDhhmmss")}`
+          .replace(/-/g, "")}_${moment().format("YYYYMMDDHHmmss")}`
       )
       .update({
         userID: user.mail.split("@")[0],
@@ -392,14 +466,65 @@ function uploadDonationHistory(cardDetails, amount) {
     console.log(error);
   }
 }
-
-async function placeFoodOrder(orderDetails,total, cafeID, location, cafeName) {
+function setOrderStatus(orderID, cafeID) {
+  console.log(orderID);
+  console.log(cafeID);
   try {
+    const user = getCurrentUser();
+    firebase.database().ref(`db/FoodOrders/cafes/${cafeID}/${orderID}`).update({
+      status: "Completed",
+    });
+    firebase
+      .database()
+      .ref(`db/FoodOrders/customers/${user.userID}/${orderID}`)
+      .update({
+        status: "Completed",
+      });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function deletePost(postID) {
+  try {
+    const user = getCurrentUser();
+    firebase.database().ref(`db/posts/${postID}`).remove();
+
+    firebase
+      .database()
+      .ref(`db/users/user_${user.userID}`)
+      .update({
+        posts_count: user.posts_count - 1,
+        popularity: user.popularity - 3,
+      });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function deleteItem(orderID, cafeID) {
+  console.log(cafeID);
+  try {
+    const user = getCurrentUser();
+    firebase
+      .database()
+      .ref(`db/FoodOrders/cafes/${cafeID}/${orderID}`)
+      .remove();
+    firebase
+      .database()
+      .ref(`db/FoodOrders/customers/${user.userID}/${orderID}`)
+      .remove();
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function placeFoodOrder(orderDetails, total, cafeID, location, cafeName) {
+  try {
+    console.log("Place Order");
     let cords = `${location.coords.latitude},${location.coords.longitude}`;
     const user = getCurrentUser();
-    loc = `geo:${cords}?center=${cords}&q=${cords}&z=20`;
-    // locationURL = `http://maps.google.com/maps?q=${location.coords.latitude},${location.coords.longitude}`;
-    let timestamp = moment().format("YYYYMMDDhhmmss");
+    let loc = `geo:${cords}?center=${cords}&q=${cords}&z=20`;
+    let timestamp = moment().format("YYYYMMDDHHmmss");
     let orderID = `order${timestamp}`;
     firebase.database().ref(`db/FoodOrders/cafes/${cafeID}/${orderID}`).update({
       userID: user.userID,
@@ -476,6 +601,7 @@ export default {
   getComments,
   uploadUserStory,
   getUserStories,
+  storyViewed,
   getPosts,
   isFriend,
   isFriendRequestReceived,
@@ -494,4 +620,12 @@ export default {
   uploadDonationHistory,
   placeFoodOrder,
   getPendingOrders,
+  setOrderStatus,
+  deleteItem,
+  deletePost,
+  isPostExist,
+  deleteAccount,
+  check,
+  getUsers,
+
 };

@@ -20,7 +20,7 @@ const OrderPlacedScreen = ({ route }) => {
   const navigation = useNavigation();
 
   const handlePress = () => {
-    navigation.navigate("Feed");
+    navigation.navigate("FoodHome");
   };
 
   return (

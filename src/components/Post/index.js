@@ -21,9 +21,16 @@ const Post = ({ post }) => {
         name={post.owner}
         userID={post.userID}
         caption={post.caption}
+        privacy={post.privacy}
+        type={post.type}
+        postID={post.postID}
       />
       {post.image ? <Body image={post.image} /> : null}
+      {database.isPostExist(post.postID) ?
       <Footer post={post} />
+      :
+      null
+      }
     </View>
   );
 };

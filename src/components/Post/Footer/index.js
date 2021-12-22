@@ -7,14 +7,16 @@ import {
   Modal,
   TextInput,
   ToastAndroid,
+  Share
 } from "react-native";
-import moment from 'moment'
+import moment from "moment";
 import { COLORS } from "../../../Constants/COLORS";
 import CommentList from "../../CommentList/index";
 import styles from "./style";
 import database from "../../../Database/database";
 import { setCommentsArray } from "../../../Redux/Post/actions";
 import { useDispatch, useSelector } from "react-redux";
+// import Share from "react-native-share";
 
 const Footer = ({ post }) => {
   const [isLiked, setIsLiked] = useState(false);
@@ -22,9 +24,12 @@ const Footer = ({ post }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isEmpty, setIsEmpty] = useState(true);
   const [comment, setComment] = useState("");
-  const commentsArray = useSelector((state)=> state.post.commentsArray)
+  const commentsArray = useSelector((state) => state.post.commentsArray);
   const [refreshing, setRefreshing] = React.useState(false);
-const dispatch = useDispatch()
+  const options = {
+    title: post.caption,
+  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setCommentsArray(database.getComments(post.postID)));
@@ -32,28 +37,27 @@ const dispatch = useDispatch()
   const onLikePressed = () => {
     const amount = isLiked ? -1 : 1;
     setLikesCount(likesCount + amount);
-    if(amount===1){
-    database.likeAction(likesCount+1, post.postID)
-    }else{
+    if (amount === 1) {
+      database.likeAction(likesCount + 1, post.postID);
+    } else {
       database.likeAction(likesCount - 1, post.postID);
     }
     setIsLiked(!isLiked);
   };
 
   const onCommentPressed = () => {
-    if(database.getComments(post.postID)){
-      dispatch(setCommentsArray(database.getComments(post.postID)))
-      console.log(commentsArray)
+    if (database.getComments(post.postID)) {
+      dispatch(setCommentsArray(database.getComments(post.postID)));
     }
     setModalVisible(true);
   };
 
   const onPostCommentPress = () => {
     if (comment) {
-      database.uploadComment(post.postID, comment)
-      dispatch(setCommentsArray(database.getComments(post.postID)))
-      setComment('')
-      onRefresh()
+      database.uploadComment(post.postID, comment);
+      dispatch(setCommentsArray(database.getComments(post.postID)));
+      setComment("");
+      onRefresh();
     }
   };
 
@@ -71,11 +75,35 @@ const dispatch = useDispatch()
     setModalVisible(!modalVisible);
   };
 
+const onShare = async () => {
+  try {
+    const result = await Share.share(
+      {
+        message: `Please check this post from Campus Buddy\n${post.image}`,
+      },
+      {
+        title: "Please check this post from Campus Buddy",
+      }
+    );
+    if (result.action === Share.sharedAction) {
+      if (result.activityType) {
+        // shared with activity type of result.activityType
+      } else {
+        ToastAndroid.show("Post Shared", ToastAndroid.LONG)
+      }
+    } else if (result.action === Share.dismissedAction) {
+      // dismissed
+    }
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     if (true) {
       try {
-        dispatch(setCommentsArray(database.getComments(post.postID)))
+        dispatch(setCommentsArray(database.getComments(post.postID)));
         setRefreshing(false);
       } catch (error) {
         console.error(error);
@@ -102,10 +130,14 @@ const dispatch = useDispatch()
           </TouchableWithoutFeedback>
           <TouchableOpacity onPress={onCommentPressed}>
             <View style={styles.buttonView}>
-              <Text style={styles.footer_button}>Comment</Text>
+              {post.type === "ask" ? (
+                <Text style={styles.footer_button}>Answer</Text>
+              ) : (
+                <Text style={styles.footer_button}>Comment</Text>
+              )}
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onShare}>
             <View style={styles.buttonView}>
               <Text style={styles.footer_button}>Share</Text>
             </View>
@@ -118,7 +150,9 @@ const dispatch = useDispatch()
       </View>
 
       <View style={styles.left}>
-        <Text style={styles.timestamp}>{moment(post.timestamp, "YYYYMMDDhhmmss").fromNow()}</Text>
+        <Text style={styles.timestamp}>
+          {moment(post.timestamp, "YYYYMMDDHHmmss").fromNow()}
+        </Text>
       </View>
       <Modal
         keyboardShouldPersistTaps={"handled"}
@@ -138,13 +172,24 @@ const dispatch = useDispatch()
           ></TouchableOpacity>
           <View style={styles.modalView}>
             <View style={{ alignSelf: "center", marginBottom: 10 }}>
-              <Text style={styles.modalText}>Comments</Text>
+              {post.type === "ask" ? (
+                <Text style={styles.modalText}>Answers</Text>
+              ) : (
+                <Text style={styles.modalText}>Comments</Text>
+              )}
             </View>
             {commentsArray ? (
               <CommentList post={post} />
             ) : (
-              <View style={styles.centeredView,[{flex: 1, justifyContent: "center", alignItems: "center"}]}>
-              <Text style={{fontSize: 18, color: COLORS.font}}>Be the first to comment</Text>
+              <View
+                style={
+                  (styles.centeredView,
+                  [{ flex: 1, justifyContent: "center", alignItems: "center" }])
+                }
+              >
+                <Text style={{ fontSize: 18, color: COLORS.font }}>
+                  Be the first to comment
+                </Text>
               </View>
             )}
 

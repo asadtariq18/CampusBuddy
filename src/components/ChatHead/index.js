@@ -36,7 +36,7 @@ const Chat = ({ userID, lastmessage, timestamp }) => {
         }}
       >
         <Text style={styles.timestamp}>
-          {moment(timestamp, "YYYYMMDDhhmmss").fromNow()}
+          {moment(timestamp, "YYYYMMDDHHmmss").fromNow()}
         </Text>
       </View>
     </TouchableOpacity>

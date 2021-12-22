@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -18,15 +18,23 @@ import styles from "./style";
 const FoodHomeScreen = () => {
 const [pendingOrders, setPendingOrders] = useState([])
   const [modal, setModal] = useState(false);
+  let [newOrdersCount, setNewOrdersCount] = useState(0)
 
 const handlePendingOrdersPress=()=>{
   let orders = database.getPendingOrders(database.getCurrentUser().userID);
   if(orders){
     setPendingOrders(Object.values(orders));
   }
-  console.log(pendingOrders)
   setModal(!modal)
 }
+
+useEffect(() => {
+  let orders = database.getPendingOrders(database.getCurrentUser().userID);
+  if (orders) {
+    setPendingOrders(Object.values(orders));
+  }
+
+}, [])
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar showHideTransition backgroundColor={COLORS.primary} />
@@ -47,8 +55,9 @@ const handlePendingOrdersPress=()=>{
         }}
       >
         <TouchableOpacity onPress={handlePendingOrdersPress}>
-          <Text style={styles.Button2}> Pending Orders </Text>
+          <Text style={styles.Button2}> Orders History </Text>
         </TouchableOpacity>
+        <Text style={styles.count}> {pendingOrders.length} </Text>
       </View>
       <View
         style={{
@@ -81,7 +90,7 @@ const handlePendingOrdersPress=()=>{
             style={styles.modalClose}
           ></TouchableOpacity>
           <View style={styles.modalView}>
-            <Text style={styles.headerText}> Pending Orders </Text>
+            <Text style={styles.headerText}> Orders History </Text>
             {pendingOrders.length === 0 ? (
               <View
                 style={{

@@ -19,6 +19,15 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: COLORS.font,
   },
+  textView: {
+    alignSelf: "center",
+    fontWeight: "bold",
+    marginTop: 10,
+    color: COLORS.font,
+    borderRadius: 25,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  },
   text: {
     color: COLORS.font,
     fontWeight: "bold",
@@ -81,7 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.secondary,
     marginVertical: 10,
     borderWidth: 3,
-    borderColor: COLORS.primary
+    borderColor: COLORS.primary,
   },
 });
 

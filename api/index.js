@@ -28,10 +28,26 @@ app.use("/create-payment-intent", async (req, res, next) => {
       clientSecret: paymentIntent.client_secret,
     });
   } catch (err) {
-    console.log(err);
+    console.log(err.code);
   }
 }});
 
-app.listen(3030, () => {
+app.use("/scrape-data", async (req, res, next) => {
+  request(
+    "https://www.bullion-rates.com/gold/INR/2007-1-history.htm",
+    (error, res, html) => {
+      if (!error && res.statusCode == 200) {
+        const $ = cheerio.load(html);
+        console.log($);
+        return res.send($)
+      }else{
+        console.log("scraping error: "+error)
+      }
+      
+    }
+  );
+})
+
+app.listen(3020, () => {
   console.log("SERVER RUNNING");
 });

@@ -6,6 +6,7 @@ import LoadingScreen from "../screens/LoadingScreen";
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import PasswordVerificationScreen from "../screens/PasswordVerifyScreen";
 import EmailVerificationScreen from "../screens/EmailVerifyScreen";
+import AppStack from "../Navigation/AppStack"
 const Stack = createStackNavigator();
 
 const AuthStack = () => {
@@ -30,6 +31,11 @@ const AuthStack = () => {
       <Stack.Screen
         name="Password Verification Screen"
         component={PasswordVerificationScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="AppStack"
+        component={AppStack}
         options={{ headerShown: false }}
       />
       <Stack.Screen

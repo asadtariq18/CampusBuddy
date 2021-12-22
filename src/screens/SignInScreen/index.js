@@ -119,7 +119,7 @@ const SignInScreen = () => {
                       25,
                       50
                     );
-          navigation.getParent.navigate('AppStack')
+          navigation.navigate('AppStack')
         }
       }
     } catch (error) {

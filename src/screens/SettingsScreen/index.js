@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import styles from "./style";
 import { COLORS } from "../../Constants/COLORS";
 import { getAuth, deleteUser } from "firebase/auth";
+import database from "../../Database/database";
 
 const SettingScreen = () => {
   const navigation = useNavigation();
@@ -23,15 +24,14 @@ const SettingScreen = () => {
   // const user = auth.currentUser;
 
   const deleteAccount = () => {
-  //   try {
-  //     deleteUser(user).then(() => {
-  //       // User deleted.
-  //       ToastAndroid.show("User Deleted", ToastAndroid.SHORT);
-  //     })
-  //   } catch (error) {
-  //     ToastAndroid.show(error.message, ToastAndroid.SHORT);
-  //   }
- };
+    try {
+      database.deleteAccount();
+      ToastAndroid.show("Account Deleted", ToastAndroid.SHORT);
+      navigation.navigate("SignIn")
+    } catch (error) {
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -46,13 +46,12 @@ const SettingScreen = () => {
           <Title style={styles.headerText}>Account Setting</Title>
         </Body>
       </Header>
-      <TouchableWithoutFeedback onPress={deleteAccount}>
+      <TouchableOpacity onPress={deleteAccount}>
         <Text style={styles.Button1}>Delete Account</Text>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
       <TouchableWithoutFeedback onPress={deleteAccount}>
         <Text style={styles.Button1}>Push Notification</Text>
       </TouchableWithoutFeedback>
-
     </SafeAreaView>
   );
 };

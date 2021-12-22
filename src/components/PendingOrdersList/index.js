@@ -1,11 +1,12 @@
 import React from "react";
-import {
-  FlatList,
-} from "react-native";
+import { FlatList } from "react-native";
 import OrderHead from "./OrderHead";
 
-const PendingOrdersList = ({pendingOrders}) => {
-    console.log(pendingOrders)
+const PendingOrdersList = ({ pendingOrders }) => {
+  let sortedList = pendingOrders.sort(function (a, b) {
+    return a.timestamp < b.timestamp;
+  });
+
   return (
     <FlatList
       contentContainerStyle={{
@@ -13,7 +14,7 @@ const PendingOrdersList = ({pendingOrders}) => {
         paddingBottom: 20,
       }}
       showsVerticalScrollIndicator={false}
-      data={pendingOrders}
+      data={sortedList}
       keyExtractor={({ id }) => id}
       renderItem={({ item }) => (
         <OrderHead
@@ -21,6 +22,7 @@ const PendingOrdersList = ({pendingOrders}) => {
           status={item.status}
           timestamp={item.timestamp}
           cafeName={item.cafeName}
+          cafeID={item.cafeID}
         />
       )}
     />

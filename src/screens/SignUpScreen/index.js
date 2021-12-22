@@ -130,7 +130,7 @@ const SignUpScreen = () => {
 
   const ValidateMail = (str) => {
     const re =
-      /[SP|FA|sp|fa|Sp|Fa][0-9][0-9]-[B|b][a-zA-Z][a-zA-Z]-\d\d\d@student\.comsats\.edu\.pk/;
+      /[SP|FA|sp|fa|Sp|Fa][0-9][0-9]-[B|b][a-zA-Z][a-zA-Z]-\d\d\d@isbstudent\.comsats\.edu\.pk/;
     if (re.test(String(str).toLowerCase())) {
       dispatch(setMail(str));
       dispatch(setIsValidMail(true));

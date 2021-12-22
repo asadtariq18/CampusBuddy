@@ -17,6 +17,7 @@ import database from "../../Database/database";
 import { COLORS } from "../../Constants/COLORS";
 import { useSelector } from "react-redux";
 import MyStory from "../MyStory";
+import moment from "moment";
 const Stories = () => {
   const [storiesData, setStoriesData] = useState(null);
   // const myStory = useSelector((state) => state.story.myStory);
@@ -74,7 +75,7 @@ const Stories = () => {
   };
 
   const renderStory = (item) => {
-    if (item.user.userID === database.getCurrentUser().userID) {
+    if (moment().format("YYYYMMDDHHmmss") - item.user.lastStoryTime < 86400) {
       return (
         <StoryPreview
           userStoriesObj={item}
@@ -84,11 +85,7 @@ const Stories = () => {
       );
     } else {
       return (
-        <StoryPreview
-          userStoriesObj={item}
-          color={COLORS.primary}
-          borderColor={COLORS.secondary2}
-        />
+null
       );
     }
 

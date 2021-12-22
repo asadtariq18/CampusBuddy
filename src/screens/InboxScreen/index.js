@@ -89,6 +89,7 @@ const InboxScreen = ({ route }) => {
   }
   useEffect(() => {
     //readUser();
+    dispatch(setImage(null))
     const unsubscribe = chatsRef.onSnapshot((querySnapshot) => {
       const messagesFirestore = querySnapshot
         .docChanges()
@@ -364,7 +365,7 @@ const InboxScreen = ({ route }) => {
                   trackColor={COLORS.secondary2}
                 />
 
-                <Text style={styles.text}> No Messages, Start your chat </Text>
+                <Text style={styles.text}> Loading messages </Text>
               </View>
             );
           }}

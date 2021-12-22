@@ -18,6 +18,7 @@ import MenuScreen from "../screens/FoodOrderScreen/MenuScreen";
 import ConfirmOrderScreen from "../screens/FoodOrderScreen/ConfirmOrderScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
 import FriendsListScreen from "../screens/FriendsListScreen";
+import SignInScreen from "../screens/SignInScreen";
 import database from "../Database/database";
 import OrderPlacedScreen from "../screens/FoodOrderScreen/OrderPlacedScreen";
 
@@ -163,6 +164,11 @@ const AppStack = () => {
         options={{
           headerShown: false,
         }}
+      />
+      <Stack.Screen
+        name="SignIn"
+        component={SignInScreen}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="FoodHome"

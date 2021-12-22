@@ -7,18 +7,21 @@ import { COLORS } from "../../Constants/COLORS";
 
 const TimelinePosts = ({ posts, user }) => {
   const [postsArray, setPostsArray] = useState(posts);
+  const [tempArray, setTempArray] = useState(null);
   useEffect(() => {
-    setPostsArray(
-      Object.keys(posts).map(function (_) {
-        return posts[_];
-      })
-    );
+    setTempArray(Object.values(posts));
+    if (tempArray) {
+      setPostsArray(
+        tempArray.sort(function (a, b) {
+          return a.timestamp > b.timestamp;
+        })
+      );
+    }
   }, [posts]);
   return (
-    
     <ScrollView contentContainerStyle={styles.container}>
       {user.posts_count === 0 ? (
-        <View style = {{marginStart: 140}}>
+        <View style={{ marginStart: 140 }}>
           <Text
             style={[
               styles.text,
@@ -26,7 +29,7 @@ const TimelinePosts = ({ posts, user }) => {
                 fontSize: 24,
                 color: COLORS.font_secondary,
                 marginTop: 50,
-                alignSelf: "center"
+                alignSelf: "center",
               },
             ]}
           >
@@ -34,20 +37,20 @@ const TimelinePosts = ({ posts, user }) => {
             NO POSTS{" "}
           </Text>
         </View>
-        ) : (
-      <FlatList
-        contentContainerStyle={[styles.container, { flexWrap: "wrap" }]}
-        data={postsArray}
-        keyExtractor={({ id }) => id}
-        renderItem={({ item }) => {
-          //console.log(item)
-          if (item.userID === user.userID) {
-            return <PostPreview post={item} />;
-          }
-          return null;
-        }}
-      />
-        )}
+      ) : (
+        <FlatList
+          contentContainerStyle={[styles.container, { flexWrap: "wrap" }]}
+          data={tempArray}
+          keyExtractor={({ id }) => id}
+          renderItem={({ item }) => {
+            //console.log(item)
+            if (item.userID === user.userID) {
+              return <PostPreview post={item} />;
+            }
+            return null;
+          }}
+        />
+      )}
     </ScrollView>
   );
 };

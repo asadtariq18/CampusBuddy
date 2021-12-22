@@ -63,8 +63,7 @@ export function DrawerContent(props) {
             <View style={styles.row}>
               <View style={styles.section}>
                 <Paragraph style={[styles.paragraph, styles.caption]}>
-                  2
-                  {/* {Object.values(user.friendsList).length} */}
+                  2{/* {Object.values(user.friendsList).length} */}
                 </Paragraph>
                 <Caption style={styles.caption}>Friends</Caption>
                 <Paragraph style={[styles.paragraph, styles.caption]}>
@@ -109,6 +108,16 @@ export function DrawerContent(props) {
               inactiveTintColor={COLORS.font}
               onPress={() => {
                 props.navigation.navigate("Donation");
+              }}
+            />
+            <DrawerItem
+              icon={({ color, size }) => (
+                <Icon name="map" color={COLORS.icon} size={size} />
+              )}
+              label="Library"
+              inactiveTintColor={COLORS.font}
+              onPress={() => {
+                props.navigation.navigate("Library");
               }}
             />
             <DrawerItem

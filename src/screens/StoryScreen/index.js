@@ -30,6 +30,8 @@ const StoryScreen = () => {
   const [activeStory, setActiveStory] = useState(null);
   const [emptyInput, setEmptyInput] = useState(true);
   const [messageText, setMessageText] = useState("");
+  const [storyID, setStoryID] = useState("");
+  
   const [views, setViews] = useState(0)
   const [loading, setLoading] = useState(false);
 
@@ -37,19 +39,25 @@ const StoryScreen = () => {
     setUsername(route.params.username);
     setImageUri(route.params.imageUri);
     setUserID(route.params.userID);
-    setUserStories(route.params.stories);
+    setUserStories(route.params.stories.sort(function (a, b) {
+          return b.postedAt < a.postedAt;
+        }));
     setActiveStoryIndex(0);
-    
-  }, []);
+    console.log(userStories)
+  }, [route]);
 
   useEffect(() => {
     if (userStories && userStories.length > activeStoryIndex - 1) {
       setActiveStory(userStories[activeStoryIndex]);
-      console.log(activeStory)
+      
+      // console.log(activeStory)
       // let viewers = database.getStoryViews(activeStory.storyID=, userID)
       // if(viewers){
       //   setViews(viewers.length);
       // }
+    }
+    if(activeStory){
+      // database.storyViewed(storyID, userID);
     }
   }, [activeStoryIndex]);
 
@@ -69,7 +77,7 @@ const StoryScreen = () => {
       alert("Delete Story");
     };
   const handleNextStory = () => {
-    if (activeStoryIndex >= stories.length -1) {
+    if (activeStoryIndex === stories.length -1) {
       navigation.goBack();
       return;
     }
@@ -105,6 +113,7 @@ const StoryScreen = () => {
       </TouchableHighlight>
     );
   }
+if ((moment().format("YYYYMMDDHHmmss") - activeStory.postedAt) < 86400) {
   return (
     <TouchableHighlight onPress={handlePress}>
       <SafeAreaView style={styles.container}>
@@ -172,6 +181,16 @@ const StoryScreen = () => {
       </SafeAreaView>
     </TouchableHighlight>
   );
+}
+else{
+      return (
+        <TouchableHighlight onPress={onPress}>
+          <SafeAreaView style={styles.container}>
+            <ActivityIndicator color={COLORS.primary} size={30} />
+          </SafeAreaView>
+        </TouchableHighlight>
+      );
 };
+}
 
 export default StoryScreen;

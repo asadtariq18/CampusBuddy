@@ -97,6 +97,7 @@ const CreatePostScreen = () => {
           dispatch(setType("status"));
           dispatch(setPrivacy("public"));
           ToastAndroid.show("Post Uploaded", ToastAndroid.SHORT);
+          dispatch(setPosts(database.getPosts()))
         }
       }
     } catch (error) {
@@ -151,12 +152,88 @@ const CreatePostScreen = () => {
           </View>
         </View>
       </ScrollView>
-      {uploading ? 
+      <View style={styles.cardView}>
+        <View style={{ flexDirection: "row", marginTop: 8 }}>
+          <TouchableWithoutFeedback
+            onPress={() => dispatch(setPrivacy("public"))}
+          >
+            {privacy === "public" ? (
+              <View style={styles.buttonView}>
+                <Text style={styles.button_pressed}>Public</Text>
+              </View>
+            ) : (
+              <View style={styles.buttonView}>
+                <Text style={styles.button}>Public</Text>
+              </View>
+            )}
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => dispatch(setPrivacy("private"))}
+          >
+            {privacy === "private" ? (
+              <View style={styles.buttonView}>
+                <Text style={styles.button_pressed}>Private</Text>
+              </View>
+            ) : (
+              <View style={styles.buttonView}>
+                <Text style={styles.button}>Private</Text>
+              </View>
+            )}
+          </TouchableWithoutFeedback>
+        </View>
+        <View style={{ flexDirection: "row", marginTop: 8 }}>
+          <TouchableWithoutFeedback onPress={() => dispatch(setType("status"))}>
+            {type === "status" ? (
+              <View style={styles.buttonView}>
+                <Text style={styles.button_pressed}>Status</Text>
+              </View>
+            ) : (
+              <View style={styles.buttonView}>
+                <Text style={styles.button}>Status</Text>
+              </View>
+            )}
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => dispatch(setType("ask"))}>
+            {type === "ask" ? (
+              <View style={styles.buttonView}>
+                <Text style={styles.button_pressed}>Ask</Text>
+              </View>
+            ) : (
+              <View style={styles.buttonView}>
+                <Text style={styles.button}>Ask</Text>
+              </View>
+            )}
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => dispatch(setType("lost"))}>
+            {type === "lost" ? (
+              <View style={styles.buttonView}>
+                <Text style={styles.button_pressed}>Lost</Text>
+              </View>
+            ) : (
+              <View style={styles.buttonView}>
+                <Text style={styles.button}>Lost</Text>
+              </View>
+            )}
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => dispatch(setType("found"))}>
+            {type === "found" ? (
+              <View style={styles.buttonView}>
+                <Text style={styles.button_pressed}>Found</Text>
+              </View>
+            ) : (
+              <View style={styles.buttonView}>
+                <Text style={styles.button}>Found</Text>
+              </View>
+            )}
+          </TouchableWithoutFeedback>
+        </View>
+      </View>
+      {uploading ? (
         <View style={{ marginBottom: 20 }}>
           <Text style={styles.textView}>Uploading...</Text>
           <ActivityIndicator color={COLORS.primary} size={60} />
         </View>
-       : null}
+      ) : null}
 
       <TouchableWithoutFeedback onPress={postPressed}>
         <View style={styles.postButton}>
