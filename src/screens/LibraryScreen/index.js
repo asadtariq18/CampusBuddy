@@ -1,13 +1,16 @@
-import React, { useEffect } from "react";
-import { SafeAreaView, Image, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import { SafeAreaView, Image, Text, ScrollView, RefreshControl } from "react-native";
 import { COLORS } from "../../Constants/COLORS";
 import styles from "./style";
 import axios from "axios";
 import FriendSuggestionList from "../../components/FriendSuggestionList";
+import database from "../../Database/database";
 
 const LibraryScreen = () => {
+    const [refreshing, setRefreshing] = useState(false);
   useEffect(() => {
-    ScraperHandler();
+    // ScraperHandler();
+    // console.log(database.getUsers())
   }, []);
   const ScraperHandler = () => {
     axios
@@ -20,18 +23,27 @@ const LibraryScreen = () => {
       });
   };
 
+
+
   return (
-    <SafeAreaView
-      style={{
+    <ScrollView
+      contentContainerStyle={{
         backgroundColor: COLORS.background_dark,
         justifyContent: "center",
         alignItems: "center",
         flex: 1,
       }}
+      // refreshControl={
+      //   <RefreshControl
+      //     progressBackgroundColor={COLORS.background_dark}
+      //     colors={[COLORS.primary]}
+      //     refreshing={refreshing}
+      //     onRefresh={onRefresh}
+      //   />
+      // }
     >
       <Text style={styles.text}>Library</Text>
-    {/* <FriendSuggestionList userID={"asadtariq070 "}/> */}
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 export default LibraryScreen;

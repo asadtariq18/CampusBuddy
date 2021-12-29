@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, Text, View } from "react-native";
 import ProfilePicture from "../ProfilePicture";
@@ -6,17 +6,20 @@ import ProfilePicture from "../ProfilePicture";
 import styles from "./style";
 import database from "../../Database/database";
 
-const Notification = ({ userID, image, name, notification }) => {
+const Notification = ({ userID, notification, avatar, name }) => {
+  console.log(userID)
   const navigation = useNavigation();
+  const [user, setUser] = useState();
   const onPress = () => {
-    const user = database.getUser(userID)
     navigation.navigate("UserProfile", { user: user });
   };
+  useEffect(() => {
 
+  }, []);
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.left}>
-        <ProfilePicture uri={image} border={false} />
+        <ProfilePicture uri={avatar} border={false} />
         <Text style={styles.name}>{name} </Text>
         <Text style={styles.notificationText}>{notification}</Text>
       </View>

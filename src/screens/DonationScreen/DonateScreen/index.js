@@ -20,8 +20,11 @@ import database from "../../../Database/database";
 import { useDispatch, useSelector } from "react-redux";
 import { setCardDetails, setAmount } from "../../../Redux/Donate/actions";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 
-const DonateScreen = () => {
+const DonateScreen = ({route}) => {
+  const navigation = useNavigation()
+  const receiver = route.params.receiverTitle
   const dispatch = useDispatch();
   const cardDetails = useSelector((state) => state.donate.cardDetails);
   const [amount, setAmount] = useState(0);
@@ -35,7 +38,7 @@ const DonateScreen = () => {
 
   const getSecretKey = () => {
     axios
-      .post("http://10.113.51.70:3020/create-payment-intent", {
+      .post("http://192.168.0.101:3020/create-payment-intent", {
         amount,
       })
       .then((response) => {
@@ -45,7 +48,6 @@ const DonateScreen = () => {
       .catch((err) => console.log("Errr", err));
   };
 
-  // const { confirmPayment, loading } = useConfirmPayment();
   const handlePayment = async () => {
     getSecretKey();
     setLoading(true);
@@ -59,7 +61,9 @@ const DonateScreen = () => {
     if (error) {
       ToastAndroid.show("Server is busy, try again", ToastAndroid.LONG);
     } else {
-      alert("Payment Successful!");
+      ToastAndroid.show("Payment Successful",ToastAndroid.SHORT);
+      navigation.navigate("PaymentSuccess", {accountTitle: receiver, accountNumber: route.params.accountNumber, bankName:route.params.bankName })
+
     }
   };
 
@@ -74,6 +78,7 @@ const DonateScreen = () => {
           uri: "https://www.shareicon.net/data/128x128/2016/09/07/826989_heart_512x512.png",
         }}
       />
+      <Text style={styles.text}>Donating to {receiver}</Text>
       <Text style={styles.text}>Card Information</Text>
       <CardField
         placeholder={{ number: "4200 4200 4200 4200" }}

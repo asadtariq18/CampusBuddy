@@ -9,7 +9,7 @@ import ChatScreen from "../screens/ChatScreen";
 import InboxScreen from "../screens/InboxScreen";
 import ViewPostScreen from "../screens/ViewPostScreen";
 import DonateScreen from "../screens/DonationScreen/DonateScreen";
-import ApplyDonationScreen from "../screens/DonationScreen/ApplyDonationScreen";
+import CreateDonationPostScreen from "../screens/DonationScreen/CreateDonationPostScreen";
 import GetStartedScreen from "../screens/FoodOrderScreen/GetStartedScreen";
 import FoodHomeScreen from "../screens/FoodOrderScreen/FoodHomeScreen";
 import { COLORS } from "../Constants/COLORS";
@@ -21,6 +21,8 @@ import FriendsListScreen from "../screens/FriendsListScreen";
 import SignInScreen from "../screens/SignInScreen";
 import database from "../Database/database";
 import OrderPlacedScreen from "../screens/FoodOrderScreen/OrderPlacedScreen";
+import DonationHome from "../screens/DonationScreen/DonationHome";
+import PaymentSuccessScreen from "../screens/DonationScreen/PaymentSuccessScreen";
 
 const Stack = createStackNavigator();
 const AppStack = () => {
@@ -123,10 +125,10 @@ const AppStack = () => {
       />
 
       <Stack.Screen
-        name="ApplyDonationScreen"
-        component={ApplyDonationScreen}
+        name="CreateDonationPostScreen"
+        component={CreateDonationPostScreen}
         options={{
-          title: "Apply for donation",
+          title: "Create a donation post",
           headerTitleAlign: "center",
           headerTintColor: COLORS.font,
           headerStyle: {
@@ -156,6 +158,20 @@ const AppStack = () => {
             fontSize: 20,
             color: COLORS.font,
           },
+        }}
+      />
+      <Stack.Screen
+        name="DonationHome"
+        component={DonationHome}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PaymentSuccess"
+        component={PaymentSuccessScreen}
+        options={{
+          headerShown: false,
         }}
       />
       <Stack.Screen

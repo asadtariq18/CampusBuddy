@@ -19,6 +19,7 @@ import PostReducer from "./Post/reducers";
 import FeedReducer from "./Feed/reducers";
 import StoryReducer from "./Story/reducers";
 import LoadDBReducer from "./LoadDB/reducers";
+import FriendSuggestionReducer from "./FriendSuggestion/reducers";
 
 export const rootReducer = combineReducers({
   login: LoginReducer,
@@ -41,5 +42,6 @@ export const rootReducer = combineReducers({
   feed: FeedReducer,
   story: StoryReducer,
   loadDB: LoadDBReducer,
+  suggestionList: FriendSuggestionReducer,
   
 });

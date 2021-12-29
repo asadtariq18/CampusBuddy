@@ -4,15 +4,14 @@ import { COLORS } from "../../../Constants/COLORS";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: "center",
-    paddingTop: 30,
     backgroundColor: COLORS.background_dark,
+    paddingBottom: 65,
   },
   text: {
     textAlign: "center",
     marginTop: 20,
-    fontSize: 12,
+    fontSize: 20,
+    fontWeight: 'bold',
     color: COLORS.font,
   },
   text2: {
@@ -23,14 +22,14 @@ const styles = StyleSheet.create({
   },
   header: {
     alignContent: "center",
-    alignSelf: "flex-start",
+    alignSelf: "center",
     backgroundColor: COLORS.background_dark,
-    marginTop: 20,
-    marginBottom: 10,
+    marginTop: 10,
+    marginStart: 10,
   },
   headerText: {
     fontWeight: "bold",
-    fontSize: 40,
+    fontSize: 20,
     color: COLORS.font,
   },
   textInput: {
@@ -41,17 +40,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     margin: 10,
     padding: 10,
-    color: COLORS.font,
-  },
-  textInput2: {
-    backgroundColor: COLORS.secondary,
-    fontSize: 15,
-    height: 100,
-    width: 350,
-    borderRadius: 20,
-    margin: 10,
-    padding: 10,
-    textAlignVertical: 'top',
     color: COLORS.font,
   },
   buttonView: {
@@ -87,7 +75,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.background_dark,
     fontSize: 15,
     height: 50,
     width: 350,
@@ -95,6 +83,18 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     color: COLORS.font,
+  },
+  card: {
+    backgroundColor: COLORS.secondary2,
+    borderRadius: 20,
+  },
+  cardContainer: {
+    marginTop: 15,
+    fontSize: 15,
+    height: 50,
+    width: 350,
+    margin: 10,
+    padding: 10,
   },
 });
 

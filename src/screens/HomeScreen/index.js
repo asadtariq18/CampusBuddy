@@ -21,7 +21,6 @@ import { setLoad } from "../../Redux/LoadDB/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/core";
 import { LinearGradient } from "expo-linear-gradient";
-import database from "../../Database/database";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -31,22 +30,17 @@ const HomeScreen = () => {
 
   const user = useSelector((state) => state.home.user);
   const posts = useSelector((state) => state.home.posts);
+  const [stories, setStories] = useState(null)
 
     useEffect(() => {
       // dispatch(setLoad(true));
       console.log("Loaded");
       dispatch(setUser(Database.getCurrentUser()));
       dispatch(setPosts(Database.getPosts()));
+      setStories(Database.getUserStories())
       // dispatch(setLoad(false));
     }, []);
-  
-  useEffect(() => {
-    dispatch(setLoad(true));
-    console.log("STart");
-    dispatch(setUser(Database.getCurrentUser()));
-    dispatch(setPosts(Database.getPosts()));
-    onRefresh()
-  }, []);
+
 
   const onRefresh = React.useCallback(async () => {
     dispatch(setRefreshing(true));
@@ -112,7 +106,7 @@ const HomeScreen = () => {
                 Welcome to Campus Buddy{" "}
               </Text>
             ) : (
-              <Feed posts={posts} />
+              <Feed posts={posts} stories={stories} />
             )}
           </ScrollView>
         ) : (

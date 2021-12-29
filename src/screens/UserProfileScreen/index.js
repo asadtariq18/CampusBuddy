@@ -60,14 +60,14 @@ const UserProfileScreen = ({ route }) => {
     ToastAndroid.show("Request Sent", ToastAndroid.SHORT);
   };
   const CancelRequestHandle = () => {
-    database.removeFriendRequest();
+    database.removeFriendRequest(user.userID);
     dispatch(setRequestSent(false));
     onRefresh();
     ToastAndroid.show("Request Cancelled", ToastAndroid.SHORT);
   };
   const acceptRequestHandle = () => {
     database.acceptFriendRequest(user.userID);
-    database.removeFriendRequest();
+    database.removeFriendRequest(user.userID);
     dispatch(setRequestReceived(false));
     dispatch(setRequestSent(false));
     onRefresh();
@@ -174,7 +174,7 @@ const UserProfileScreen = ({ route }) => {
                 </TouchableOpacity>
               ) : (
                 [
-                  requestSent ? (
+                  database.isFriendRequestSent(user.userID) ? (
                     <TouchableOpacity onPress={CancelRequestHandle}>
                       <Text
                         style={[

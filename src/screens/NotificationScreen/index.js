@@ -54,7 +54,7 @@ const NotificationScreen = () => {
           refreshing={refreshing}
           onRefresh={onRefresh}
         />
-        {!notifications ? (
+        {notifications ? (
           <NotificationList notifications={notifications} />
         ) : (
           <Text

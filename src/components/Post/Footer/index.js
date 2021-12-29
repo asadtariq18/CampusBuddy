@@ -89,7 +89,6 @@ const onShare = async () => {
       if (result.activityType) {
         // shared with activity type of result.activityType
       } else {
-        ToastAndroid.show("Post Shared", ToastAndroid.LONG)
       }
     } else if (result.action === Share.dismissedAction) {
       // dismissed

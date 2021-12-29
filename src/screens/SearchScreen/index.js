@@ -7,6 +7,7 @@ import SearchList from "../../components/SearchList";
 import { useDispatch, useSelector } from "react-redux";
 import { setQuery } from "../../Redux/Search/actions";
 import PostsSearchList from "../../components/PostsSearchList";
+import FriendSuggestionList from "../../components/FriendSuggestionList";
 
 const SearchScreen = () => {
   const dispatch = useDispatch();
@@ -35,8 +36,10 @@ const SearchScreen = () => {
           <Text>Search</Text>
         </Button>
       </Header>
+
       <SearchList query={query} />
-      <PostsSearchList query={query}/>
+      <PostsSearchList query={query} />
+      <FriendSuggestionList />
     </SafeAreaView>
   );
 };

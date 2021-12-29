@@ -4,6 +4,7 @@ import Post from "../Post";
 import Stories from "../../components/Stories";
 import { useDispatch, useSelector } from "react-redux";
 import { setPostsArray } from "../../Redux/Feed/actions";
+import FriendSuggestionList from "../FriendSuggestionList";
 
 const Feed = ({ posts, storiesData }) => {
   const dispatch = useDispatch();
@@ -12,11 +13,6 @@ const Feed = ({ posts, storiesData }) => {
   const [tempArray, setTempArray] = useState(null);
   // const postsArray = useSelector((state)=> state.feed.postsArray)
   useEffect(() => {
-    // dispatch(setPostsArray(
-    //   Object.keys(posts).map(function (_) {
-    //     return posts[_];
-    //   })
-    // ));
     setTempArray(Object.values(posts));
     if (tempArray) {
       setPostsArray(
@@ -30,6 +26,7 @@ const Feed = ({ posts, storiesData }) => {
   return (
     <View style={{ paddingBottom: 50 }}>
       <Stories storiesData={storiesData} />
+      {/* <FriendSuggestionList /> */}
       <FlatList
         inverted
         data={postsArray}

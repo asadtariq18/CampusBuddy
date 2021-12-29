@@ -55,7 +55,7 @@ function getCurrentUser() {
   return user;
 }
 function getUser(userID) {
-  let user = new Object();
+  let user =  {};
   firebase
     .database()
     .ref(`db/users/user_${userID}`)
@@ -75,6 +75,21 @@ function getUserPosts(userID) {
       posts = temp;
     });
   return posts;
+}
+function getDonationPosts() {
+  let posts = new Object();
+  try {
+    firebase
+      .database()
+      .ref(`db/donations`)
+      .on("value", (snapshot) => {
+        let temp = snapshot.val();
+        posts = temp;
+      });
+    return posts;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function getPosts() {
@@ -115,6 +130,32 @@ function isFriendRequestReceived(userID) {
   return false;
 }
 
+function isFriendRequestSent(userID) {
+  const self = getCurrentUser();
+  let requests = new Object();
+  let result = false
+
+  try {
+    firebase
+      .database()
+      .ref(`db/users/user_${userID}`)
+      .on("value", (snapshot) => {
+        let temp = snapshot.val();
+        if (temp) {
+          requests = temp.friendRequests;
+          if (requests[self.userID]) {
+            result = true;
+          } else {
+            result = false;
+          }
+        }
+      });
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 function acceptFriendRequest(userID) {
   const self = getCurrentUser();
   const user = getUser(userID);
@@ -151,7 +192,7 @@ function removeFriendRequest(userID) {
   const self = getCurrentUser();
   firebase
     .database()
-    .ref(`db/users/user_${self.userID}/friendRequests/${userID}`)
+    .ref(`db/users/user_${userID}/friendRequests/${self.userID}`)
     .remove();
 }
 function sendFriendRequest(userID) {
@@ -168,6 +209,7 @@ function sendFriendRequest(userID) {
     });
   sendNotification(userID, timestamp, notificationText);
 }
+
 function deleteAccount() {
   // try {
   // let userID = getCurrentUser().userID;
@@ -182,7 +224,6 @@ function deleteAccount() {
   //       //   .ref(`db/FoodOrders/customers/${userID}`)
   //       //   .remove();
   //       // firebase.database().ref(`db/stories/${userID}`).remove();
-
   //       // firebase
   //       //   .database()
   //       //   .ref(`db/posts`)
@@ -198,7 +239,7 @@ function deleteAccount() {
   //       auth.reauthenticateWithCredential()
   //       console.log(error);
   //     }
-    }
+}
 
 function check() {
   firebase
@@ -252,15 +293,32 @@ function getChatList() {
 }
 
 function getUsers() {
-  let users;
+  let filteredResults = [];
+  let selfID = getCurrentUser().userID
+  let query =""
+  if(selfID){
+    query = selfID.split("-")[1]
+  }
   firebase
     .database()
     .ref(`db/users`)
     .on("value", (snapshot) => {
       const u = snapshot.val();
-      users = u;
+      let users = u;
+      if (users) {
+        filteredResults = Object.values(users).filter(function (obj) {
+          if (
+            !isFriend(obj.userID) &&
+            !isFriendRequestReceived(obj.userID) &&
+            !isFriendRequestSent(obj.userID) &&
+            selfID !== obj.userID
+          ) {
+            return obj.userID.includes(query);
+          }
+        });
+      }
     });
-  return users;
+  return filteredResults;
 }
 
 function getFriends(userID) {
@@ -306,7 +364,15 @@ function storyViewed(storyID, userID) {
 
 function getNotifications() {
   let notifications = getCurrentUser().notifications;
-  return notifications;
+  let notificationList = []
+  if(notifications){
+    notificationList = Object.values(notifications)
+  }else{
+    notificationList = null;
+  }
+  console.log(notificationList)
+  return notificationList
+
 }
 
 function likeAction(likes_count, postID) {
@@ -405,6 +471,31 @@ function getUserStories() {
       }
     });
   return userStoriesList;
+}
+
+function uploadDonationPost(bankName, accountTitle, accountNumber, description) {
+  const user = getCurrentUser();
+  let timestamp = moment().format("YYYYMMDDHHmmss");
+
+  firebase
+    .database()
+    .ref(
+      `db/donations/post_${user.userID
+        .toLowerCase()
+        .replace(/-/g, "")}_${timestamp}`
+    )
+    .update({
+      bankName: bankName,
+      accountTitle: accountTitle,
+      userID: user.userID,
+      postID: `post_${user.userID
+        .toLowerCase()
+        .replace(/-/g, "")}_${timestamp}`,
+      description: description,
+      name: user.name,
+      accountNumber: accountNumber,
+      timestamp: timestamp,
+    });
 }
 
 async function uploadUserPost(caption, privacy, type, image) {
@@ -596,6 +687,7 @@ export default {
   getCurrentUser,
   getUser,
   uploadUserPost,
+  uploadDonationPost,
   likeAction,
   uploadComment,
   getComments,
@@ -603,8 +695,10 @@ export default {
   getUserStories,
   storyViewed,
   getPosts,
+  getDonationPosts,
   isFriend,
   isFriendRequestReceived,
+  isFriendRequestSent,
   sendFriendRequest,
   acceptFriendRequest,
   removeFriendRequest,
@@ -627,5 +721,4 @@ export default {
   deleteAccount,
   check,
   getUsers,
-
 };
